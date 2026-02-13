@@ -19,6 +19,29 @@ class App extends BaseConfig
     public string $baseURL = 'http://localhost:8080/';
 
     /**
+     * Auto-detect baseURL from request headers.
+     * Works on Vercel, local dev, and any hosting.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Auto-detect baseURL from request (not CLI)
+        if (PHP_SAPI !== 'cli' && isset($_SERVER['HTTP_HOST'])) {
+            $scheme = 'https'; // default to HTTPS
+            if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+                $scheme = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+            } elseif ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                      || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)) {
+                $scheme = 'https';
+            } else {
+                $scheme = 'http';
+            }
+            $this->baseURL = $scheme . '://' . $_SERVER['HTTP_HOST'] . '/';
+        }
+    }
+
+    /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
      * If you want to accept multiple Hostnames, set this.
      *
