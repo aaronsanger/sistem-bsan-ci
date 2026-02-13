@@ -40,11 +40,13 @@ if (is_file($projectRoot . '/.env')) {
     }
 }
 
-// Set CI_ENVIRONMENT for production
-if (!isset($_ENV['CI_ENVIRONMENT'])) {
-    $_ENV['CI_ENVIRONMENT'] = 'production';
-    $_SERVER['CI_ENVIRONMENT'] = 'production';
-}
+// Set CI_ENVIRONMENT for production on Vercel
+$_ENV['CI_ENVIRONMENT'] = 'production';
+$_SERVER['CI_ENVIRONMENT'] = 'production';
+
+// Set VERCEL flag for AuthFilter detection
+$_ENV['VERCEL'] = '1';
+$_SERVER['VERCEL'] = '1';
 
 // Auto-detect baseURL on Vercel (override localhost from .env)
 if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== 'localhost') {
