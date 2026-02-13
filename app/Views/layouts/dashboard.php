@@ -567,17 +567,35 @@
             };
             const mappedRole = roleMap[sessionRole] || 'kementerian';
 
-            // Always set role from session (locked for dinas roles)
-            localStorage.setItem(ROLE_KEY, mappedRole);
+            // Store the base session role so JS knows the account type
+            localStorage.setItem('bsan_session_role', sessionRole);
 
-            // Set wilayah from PHP session (pre-determined, no modal needed)
+            // Admin/kementerian can switch roles freely — only set default on first visit
+            if (sessionRole === 'admin' || sessionRole === 'koordinator') {
+                // Don't override if user already picked a role via switchRole()
+                if (!localStorage.getItem(ROLE_KEY)) {
+                    localStorage.setItem(ROLE_KEY, mappedRole);
+                }
+            } else {
+                // Dinas users are locked to their role
+                localStorage.setItem(ROLE_KEY, mappedRole);
+            }
+
+            // Set wilayah from PHP session (for dinas users)
             <?php if (session()->get('wilayah_provinsi')): ?>
-            localStorage.setItem(WILAYAH_PROV_KEY, '<?= session()->get('wilayah_provinsi') ?>');
+            // Only override wilayah for dinas users, not admin who may have switched
+            if (sessionRole !== 'admin') {
+                localStorage.setItem(WILAYAH_PROV_KEY, '<?= session()->get('wilayah_provinsi') ?>');
+            }
             <?php endif; ?>
             <?php if (session()->get('wilayah_kabupaten')): ?>
-            localStorage.setItem(WILAYAH_KAB_KEY, '<?= session()->get('wilayah_kabupaten') ?>');
+            if (sessionRole !== 'admin') {
+                localStorage.setItem(WILAYAH_KAB_KEY, '<?= session()->get('wilayah_kabupaten') ?>');
+            }
             <?php else: ?>
-            localStorage.removeItem(WILAYAH_KAB_KEY);
+            if (sessionRole !== 'admin') {
+                localStorage.removeItem(WILAYAH_KAB_KEY);
+            }
             <?php endif; ?>
         })();
         <?php endif; ?>

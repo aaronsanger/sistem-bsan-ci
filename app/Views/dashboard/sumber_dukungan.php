@@ -204,12 +204,16 @@ function renderPage() {
 
     // Pokja gate banner for dinas who are not approved
     if (isPokja && !pokjaApproved) {
-        html += `<div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
+        html += `<div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-5">
             <div class="flex items-start gap-3">
-                <svg class="w-5 h-5 text-yellow-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <svg class="w-6 h-6 text-yellow-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 <div>
-                    <p class="font-semibold text-yellow-800 dark:text-yellow-300">\u26a0\ufe0f Pokja Belum Disetujui</p>
-                    <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Fitur Sumber Rujukan hanya aktif setelah Pokja disetujui oleh Admin Pusat. Anda masih dapat melihat data yang ada.</p>
+                    <p class="font-semibold text-yellow-800 dark:text-yellow-300 text-base">Pokja Belum Disetujui</p>
+                    <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Fitur Sumber Rujukan hanya aktif setelah data Pokja disetujui oleh Admin Pusat. Silakan lengkapi dan ajukan data Pokja terlebih dahulu.</p>
+                    <a href="/dashboard/pokja" class="inline-flex items-center gap-2 mt-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        Isi Data Pokja
+                    </a>
                 </div>
             </div>
         </div>`;
