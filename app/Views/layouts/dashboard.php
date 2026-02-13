@@ -33,8 +33,8 @@
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-[#0F0A0A] border-r border-gray-200 dark:border-[#3f4739] transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-200">
             <div class="p-6 border-b border-gray-200 dark:border-[#3f4739]">
                 <div class="flex flex-col items-center text-center">
-                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Hitam.png" alt="Logo" class="h-12 w-auto block dark:hidden mb-3">
-                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Putih.png" alt="Logo" class="h-12 w-auto hidden dark:block mb-3">
+                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Hitam.png" alt="Logo" id="logo-light" class="h-12 w-auto mb-3">
+                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Putih.png" alt="Logo" id="logo-dark" class="h-12 w-auto mb-3" style="display:none">
                     <h2 class="font-bold text-gray-900 dark:text-white text-sm">Sistem BSAN</h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5" id="sidebar-role-label">Dashboard</p>
                 </div>
@@ -185,6 +185,11 @@
             const moonIcon = document.getElementById('theme-icon-moon');
             if (sunIcon) sunIcon.style.display = isDark ? 'block' : 'none';
             if (moonIcon) moonIcon.style.display = isDark ? 'none' : 'block';
+            // Toggle logo
+            const logoLight = document.getElementById('logo-light');
+            const logoDark = document.getElementById('logo-dark');
+            if (logoLight) logoLight.style.display = isDark ? 'none' : 'block';
+            if (logoDark) logoDark.style.display = isDark ? 'block' : 'none';
         }
         function initTheme() {
             const saved = localStorage.getItem(THEME_KEY);
