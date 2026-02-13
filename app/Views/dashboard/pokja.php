@@ -622,55 +622,104 @@ function saveSK() {
 }
 
 // ---- View Renderers ----
-function renderMemberCard(label, m) {
+function getRoleBadge(label) {
+    if (label.includes('Ketua') && !label.includes('Wakil')) return { color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' };
+    if (label.includes('Wakil')) return { color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800' };
+    if (label.includes('Koordinator')) return { color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800' };
+    return { color: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700' };
+}
+
+function renderMemberCard(label, m, index) {
     if (!m || !m.nama) return '';
     const gLabel = m.jenisKelamin === 'L' ? 'Laki-laki' : m.jenisKelamin === 'P' ? 'Perempuan' : '-';
-    return `<div class="border-b dark:border-[#3f4739] pb-3">
-        <div class="flex items-center gap-2 mb-1">
-            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">${label}</span>
-            <span class="text-xs text-gray-400">· ${m.instansi || INSTANSI_MAP[label] || '-'}</span>
-        </div>
-        <p class="font-medium text-gray-900 dark:text-white">${m.nama} <span class="text-xs text-gray-400">(${m.jabatan || '-'})</span></p>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-1 mt-1 text-sm text-gray-500 dark:text-gray-400">
-            <span>📧 ${m.email || '-'}</span>
-            <span>🚻 ${gLabel}</span>
-            <span>📱 WA: ${m.noWa || '-'}</span>
-            <span>🏢 Instansi: ${m.nomorInstansi || '-'}</span>
-            <span>📞 Pribadi: ${m.nomorPribadi || '-'}</span>
+    const badge = getRoleBadge(label);
+    const initials = m.nama.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+    const isLeader = label.includes('Ketua') || label.includes('Wakil') || label.includes('Koordinator');
+    const borderLeft = isLeader ? 'border-l-4 ' + badge.color.split(' ').filter(c => c.startsWith('border-'))[0] : '';
+    return `<div class="bg-white dark:bg-[#0F0A0A] rounded-xl border ${borderLeft} border-gray-200 dark:border-[#3f4739] p-4 hover:shadow-md transition-shadow">
+        <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full ${badge.color.split(' ').slice(0, 2).join(' ')} flex items-center justify-center text-sm font-bold shrink-0">${initials}</div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="font-semibold text-gray-900 dark:text-white text-sm">${m.nama}</span>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border ${badge.color}">${m.jabatan || label}</span>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${m.instansi || INSTANSI_MAP[label] || '-'}</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 mt-2">
+                    <div class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"><svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><span class="truncate">${m.email || '-'}</span></div>
+                    <div class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"><svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>${gLabel}</div>
+                    <div class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"><svg class="w-3.5 h-3.5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>WA: ${m.noWa || '-'}</div>
+                    <div class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"><svg class="w-3.5 h-3.5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Kantor: ${m.nomorInstansi || '-'}</div>
+                </div>
+            </div>
         </div>
     </div>`;
 }
 
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
 function renderReadonlySummary(sub) {
     const s = sub.struktur || {};
-    let membersHtml = '';
-    if (s.ketua) membersHtml += renderMemberCard('Ketua — Sekretaris Daerah', s.ketua);
-    if (s.wakil) membersHtml += renderMemberCard('Wakil Ketua — Kepala Bappeda', s.wakil);
-    if (s.koordinator) membersHtml += renderMemberCard('Koordinator — Kepala Dinas Pendidikan', s.koordinator);
-    if (s.anggota) s.anggota.forEach(a => { membersHtml += renderMemberCard(a.bidang, a); });
+    let leadersHtml = '';
+    let anggotaHtml = '';
+    if (s.ketua) leadersHtml += renderMemberCard('Ketua Pokja', { ...s.ketua, jabatan: 'Ketua Pokja', instansi: 'Sekretaris Daerah' });
+    if (s.wakil) leadersHtml += renderMemberCard('Wakil Ketua', { ...s.wakil, jabatan: 'Wakil Ketua', instansi: 'Kepala Bappeda' });
+    if (s.koordinator) leadersHtml += renderMemberCard('Koordinator', { ...s.koordinator, jabatan: 'Koordinator', instansi: 'Kepala Dinas Pendidikan' });
+    if (s.anggota) s.anggota.forEach((a, i) => { anggotaHtml += renderMemberCard(a.bidang, a, i); });
+    const totalMembers = (s.ketua ? 1 : 0) + (s.wakil ? 1 : 0) + (s.koordinator ? 1 : 0) + (s.anggota ? s.anggota.length : 0);
 
     return `
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Nama Pokja</p>
-            <p class="font-bold text-gray-900 dark:text-white mt-1">${sub.namaPokja || '-'}</p>
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-5">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center"><svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
+                <p class="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider">Nama Pokja</p>
+            </div>
+            <p class="font-bold text-gray-900 dark:text-white text-base leading-tight">${sub.namaPokja || '-'}</p>
         </div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Nomor SK</p>
-            <p class="font-bold text-gray-900 dark:text-white mt-1">${sub.nomorSK || '-'}</p>
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-200 dark:border-purple-800 p-5">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center"><svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+                <p class="text-xs font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wider">Nomor SK</p>
+            </div>
+            <p class="font-bold text-gray-900 dark:text-white text-base font-mono">${sub.nomorSK || '-'}</p>
         </div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Masa Berlaku SK</p>
-            <p class="font-bold text-gray-900 dark:text-white mt-1">${sub.periodeMulai && sub.periodeSelesai ? sub.periodeMulai + ' s/d ' + sub.periodeSelesai : '-'}</p>
+        <div class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-200 dark:border-amber-800 p-5">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center"><svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+                <p class="text-xs font-medium text-amber-600 dark:text-amber-400 uppercase tracking-wider">Masa Berlaku SK</p>
+            </div>
+            <p class="font-bold text-gray-900 dark:text-white text-sm">${sub.periodeMulai ? formatDate(sub.periodeMulai) : '-'}</p>
+            ${sub.periodeSelesai ? `<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">s/d ${formatDate(sub.periodeSelesai)}</p>` : ''}
         </div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Call Center Pokja</p>
-            <p class="font-bold text-gray-900 dark:text-white mt-1">${sub.callCenterPokja || '-'}</p>
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border border-green-200 dark:border-green-800 p-5">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-900/40 flex items-center justify-center"><svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
+                <p class="text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider">Call Center</p>
+            </div>
+            <p class="font-bold text-gray-900 dark:text-white text-base font-mono">${sub.callCenterPokja || '-'}</p>
         </div>
     </div>
-    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Struktur dan Anggota Pokja</h3>
-        <div class="space-y-3">${membersHtml || '<p class="text-gray-400">Tidak ada data struktur.</p>'}</div>
+    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-[#3f4739]">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Struktur & Anggota Pokja</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">${totalMembers} anggota terdaftar</p>
+        </div>
+        <div class="p-6 space-y-4">
+            ${leadersHtml ? `<div>
+                <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Pimpinan Pokja</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">${leadersHtml}</div>
+            </div>` : ''}
+            ${anggotaHtml ? `<div class="pt-2">
+                <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Anggota Pokja</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">${anggotaHtml}</div>
+            </div>` : ''}
+            ${!leadersHtml && !anggotaHtml ? '<p class="text-gray-400 text-center py-8">Tidak ada data struktur.</p>' : ''}
+        </div>
     </div>`;
 }
 
@@ -709,10 +758,25 @@ function renderPendingView(app, sub, wilayah) {
 
 function renderApprovedView(app, sub, wilayah) {
     app.innerHTML = `
-    <div><h2 class="text-xl font-bold text-gray-900 dark:text-white">Data Pokja ${wilayah}</h2></div>
-    <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-6 text-center">
-        <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4"><svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-        <h3 class="text-lg font-bold text-green-800 dark:text-green-300">✅ Pokja Disetujui</h3>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div><h2 class="text-xl font-bold text-gray-900 dark:text-white">Data Pokja ${wilayah}</h2></div>
+        <div class="flex gap-2">
+            <button onclick="editPokja('struktur')" class="inline-flex items-center gap-2 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium px-4 py-2 rounded-lg transition-colors text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                Edit Struktur
+            </button>
+            <button onclick="editPokja('sk')" class="inline-flex items-center gap-2 border border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 font-medium px-4 py-2 rounded-lg transition-colors text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Update SK
+            </button>
+        </div>
+    </div>
+    <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center shrink-0"><svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <div>
+            <h3 class="font-bold text-green-800 dark:text-green-300">Pokja Disetujui</h3>
+            <p class="text-sm text-green-700 dark:text-green-400">Struktur Pokja telah diverifikasi. Anda tetap dapat memperbarui data Struktur atau SK jika ada perubahan anggota.</p>
+        </div>
     </div>
     ${renderReadonlySummary(sub)}`;
 }
