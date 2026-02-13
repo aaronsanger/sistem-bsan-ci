@@ -1,12 +1,3 @@
-# CI4 Ignores
-vendor/
-composer.phar
-writable/logs/*
-writable/cache/*
-writable/session/*
-writable/uploads/*
-writable/debugbar/*
-
 # Environment
 .env
 
@@ -19,3 +10,12 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Writable (logs/cache only)
+writable/logs/*
+writable/cache/*
+writable/session/*
+writable/debugbar/*
+!writable/logs/.gitkeep
+!writable/cache/.gitkeep
+!writable/session/.gitkeep

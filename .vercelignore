@@ -1,0 +1,7 @@
+.env
+.git
+writable/logs/*
+writable/cache/*
+writable/session/*
+writable/debugbar/*
+node_modules
