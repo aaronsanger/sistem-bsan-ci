@@ -31,12 +31,14 @@
 
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-[#0F0A0A] border-r border-gray-200 dark:border-[#3f4739] transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-200">
-            <div class="flex items-center gap-3 p-6 border-b border-gray-200 dark:border-[#3f4739]">
-                <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Hitam.png" alt="Logo" class="h-10 w-auto block dark:hidden">
-                <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Putih.png" alt="Logo" class="h-10 w-auto hidden dark:block">
-                <div>
-                    <h2 class="font-bold text-gray-900 dark:text-white text-sm">Sistem BSAN</h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400" id="sidebar-role-label">Dashboard</p>
+            <div class="p-6 border-b border-gray-200 dark:border-[#3f4739]">
+                <div class="flex items-center gap-3">
+                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Hitam.png" alt="Logo" class="h-10 w-auto block dark:hidden">
+                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Putih.png" alt="Logo" class="h-10 w-auto hidden dark:block">
+                    <div>
+                        <h2 class="font-bold text-gray-900 dark:text-white text-sm">Sistem BSAN</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400" id="sidebar-role-label">Dashboard</p>
+                    </div>
                 </div>
             </div>
 
@@ -168,6 +170,29 @@
 
     <script src="/assets/js/app.js"></script>
     <script>
+        // ---- Theme Toggle ----
+        const THEME_KEY = 'bsan_theme';
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        }
+        function initTheme() {
+            const saved = localStorage.getItem(THEME_KEY);
+            const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            applyTheme(isDark);
+        }
+        initTheme();
+        document.getElementById('theme-toggle')?.addEventListener('click', () => {
+            const isDark = !document.documentElement.classList.contains('dark');
+            applyTheme(isDark);
+            localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+        });
+
         // ---- Role System ----
         const ROLE_KEY = 'bsan_demo_role';
         const WILAYAH_PROV_KEY = 'bsan_wilayah_prov';
@@ -318,6 +343,44 @@
             `).join('');
         }
 
+        // Search kabupaten across ALL provinces (for typing "Kota Surakarta" etc)
+        function searchKabAcrossProvinces(filter) {
+            const list = document.getElementById('wilayah-kab-list');
+            const results = [];
+            for (const [prov, kabs] of Object.entries(WILAYAH_DATA)) {
+                for (const k of kabs) {
+                    if (k.toLowerCase().includes(filter.toLowerCase())) {
+                        results.push({ prov, kab: k });
+                    }
+                }
+            }
+            results.sort((a, b) => a.kab.localeCompare(b.kab));
+
+            if (results.length === 0) {
+                list.innerHTML = '<p class="text-sm text-gray-400 py-3 text-center">Tidak ditemukan</p>';
+                return;
+            }
+
+            list.innerHTML = results.slice(0, 50).map(r => `
+                <button onclick="selectKabFromSearch('${r.prov.replace(/'/g, "\\\'")}', '${r.kab.replace(/'/g, "\\\'")}')" 
+                    class="w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors group border border-transparent hover:border-green-200 dark:hover:border-green-800">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700 dark:text-gray-300 group-hover:text-green-700 dark:group-hover:text-green-400">${r.kab}</span>
+                        <svg class="w-4 h-4 text-gray-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <span class="text-xs text-gray-400">${r.prov}</span>
+                </button>
+            `).join('');
+        }
+
+        function selectKabFromSearch(prov, kab) {
+            localStorage.setItem(WILAYAH_PROV_KEY, prov);
+            localStorage.setItem(WILAYAH_KAB_KEY, kab);
+            localStorage.setItem(ROLE_KEY, pendingRole);
+            closeWilayahModal();
+            location.href = '/dashboard';
+        }
+
         function selectKabupaten(kab) {
             localStorage.setItem(WILAYAH_KAB_KEY, kab);
             localStorage.setItem(ROLE_KEY, pendingRole);
@@ -335,13 +398,34 @@
 
         function filterWilayahList() {
             const search = document.getElementById('wilayah-search').value;
+            const modal = document.getElementById('wilayah-modal');
+            const mode = modal.dataset.mode;
             const stepKab = document.getElementById('wilayah-step-kab');
+            const stepProv = document.getElementById('wilayah-step-prov');
 
-            if (stepKab.classList.contains('hidden')) {
+            if (mode === 'kab' && stepProv.classList.contains('hidden') === false && search.length >= 2) {
+                // In kab mode, still on prov step but user is typing — search kabupaten across all provinces
+                stepProv.classList.add('hidden');
+                stepKab.classList.remove('hidden');
+                document.getElementById('wilayah-modal-title').textContent = 'Hasil Pencarian';
+                document.getElementById('selected-prov-label').textContent = 'Semua Provinsi';
+                searchKabAcrossProvinces(search);
+            } else if (stepKab.classList.contains('hidden')) {
                 // Filtering provinces
                 renderProvList(search);
+            } else if (mode === 'kab' && document.getElementById('selected-prov-label').textContent === 'Semua Provinsi') {
+                // We were searching across all provinces
+                if (search.length < 2) {
+                    // Go back to prov list
+                    stepProv.classList.remove('hidden');
+                    stepKab.classList.add('hidden');
+                    document.getElementById('wilayah-modal-title').textContent = 'Pilih Wilayah';
+                    renderProvList(search);
+                } else {
+                    searchKabAcrossProvinces(search);
+                }
             } else {
-                // Filtering kabupaten
+                // Filtering kabupaten within selected province
                 const prov = localStorage.getItem(WILAYAH_PROV_KEY);
                 renderKabList(prov, search);
             }
