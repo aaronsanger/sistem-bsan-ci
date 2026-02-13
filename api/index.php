@@ -46,6 +46,21 @@ if (!isset($_ENV['CI_ENVIRONMENT'])) {
     $_SERVER['CI_ENVIRONMENT'] = 'production';
 }
 
+// Auto-detect baseURL on Vercel (override localhost from .env)
+if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== 'localhost') {
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    // Vercel always uses HTTPS
+    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+        $scheme = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+    }
+    $autoBaseURL = $scheme . '://' . $_SERVER['HTTP_HOST'] . '/';
+    $_ENV['app.baseURL'] = $autoBaseURL;
+    $_SERVER['app.baseURL'] = $autoBaseURL;
+    // Remove index.php from URLs on Vercel
+    $_ENV['app.indexPage'] = '';
+    $_SERVER['app.indexPage'] = '';
+}
+
 // Load paths config and override writable directory
 require $projectRoot . '/app/Config/Paths.php';
 $paths = new Config\Paths();
