@@ -346,6 +346,10 @@ function buildFormHTML(wilayah, existing) {
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Lengkapi struktur Pokja sebelum mengunggah SK</p>
                 </div>
                 <div class="flex gap-2">
+                    <button onclick="exportDummyData()" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors" title="Download data contoh">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Data Contoh
+                    </button>
                     <button onclick="exportExcelTemplate()" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" title="Download template Excel">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         Export Template
@@ -746,6 +750,36 @@ function loadSheetJS() {
         s.onerror = () => reject(new Error('Gagal memuat library Excel'));
         document.head.appendChild(s);
     });
+}
+
+// ---- Export Dummy Data ----
+async function exportDummyData() {
+    try {
+        const XLSX = await loadSheetJS();
+        const wilayah = getWilayahName();
+        const headers = ['Peran', 'Bidang', 'Jabatan', 'Instansi', 'Nama*', 'Email*', 'Jenis Kelamin* (L/P)', 'No. WhatsApp*', 'No. Instansi*', 'No. Pribadi'];
+        const rows = [headers,
+            ['Pimpinan', 'Ketua Pokja', 'Ketua Pokja', 'Sekretaris Daerah', 'Budi Santoso', 'ketua@demo.bsan.id', 'L', '6281234567890', '6221345678', '6285678901234'],
+            ['Pimpinan', 'Wakil Ketua', 'Wakil Ketua', 'Kepala Bappeda', 'Siti Rahayu', 'wakil@demo.bsan.id', 'P', '6281345678901', '6221456789', ''],
+            ['Pimpinan', 'Koordinator', 'Koordinator', 'Kepala Dinas Pendidikan', 'Ahmad Wijaya', 'koordinator@demo.bsan.id', 'L', '6281456789012', '6221567890', '6285789012345'],
+            ['Anggota', 'Bidang Pendidikan', 'Anggota', 'Dinas Pendidikan', 'Dewi Lestari', 'pendidikan@demo.bsan.id', 'P', '6281567890123', '6221678901', ''],
+            ['Anggota', 'Bidang PPPA', 'Anggota', 'Dinas PPPA', 'Rina Wulandari', 'pppa@demo.bsan.id', 'P', '6281678901234', '6221789012', '6285890123456'],
+            ['Anggota', 'Bidang Sosial', 'Anggota', 'Dinas Sosial', 'Hendra Pratama', 'sosial@demo.bsan.id', 'L', '6281789012345', '6221890123', ''],
+            ['Anggota', 'Bidang Kesehatan', 'Anggota', 'Dinas Kesehatan', 'Nurul Hidayah', 'kesehatan@demo.bsan.id', 'P', '6281890123456', '6221901234', '6285901234567'],
+            ['Anggota', 'Bidang Dukbangga', 'Anggota', 'Dinas Dukbangga', 'Agus Setiawan', 'dukbangga@demo.bsan.id', 'L', '6281901234567', '6222012345', ''],
+            ['Anggota', 'Bidang Kominfo', 'Anggota', 'Dinas Kominfo', 'Maya Putri', 'kominfo@demo.bsan.id', 'P', '6282012345678', '6222123456', '6286012345678'],
+        ];
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        ws['!cols'] = [
+            { wch: 12 }, { wch: 22 }, { wch: 18 }, { wch: 26 },
+            { wch: 25 }, { wch: 30 }, { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 18 },
+        ];
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Struktur Pokja');
+        XLSX.writeFile(wb, `Data_Contoh_Pokja_${wilayah.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`);
+    } catch (err) {
+        alert('Error: ' + err.message);
+    }
 }
 
 // ---- Export Excel Template ----
