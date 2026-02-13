@@ -52,6 +52,40 @@
     </div>
 </div>
 
+<!-- Import Excel Modal -->
+<div id="import-excel-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50" onclick="closeImportModal()"></div>
+    <div class="relative flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-lg shadow-2xl">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Import Data dari Excel</h3>
+                <button onclick="closeImportModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div id="import-dropzone" class="border-2 border-dashed border-gray-300 dark:border-[#3f4739] rounded-xl p-8 text-center cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all"
+                     onclick="document.getElementById('import-file-input').click()">
+                    <svg class="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Drag & drop file Excel di sini</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">atau klik untuk mencari file</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Format: .xlsx, .xls</p>
+                </div>
+                <div id="import-file-info" class="hidden mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-2">
+                    <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span id="import-file-name" class="text-sm text-green-700 dark:text-green-400 font-medium truncate"></span>
+                    <button onclick="clearImportFile()" class="ml-auto text-green-600 hover:text-red-500 shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                </div>
+                <input type="file" id="import-file-input" accept=".xlsx,.xls" class="hidden" onchange="onImportFileSelected(this)">
+            </div>
+            <div class="px-6 pb-6 flex gap-3">
+                <button onclick="closeImportModal()" class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1414] transition-colors font-medium">Batal</button>
+                <button id="btn-do-import" onclick="doImport()" disabled class="flex-1 bg-blue-700 hover:bg-blue-800 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Import Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
@@ -354,11 +388,10 @@ function buildFormHTML(wilayah, existing) {
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         Export Template
                     </button>
-                    <label class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer" title="Import data dari Excel">
+                    <button onclick="openImportModal()" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" title="Import data dari Excel">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                         Import Excel
-                        <input type="file" accept=".xlsx,.xls" onchange="importExcel(this)" class="hidden">
-                    </label>
+                    </button>
                 </div>
             </div>
 
@@ -838,20 +871,75 @@ async function exportExcelTemplate() {
     }
 }
 
-// ---- Import Excel ----
-async function importExcel(input) {
-    if (!input.files || !input.files[0]) return;
+// ---- Import Excel Modal System ----
+let importPendingFile = null;
+
+function openImportModal() {
+    importPendingFile = null;
+    const modal = document.getElementById('import-excel-modal');
+    modal.classList.remove('hidden');
+    document.getElementById('import-file-info').classList.add('hidden');
+    document.getElementById('btn-do-import').disabled = true;
+    document.getElementById('import-file-input').value = '';
+    setupDropzone();
+}
+
+function closeImportModal() {
+    document.getElementById('import-excel-modal').classList.add('hidden');
+    importPendingFile = null;
+}
+
+function setupDropzone() {
+    const dz = document.getElementById('import-dropzone');
+    const prevent = (e) => { e.preventDefault(); e.stopPropagation(); };
+
+    dz.addEventListener('dragenter', (e) => { prevent(e); dz.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20'); });
+    dz.addEventListener('dragover', (e) => { prevent(e); dz.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20'); });
+    dz.addEventListener('dragleave', (e) => { prevent(e); dz.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20'); });
+    dz.addEventListener('drop', (e) => {
+        prevent(e);
+        dz.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+        const files = e.dataTransfer.files;
+        if (files.length && /\.(xlsx|xls)$/i.test(files[0].name)) {
+            importPendingFile = files[0];
+            showImportFileInfo(files[0].name);
+        } else {
+            alert('Pilih file dengan format .xlsx atau .xls');
+        }
+    });
+}
+
+function onImportFileSelected(input) {
+    if (input.files && input.files[0]) {
+        importPendingFile = input.files[0];
+        showImportFileInfo(input.files[0].name);
+    }
+}
+
+function showImportFileInfo(name) {
+    document.getElementById('import-file-info').classList.remove('hidden');
+    document.getElementById('import-file-name').textContent = name;
+    document.getElementById('btn-do-import').disabled = false;
+}
+
+function clearImportFile() {
+    importPendingFile = null;
+    document.getElementById('import-file-info').classList.add('hidden');
+    document.getElementById('btn-do-import').disabled = true;
+    document.getElementById('import-file-input').value = '';
+}
+
+async function doImport() {
+    if (!importPendingFile) return;
     try {
         const XLSX = await loadSheetJS();
-        const file = input.files[0];
-        const data = await file.arrayBuffer();
+        const data = await importPendingFile.arrayBuffer();
         const wb = XLSX.read(data);
         const ws = wb.Sheets[wb.SheetNames[0]];
         const json = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
         if (json.length < 2) { alert('File Excel kosong atau formatnya salah.'); return; }
 
-        // Skip header row (row 0)
         const dataRows = json.slice(1);
         const str = (v) => v != null ? String(v).trim() : '';
 
@@ -861,12 +949,8 @@ async function importExcel(input) {
         for (let i = 0; i < Math.min(3, dataRows.length); i++) {
             const r = dataRows[i];
             leaders[leaderMap[i]] = {
-                nama: str(r[4]),
-                email: str(r[5]),
-                jenisKelamin: str(r[6]),
-                noWa: str(r[7]),
-                nomorInstansi: str(r[8]),
-                nomorPribadi: str(r[9]),
+                nama: str(r[4]), email: str(r[5]), jenisKelamin: str(r[6]),
+                noWa: str(r[7]), nomorInstansi: str(r[8]), nomorPribadi: str(r[9]),
             };
         }
 
@@ -874,20 +958,13 @@ async function importExcel(input) {
         const anggota = [];
         for (let i = 3; i < dataRows.length; i++) {
             const r = dataRows[i];
-            if (!r || !str(r[4])) continue; // Skip empty rows
+            if (!r || !str(r[4])) continue;
             const bidang = str(r[1]) || 'Bidang Pendidikan';
             const isDefaultBidang = BIDANG_OPTIONS.some(b => b.value === bidang);
             anggota.push({
-                bidang,
-                isExtra: !isDefaultBidang,
-                nama: str(r[4]),
-                jabatan: 'Anggota',
-                instansi: INSTANSI_MAP[bidang] || 'Dinas terkait',
-                email: str(r[5]),
-                jenisKelamin: str(r[6]),
-                noWa: str(r[7]),
-                nomorInstansi: str(r[8]),
-                nomorPribadi: str(r[9]),
+                bidang, isExtra: !isDefaultBidang, nama: str(r[4]), jabatan: 'Anggota',
+                instansi: INSTANSI_MAP[bidang] || 'Dinas terkait', email: str(r[5]),
+                jenisKelamin: str(r[6]), noWa: str(r[7]), nomorInstansi: str(r[8]), nomorPribadi: str(r[9]),
             });
         }
 
@@ -908,13 +985,13 @@ async function importExcel(input) {
         if (idx >= 0) subs[idx] = submission; else subs.push(submission);
         saveSubmissions(subs);
 
+        closeImportModal();
         alert(`Berhasil import ${Object.keys(leaders).length} pimpinan dan ${anggota.length} anggota dari Excel!`);
         renderPokjaPage();
 
     } catch (err) {
         alert('Error membaca file: ' + err.message);
     }
-    input.value = ''; // Reset file input
 }
 </script>
 <?= $this->endSection() ?>
