@@ -339,8 +339,16 @@
 
     // ---- Dinas Dashboard ----
     function renderDinasDashboard(role) {
-        const wilayah = role === 'dinas_prov' ? 'Prov. Aceh' : 'Kota Banda Aceh';
-        const jenisLabel = role === 'dinas_prov' ? 'Provinsi' : 'Kabupaten/Kota';
+        const provName = localStorage.getItem('bsan_wilayah_prov') || '';
+        const kabName = localStorage.getItem('bsan_wilayah_kab') || '';
+        let wilayah, jenisLabel;
+        if (role === 'dinas_prov') {
+            jenisLabel = 'Provinsi';
+            wilayah = provName ? `Prov. ${provName}` : 'Provinsi';
+        } else {
+            jenisLabel = 'Kabupaten/Kota';
+            wilayah = kabName || 'Kabupaten/Kota';
+        }
         document.getElementById('dinas-title').textContent = `Dashboard ${jenisLabel} — ${wilayah}`;
         document.getElementById('dinas-subtitle').textContent = `Kelola Pokja ${wilayah}`;
 
