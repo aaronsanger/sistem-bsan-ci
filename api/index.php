@@ -43,25 +43,28 @@ if (is_file($projectRoot . '/.env')) {
 // Set CI_ENVIRONMENT for production on Vercel
 $_ENV['CI_ENVIRONMENT'] = 'production';
 $_SERVER['CI_ENVIRONMENT'] = 'production';
+putenv('CI_ENVIRONMENT=production');
 
 // Set VERCEL flag for AuthFilter detection
 $_ENV['VERCEL'] = '1';
 $_SERVER['VERCEL'] = '1';
+putenv('VERCEL=1');
 
-// Auto-detect baseURL on Vercel (override localhost from .env)
-if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== 'localhost') {
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    // Vercel always uses HTTPS
-    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-        $scheme = $_SERVER['HTTP_X_FORWARDED_PROTO'];
-    }
-    $autoBaseURL = $scheme . '://' . $_SERVER['HTTP_HOST'] . '/';
-    $_ENV['app.baseURL'] = $autoBaseURL;
-    $_SERVER['app.baseURL'] = $autoBaseURL;
-    // Remove index.php from URLs on Vercel
-    $_ENV['app.indexPage'] = '';
-    $_SERVER['app.indexPage'] = '';
+// Auto-detect baseURL on Vercel (override localhost from .env / App.php)
+$scheme = 'https'; // Vercel always uses HTTPS
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+    $scheme = $_SERVER['HTTP_X_FORWARDED_PROTO'];
 }
+$host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? 'sistem-bsan-dev.vercel.app';
+$autoBaseURL = $scheme . '://' . $host . '/';
+$_ENV['app.baseURL'] = $autoBaseURL;
+$_SERVER['app.baseURL'] = $autoBaseURL;
+putenv("app.baseURL={$autoBaseURL}");
+
+// Remove index.php from URLs on Vercel (rewrite handles routing)
+$_ENV['app.indexPage'] = '';
+$_SERVER['app.indexPage'] = '';
+putenv('app.indexPage=');
 
 // Load paths config and override writable directory
 require $projectRoot . '/app/Config/Paths.php';
