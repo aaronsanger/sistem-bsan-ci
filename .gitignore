@@ -1,0 +1,21 @@
+# CI4 Ignores
+vendor/
+composer.phar
+writable/logs/*
+writable/cache/*
+writable/session/*
+writable/uploads/*
+writable/debugbar/*
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
