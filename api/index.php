@@ -13,21 +13,23 @@ chdir($projectRoot);
 define('FCPATH', $projectRoot . '/public/');
 
 // Vercel serverless has a read-only filesystem except /tmp
-// Set writable directory to /tmp for logs, cache, sessions
+// Create writable directory structure in /tmp BEFORE CI4 boots
 $writablePath = '/tmp/ci4-writable';
 if (!is_dir($writablePath)) {
-    @mkdir($writablePath, 0777, true);
-    @mkdir($writablePath . '/logs', 0777, true);
-    @mkdir($writablePath . '/cache', 0777, true);
-    @mkdir($writablePath . '/session', 0777, true);
-    @mkdir($writablePath . '/uploads', 0777, true);
-    @mkdir($writablePath . '/debugbar', 0777, true);
+    mkdir($writablePath, 0777, true);
 }
+foreach (['logs', 'cache', 'session', 'uploads', 'debugbar'] as $dir) {
+    $subDir = $writablePath . '/' . $dir;
+    if (!is_dir($subDir)) {
+        mkdir($subDir, 0777, true);
+    }
+}
+
+// CRITICAL: Define WRITEPATH constant BEFORE Boot.php checks it
+// Boot::definePathConstants() skips WRITEPATH if already defined
 define('WRITEPATH', $writablePath . '/');
 
-// Load environment variables from Vercel's environment
-// (Set via Vercel Dashboard > Settings > Environment Variables)
-// Also try loading from .env if it exists (for local dev)
+// Load environment variables
 if (is_file($projectRoot . '/.env')) {
     $dotenv = parse_ini_file($projectRoot . '/.env');
     if ($dotenv !== false) {
@@ -44,11 +46,9 @@ if (!isset($_ENV['CI_ENVIRONMENT'])) {
     $_SERVER['CI_ENVIRONMENT'] = 'production';
 }
 
-// Load paths config
+// Load paths config and override writable directory
 require $projectRoot . '/app/Config/Paths.php';
 $paths = new Config\Paths();
-
-// Override writable directory to /tmp
 $paths->writableDirectory = $writablePath;
 
 // Load the framework bootstrap
