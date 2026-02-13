@@ -76,6 +76,12 @@ function normalizePhone(val) {
     return digits;
 }
 
+// ---- Phone digit validator: 10-13 digits ----
+function isValidPhoneLength(phone) {
+    const digits = phone.replace(/[^0-9]/g, '');
+    return digits.length >= 10 && digits.length <= 13;
+}
+
 // ---- Email validator ----
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -147,7 +153,9 @@ const GENDER_OPTIONS = '<option value="">Pilih</option><option value="L">Laki-la
 
 function init() {
     if (role === 'kementerian') { location.href = '/dashboard'; return; }
-    if (!localStorage.getItem(DEMO_SHOWN_KEY + '_' + role)) {
+    // Always show info modal for non-approved accounts
+    const { sub } = getMySubmission();
+    if (!sub || sub.status !== 'approved') {
         document.getElementById('demo-info-modal').classList.remove('hidden');
     }
     renderPokjaPage();
@@ -155,7 +163,6 @@ function init() {
 
 function closeDemoInfo() {
     document.getElementById('demo-info-modal').classList.add('hidden');
-    localStorage.setItem(DEMO_SHOWN_KEY + '_' + role, '1');
 }
 
 function renderPokjaPage() {
@@ -333,9 +340,22 @@ function buildFormHTML(wilayah, existing) {
     <!-- Tab 1: Struktur Pokja -->
     <div id="tab-struktur" class="${activeTab === 'struktur' ? '' : 'hidden'}">
         <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6 space-y-6">
-            <div>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Struktur & Anggota Pokja ${wilayah}</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Lengkapi struktur Pokja sebelum mengunggah SK</p>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Struktur & Anggota Pokja ${wilayah}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Lengkapi struktur Pokja sebelum mengunggah SK</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="exportExcelTemplate()" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" title="Download template Excel">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Export Template
+                    </button>
+                    <label class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer" title="Import data dari Excel">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Import Excel
+                        <input type="file" accept=".xlsx,.xls" onchange="importExcel(this)" class="hidden">
+                    </label>
+                </div>
             </div>
 
             <!-- Identitas Pokja + No. Call Center Pokja -->
@@ -495,7 +515,10 @@ function validateRequired(struktur) {
         if (m.email && !isValidEmail(m.email)) return `Email ${label} tidak valid.`;
         if (!m.jenisKelamin) return `Jenis Kelamin ${label} wajib diisi.`;
         if (!m.noWa) return `No. WhatsApp ${label} wajib diisi.`;
+        if (m.noWa && !isValidPhoneLength(m.noWa)) return `No. WhatsApp ${label} harus 10-13 digit.`;
         if (!m.nomorInstansi) return `No. Instansi ${label} wajib diisi.`;
+        if (m.nomorInstansi && !isValidPhoneLength(m.nomorInstansi)) return `No. Instansi ${label} harus 10-13 digit.`;
+        if (m.nomorPribadi && !isValidPhoneLength(m.nomorPribadi)) return `No. Pribadi ${label} harus 10-13 digit.`;
     }
     // Validate anggota
     for (let i = 0; i < struktur.anggota.length; i++) {
@@ -506,7 +529,10 @@ function validateRequired(struktur) {
         if (a.email && !isValidEmail(a.email)) return `Email ${label} tidak valid.`;
         if (!a.jenisKelamin) return `Jenis Kelamin ${label} wajib diisi.`;
         if (!a.noWa) return `No. WhatsApp ${label} wajib diisi.`;
+        if (a.noWa && !isValidPhoneLength(a.noWa)) return `No. WhatsApp ${label} harus 10-13 digit.`;
         if (!a.nomorInstansi) return `No. Instansi ${label} wajib diisi.`;
+        if (a.nomorInstansi && !isValidPhoneLength(a.nomorInstansi)) return `No. Instansi ${label} harus 10-13 digit.`;
+        if (a.nomorPribadi && !isValidPhoneLength(a.nomorPribadi)) return `No. Pribadi ${label} harus 10-13 digit.`;
     }
     return null;
 }
@@ -709,5 +735,152 @@ function resubmit(tab) {
 }
 
 $(document).ready(function() { init(); });
+
+// ---- SheetJS Dynamic Loader ----
+function loadSheetJS() {
+    return new Promise((resolve, reject) => {
+        if (window.XLSX) { resolve(window.XLSX); return; }
+        const s = document.createElement('script');
+        s.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+        s.onload = () => resolve(window.XLSX);
+        s.onerror = () => reject(new Error('Gagal memuat library Excel'));
+        document.head.appendChild(s);
+    });
+}
+
+// ---- Export Excel Template ----
+async function exportExcelTemplate() {
+    try {
+        const XLSX = await loadSheetJS();
+        const wilayah = getWilayahName();
+        const { sub } = getMySubmission();
+        const s = sub?.struktur || {};
+
+        // Build rows: header + 3 leaders + 6 default anggota + extra anggota
+        const headers = ['Peran', 'Bidang', 'Jabatan', 'Instansi', 'Nama*', 'Email*', 'Jenis Kelamin* (L/P)', 'No. WhatsApp*', 'No. Instansi*', 'No. Pribadi'];
+
+        const rows = [headers];
+
+        // Leader rows
+        const leaderKeys = [
+            { key: 'ketua', peran: 'Pimpinan', bidang: 'Ketua Pokja', jabatan: 'Ketua Pokja', instansi: 'Sekretaris Daerah' },
+            { key: 'wakil', peran: 'Pimpinan', bidang: 'Wakil Ketua', jabatan: 'Wakil Ketua', instansi: 'Kepala Bappeda' },
+            { key: 'koordinator', peran: 'Pimpinan', bidang: 'Koordinator', jabatan: 'Koordinator', instansi: 'Kepala Dinas Pendidikan' },
+        ];
+
+        leaderKeys.forEach(lk => {
+            const d = s[lk.key] || {};
+            rows.push([lk.peran, lk.bidang, lk.jabatan, lk.instansi, d.nama || '', d.email || '', d.jenisKelamin || '', d.noWa || '', d.nomorInstansi || '', d.nomorPribadi || '']);
+        });
+
+        // Anggota rows
+        const anggotaList = s.anggota && s.anggota.length ? s.anggota : defaultAnggota;
+        anggotaList.forEach(a => {
+            rows.push(['Anggota', a.bidang || '', 'Anggota', INSTANSI_MAP[a.bidang] || 'Dinas terkait', a.nama || '', a.email || '', a.jenisKelamin || '', a.noWa || '', a.nomorInstansi || '', a.nomorPribadi || '']);
+        });
+
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+
+        // Set column widths
+        ws['!cols'] = [
+            { wch: 12 }, // Peran
+            { wch: 22 }, // Bidang
+            { wch: 18 }, // Jabatan
+            { wch: 26 }, // Instansi
+            { wch: 25 }, // Nama
+            { wch: 30 }, // Email
+            { wch: 18 }, // JK
+            { wch: 18 }, // WA
+            { wch: 18 }, // Instansi No
+            { wch: 18 }, // Pribadi
+        ];
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Struktur Pokja');
+        XLSX.writeFile(wb, `Template_Pokja_${wilayah.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`);
+
+    } catch (err) {
+        alert('Error: ' + err.message);
+    }
+}
+
+// ---- Import Excel ----
+async function importExcel(input) {
+    if (!input.files || !input.files[0]) return;
+    try {
+        const XLSX = await loadSheetJS();
+        const file = input.files[0];
+        const data = await file.arrayBuffer();
+        const wb = XLSX.read(data);
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+        if (json.length < 2) { alert('File Excel kosong atau formatnya salah.'); return; }
+
+        // Skip header row (row 0)
+        const dataRows = json.slice(1);
+        const str = (v) => v != null ? String(v).trim() : '';
+
+        // First 3 rows = Ketua, Wakil, Koordinator
+        const leaders = {};
+        const leaderMap = ['ketua', 'wakil', 'koordinator'];
+        for (let i = 0; i < Math.min(3, dataRows.length); i++) {
+            const r = dataRows[i];
+            leaders[leaderMap[i]] = {
+                nama: str(r[4]),
+                email: str(r[5]),
+                jenisKelamin: str(r[6]),
+                noWa: str(r[7]),
+                nomorInstansi: str(r[8]),
+                nomorPribadi: str(r[9]),
+            };
+        }
+
+        // Remaining rows = Anggota
+        const anggota = [];
+        for (let i = 3; i < dataRows.length; i++) {
+            const r = dataRows[i];
+            if (!r || !str(r[4])) continue; // Skip empty rows
+            const bidang = str(r[1]) || 'Bidang Pendidikan';
+            const isDefaultBidang = BIDANG_OPTIONS.some(b => b.value === bidang);
+            anggota.push({
+                bidang,
+                isExtra: !isDefaultBidang,
+                nama: str(r[4]),
+                jabatan: 'Anggota',
+                instansi: INSTANSI_MAP[bidang] || 'Dinas terkait',
+                email: str(r[5]),
+                jenisKelamin: str(r[6]),
+                noWa: str(r[7]),
+                nomorInstansi: str(r[8]),
+                nomorPribadi: str(r[9]),
+            });
+        }
+
+        // Save to localStorage as draft
+        const subs = getSubmissions();
+        const { idx } = getMySubmission();
+        const wilayah = getWilayahName();
+
+        const namaPokja = document.getElementById('nama-pokja')?.value || `Pokja BSAN ${wilayah}`;
+        const callCenter = document.getElementById('call-center-pokja')?.value || '';
+
+        const submission = idx >= 0 ? { ...subs[idx] } : { roleType: role, wilayah, status: 'draft', createdAt: new Date().toISOString() };
+        submission.namaPokja = namaPokja;
+        submission.callCenterPokja = callCenter;
+        submission.struktur = { ...leaders, anggota };
+        submission.updatedAt = new Date().toISOString();
+
+        if (idx >= 0) subs[idx] = submission; else subs.push(submission);
+        saveSubmissions(subs);
+
+        alert(`Berhasil import ${Object.keys(leaders).length} pimpinan dan ${anggota.length} anggota dari Excel!`);
+        renderPokjaPage();
+
+    } catch (err) {
+        alert('Error membaca file: ' + err.message);
+    }
+    input.value = ''; // Reset file input
+}
 </script>
 <?= $this->endSection() ?>
