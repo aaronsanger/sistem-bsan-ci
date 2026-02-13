@@ -55,7 +55,7 @@ class Auth extends Controller
                 'user_id' => 'demo-dinas-dki',
                 'user_name' => 'Admin Dinas Prov. DKI Jakarta',
                 'user_role' => 'dinas_prov',
-                'wilayah_provinsi' => 'DKI Jakarta',
+                'wilayah_provinsi' => 'D.K.I. Jakarta',
             ],
             'bandung@bsan.id' => [
                 'password' => 'bandung123',
