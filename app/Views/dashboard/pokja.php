@@ -64,7 +64,8 @@ function getSubmissions() { return JSON.parse(localStorage.getItem(POKJA_SUBMISS
 function saveSubmissions(d) { localStorage.setItem(POKJA_SUBMISSIONS_KEY, JSON.stringify(d)); }
 function getMySubmission() {
     const subs = getSubmissions();
-    return { sub: subs.find(s => s.roleType === role), idx: subs.findIndex(s => s.roleType === role) };
+    const w = getWilayahName();
+    return { sub: subs.find(s => s.roleType === role && s.wilayah === w), idx: subs.findIndex(s => s.roleType === role && s.wilayah === w) };
 }
 
 // Instansi auto-fill mapping (non-editable)

@@ -354,7 +354,7 @@
 
         // Find submission for this role
         const subs = getSubmissions();
-        const mySub = subs.find(s => s.roleType === role);
+        const mySub = subs.find(s => s.roleType === role && s.wilayah === wilayah);
 
         if (mySub) {
             // Update cards
