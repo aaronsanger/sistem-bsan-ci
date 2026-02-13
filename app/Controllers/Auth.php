@@ -27,6 +27,39 @@ class Auth extends Controller
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
+        // Demo accounts — bypass Supabase auth
+        $demoAccounts = [
+            'admin@bsan.id' => [
+                'password' => 'admin123',
+                'user_id' => 'demo-admin',
+                'user_name' => 'Admin Demo',
+                'user_role' => 'admin',
+            ],
+            'koordinator@bsan.id' => [
+                'password' => 'koordinator123',
+                'user_id' => 'demo-koordinator',
+                'user_name' => 'Koordinator Demo',
+                'user_role' => 'koordinator',
+            ],
+        ];
+
+        if (isset($demoAccounts[$email])) {
+            $demo = $demoAccounts[$email];
+            if ($password === $demo['password']) {
+                session()->set([
+                    'user_id' => $demo['user_id'],
+                    'user_email' => $email,
+                    'user_name' => $demo['user_name'],
+                    'user_role' => $demo['user_role'],
+                    'access_token' => 'demo-token',
+                    'refresh_token' => '',
+                ]);
+                return redirect()->to('/dashboard');
+            }
+            return redirect()->back()->with('error', 'Password salah.');
+        }
+
+        // Real Supabase auth
         $result = $this->supabase->signIn($email, $password);
 
         if (isset($result['error'])) {

@@ -39,6 +39,8 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->post('profile', 'Profile::update');
     $routes->get('pokja', 'Pokja::index');
     $routes->post('pokja/invite', 'Pokja::invite');
+    $routes->get('pelaporan', 'Pelaporan::index');
+    $routes->get('sumber-dukungan', 'SumberDukungan::index');
     $routes->get('rujukan', 'Rujukan::index');
     $routes->post('rujukan', 'Rujukan::store');
     $routes->post('rujukan/update', 'Rujukan::update');
