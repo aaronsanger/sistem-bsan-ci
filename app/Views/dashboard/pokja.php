@@ -221,41 +221,46 @@ function buildLeaderRow(key, label, sublabel, colorClass, data) {
     const instansi = INSTANSI_MAP[key] || '';
     const jabatan = JABATAN_MAP[key] || '';
     const genderSel = (val) => GENDER_OPTIONS.replace(`value="${val}"`, `value="${val}" selected`);
+    const initials = d.nama ? d.nama.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() : label[0];
 
-    return `<div class="border border-gray-200 dark:border-[#3f4739] rounded-xl p-4 mb-4" data-leader="${key}">
-        <div class="flex items-center gap-2 mb-3">
-            <span class="px-2 py-1 rounded-full text-xs font-semibold ${colorClass}">${label}</span>
-            <span class="text-xs text-gray-500 dark:text-gray-400">${sublabel}</span>
-            <span class="ml-auto text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">📌 ${instansi}</span>
+    return `<div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] border-l-4 ${colorClass.split(' ').filter(c => c.startsWith('border-'))[0] || 'border-blue-200'} mb-4 overflow-hidden" data-leader="${key}">
+        <div class="px-4 py-3 bg-gray-50 dark:bg-[#1a1414] border-b border-gray-200 dark:border-[#3f4739] flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full ${colorClass} flex items-center justify-center text-xs font-bold">${initials}</div>
+            <div>
+                <span class="font-semibold text-gray-900 dark:text-white text-sm">${label}</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">${sublabel}</span>
+            </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama <span class="text-red-500">*</span></label>
-                <input type="text" class="leader-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nama || ''}" placeholder="Nama lengkap" required>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan <span class="text-red-500">*</span></label>
-                <input type="text" class="leader-jabatan w-full px-3 py-2 border border-gray-200 dark:border-[#3f4739] rounded-lg bg-gray-50 dark:bg-[#1a1414] text-gray-500 dark:text-gray-400 text-sm cursor-not-allowed" value="${jabatan}" readonly>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email <span class="text-red-500">*</span></label>
-                <input type="email" class="leader-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.email || ''}" placeholder="Email" required>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
-                <select class="leader-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" required>${genderSel(d.jenisKelamin || '')}</select>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
-                <input type="tel" class="leader-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.noWa || ''}" placeholder="628xxxxxxxxx" required>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
-                <input type="tel" class="leader-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorInstansi || ''}" placeholder="No. telepon instansi" required>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi <span class="text-gray-400">(opsional)</span></label>
-                <input type="tel" class="leader-pribadi w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorPribadi || ''}" placeholder="No. HP pribadi">
+        <div class="p-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama <span class="text-red-500">*</span></label>
+                    <input type="text" class="leader-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nama || ''}" placeholder="Nama lengkap" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan <span class="text-red-500">*</span></label>
+                    <input type="text" class="leader-jabatan w-full px-3 py-2 border border-gray-200 dark:border-[#3f4739] rounded-lg bg-gray-50 dark:bg-[#1a1414] text-gray-500 dark:text-gray-400 text-sm cursor-not-allowed" value="${jabatan}" readonly>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email <span class="text-red-500">*</span></label>
+                    <input type="email" class="leader-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.email || ''}" placeholder="Email" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
+                    <select class="leader-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" required>${genderSel(d.jenisKelamin || '')}</select>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
+                    <input type="tel" class="leader-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.noWa || ''}" placeholder="628xxxxxxxxx" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
+                    <input type="tel" class="leader-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorInstansi || ''}" placeholder="No. telepon instansi" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi <span class="text-gray-400">(opsional)</span></label>
+                    <input type="tel" class="leader-pribadi w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorPribadi || ''}" placeholder="No. HP pribadi">
+                </div>
             </div>
         </div>
     </div>`;
@@ -265,55 +270,60 @@ function buildLeaderRow(key, label, sublabel, colorClass, data) {
 function buildAnggotaRow(a, i, isExtra) {
     const instansi = INSTANSI_MAP[a.bidang] || 'Dinas terkait';
     const genderSel = GENDER_OPTIONS.replace(`value="${a.jenisKelamin || ''}"`, `value="${a.jenisKelamin || ''}" selected`);
+    const badge = getRoleBadge(a.bidang);
+    const initials = a.nama ? a.nama.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() : (i + 1).toString();
 
-    // For extra anggota: show bidang dropdown. For default 6: show locked bidang label.
-    let bidangHtml;
+    let headerHtml;
     if (isExtra) {
         const opts = BIDANG_OPTIONS.map(b =>
             `<option value="${b.value}" ${a.bidang === b.value ? 'selected' : ''}>${b.value}</option>`
         ).join('');
-        bidangHtml = `<div class="flex items-center gap-2 mb-3">
+        headerHtml = `<div class="px-4 py-3 bg-gray-50 dark:bg-[#1a1414] border-b border-gray-200 dark:border-[#3f4739] flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">${initials}</div>
             <select class="anggota-bidang-select px-2 py-1 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-[#3f4739]" onchange="updateAnggotaInstansi(this)">${opts}</select>
-            <span class="anggota-instansi-label text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">📌 ${instansi}</span>
-            <button onclick="removeAnggota(this)" class="ml-auto text-red-500 hover:text-red-700 text-xs font-medium">Hapus</button>
+            <span class="anggota-instansi-label text-xs text-gray-500 dark:text-gray-400">${instansi}</span>
+            <button onclick="removeAnggota(this)" class="ml-auto text-red-500 hover:text-red-700 text-xs font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">Hapus</button>
         </div>`;
     } else {
-        bidangHtml = `<div class="flex items-center gap-2 mb-3">
-            <span class="anggota-bidang-label px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">${a.bidang}</span>
-            <span class="anggota-instansi-label text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">📌 ${instansi}</span>
+        headerHtml = `<div class="px-4 py-3 bg-gray-50 dark:bg-[#1a1414] border-b border-gray-200 dark:border-[#3f4739] flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">${initials}</div>
+            <span class="anggota-bidang-label font-semibold text-gray-900 dark:text-white text-sm">${a.bidang}</span>
+            <span class="anggota-instansi-label text-xs text-gray-500 dark:text-gray-400">${instansi}</span>
         </div>`;
     }
 
-    return `<div class="border border-gray-200 dark:border-[#3f4739] rounded-xl p-4 anggota-row" data-index="${i}" data-bidang="${a.bidang}" data-extra="${isExtra ? '1' : '0'}">
-        ${bidangHtml}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama <span class="text-red-500">*</span></label>
-                <input type="text" value="${a.nama || ''}" class="anggota-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama" required>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan <span class="text-red-500">*</span></label>
-                <input type="text" value="Anggota" class="anggota-jabatan w-full px-3 py-2 border border-gray-200 dark:border-[#3f4739] rounded-lg bg-gray-50 dark:bg-[#1a1414] text-gray-500 dark:text-gray-400 text-sm cursor-not-allowed" readonly>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email <span class="text-red-500">*</span></label>
-                <input type="email" value="${a.email || ''}" class="anggota-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email" required>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
-                <select class="anggota-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" required>${genderSel}</select>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
-                <input type="tel" value="${a.noWa || ''}" class="anggota-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="628xxxxxxxxx" required>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
-                <input type="tel" value="${a.nomorInstansi || ''}" class="anggota-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. telepon instansi" required>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi <span class="text-gray-400">(opsional)</span></label>
-                <input type="tel" value="${a.nomorPribadi || ''}" class="anggota-pribadi w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. HP pribadi">
+    return `<div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] overflow-hidden anggota-row" data-index="${i}" data-bidang="${a.bidang}" data-extra="${isExtra ? '1' : '0'}">
+        ${headerHtml}
+        <div class="p-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama <span class="text-red-500">*</span></label>
+                    <input type="text" value="${a.nama || ''}" class="anggota-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan <span class="text-red-500">*</span></label>
+                    <input type="text" value="Anggota" class="anggota-jabatan w-full px-3 py-2 border border-gray-200 dark:border-[#3f4739] rounded-lg bg-gray-50 dark:bg-[#1a1414] text-gray-500 dark:text-gray-400 text-sm cursor-not-allowed" readonly>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email <span class="text-red-500">*</span></label>
+                    <input type="email" value="${a.email || ''}" class="anggota-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
+                    <select class="anggota-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" required>${genderSel}</select>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
+                    <input type="tel" value="${a.noWa || ''}" class="anggota-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="628xxxxxxxxx" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
+                    <input type="tel" value="${a.nomorInstansi || ''}" class="anggota-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. telepon instansi" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi <span class="text-gray-400">(opsional)</span></label>
+                    <input type="tel" value="${a.nomorPribadi || ''}" class="anggota-pribadi w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. HP pribadi">
+                </div>
             </div>
         </div>
     </div>`;
@@ -376,7 +386,7 @@ function buildFormHTML(wilayah, existing) {
         <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6 space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Struktur & Anggota Pokja ${wilayah}</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2"><svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Struktur & Anggota Pokja ${wilayah}</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Lengkapi struktur Pokja sebelum mengunggah SK</p>
                 </div>
                 <div class="flex gap-2">
@@ -395,9 +405,9 @@ function buildFormHTML(wilayah, existing) {
                 </div>
             </div>
 
-            <!-- Identitas Pokja + No. Call Center Pokja -->
+            <!-- Identitas Pokja -->
             <div>
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Identitas Pokja</h4>
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Identitas Pokja</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Pokja <span class="text-red-500">*</span></label>
@@ -413,7 +423,7 @@ function buildFormHTML(wilayah, existing) {
             <hr class="dark:border-[#3f4739]">
 
             <div>
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Pimpinan Pokja</h4>
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>Pimpinan Pokja</h4>
                 ${buildLeaderRow('ketua', 'Ketua Pokja', 'Sekretaris Daerah', 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300', s.ketua)}
                 ${buildLeaderRow('wakil', 'Wakil Ketua', 'Kepala Bappeda', 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300', s.wakil)}
                 ${buildLeaderRow('koordinator', 'Koordinator', 'Kepala Dinas Pendidikan', 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300', s.koordinator)}
@@ -422,7 +432,7 @@ function buildFormHTML(wilayah, existing) {
             <hr class="dark:border-[#3f4739]">
 
             <div>
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Anggota Pokja</h4>
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>Anggota Pokja</h4>
                 <div id="anggota-container" class="space-y-3">
                     ${anggotaList.map((a, i) => {
                         const isExtra = a.isExtra || false;
@@ -583,6 +593,8 @@ function saveStruktur() {
     if (err) { alert(err); return; }
 
     const callCenterPokja = document.getElementById('call-center-pokja').value.trim();
+    if (!callCenterPokja) { alert('No. Call Center Pokja wajib diisi.'); return; }
+    if (!isValidPhoneLength(callCenterPokja)) { alert('No. Call Center Pokja harus 10-13 digit.'); return; }
 
     const subs = getSubmissions();
     const { idx } = getMySubmission();
