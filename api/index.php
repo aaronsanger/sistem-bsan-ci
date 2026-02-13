@@ -12,6 +12,19 @@ chdir($projectRoot);
 // Define FCPATH as the public directory
 define('FCPATH', $projectRoot . '/public/');
 
+// Vercel serverless has a read-only filesystem except /tmp
+// Set writable directory to /tmp for logs, cache, sessions
+$writablePath = '/tmp/ci4-writable';
+if (!is_dir($writablePath)) {
+    @mkdir($writablePath, 0777, true);
+    @mkdir($writablePath . '/logs', 0777, true);
+    @mkdir($writablePath . '/cache', 0777, true);
+    @mkdir($writablePath . '/session', 0777, true);
+    @mkdir($writablePath . '/uploads', 0777, true);
+    @mkdir($writablePath . '/debugbar', 0777, true);
+}
+define('WRITEPATH', $writablePath . '/');
+
 // Load environment variables from Vercel's environment
 // (Set via Vercel Dashboard > Settings > Environment Variables)
 // Also try loading from .env if it exists (for local dev)
@@ -34,6 +47,9 @@ if (!isset($_ENV['CI_ENVIRONMENT'])) {
 // Load paths config
 require $projectRoot . '/app/Config/Paths.php';
 $paths = new Config\Paths();
+
+// Override writable directory to /tmp
+$paths->writableDirectory = $writablePath;
 
 // Load the framework bootstrap
 require $paths->systemDirectory . '/Boot.php';

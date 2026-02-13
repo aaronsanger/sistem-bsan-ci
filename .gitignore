@@ -19,3 +19,4 @@ writable/debugbar/*
 !writable/logs/.gitkeep
 !writable/cache/.gitkeep
 !writable/session/.gitkeep
+.vercel
