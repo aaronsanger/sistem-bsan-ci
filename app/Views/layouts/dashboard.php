@@ -18,6 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <link href="/assets/css/app.css" rel="stylesheet">
+    <script src="/assets/js/wilayah-data.js"></script>
     <style>
         .dropdown-menu { display: none; }
         .dropdown-menu.show { display: block; }
@@ -123,10 +124,63 @@
         </div>
     </div>
 
+    <!-- Wilayah Selection Modal -->
+    <div id="wilayah-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="closeWilayahModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-[#1a1414] rounded-2xl border border-gray-200 dark:border-[#3f4739] shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden">
+                <div class="p-5 border-b border-gray-200 dark:border-[#3f4739]">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white" id="wilayah-modal-title">Pilih Wilayah</h3>
+                        <button onclick="closeWilayahModal()" class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739] text-gray-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="wilayah-modal-desc">Pilih provinsi untuk melanjutkan</p>
+                </div>
+                <div class="p-5 space-y-4 overflow-y-auto" style="max-height: 60vh;">
+                    <!-- Search -->
+                    <div>
+                        <input type="text" id="wilayah-search" placeholder="Cari wilayah..." class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#0F0A0A] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" oninput="filterWilayahList()">
+                    </div>
+                    <!-- Provinsi Step -->
+                    <div id="wilayah-step-prov">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Provinsi <span class="text-red-500">*</span></label>
+                        <div id="wilayah-prov-list" class="space-y-1"></div>
+                    </div>
+                    <!-- Kabupaten Step (hidden initially) -->
+                    <div id="wilayah-step-kab" class="hidden">
+                        <button onclick="backToProvStep()" class="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline mb-3">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            Kembali ke Provinsi
+                        </button>
+                        <div class="mb-2">
+                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Provinsi:</span>
+                            <span id="selected-prov-label" class="text-sm font-semibold text-gray-900 dark:text-white ml-1"></span>
+                        </div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Kabupaten/Kota <span class="text-red-500">*</span></label>
+                        <div id="wilayah-kab-list" class="space-y-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/assets/js/app.js"></script>
     <script>
         // ---- Role System ----
         const ROLE_KEY = 'bsan_demo_role';
+        const WILAYAH_PROV_KEY = 'bsan_wilayah_prov';
+        const WILAYAH_KAB_KEY = 'bsan_wilayah_kab';
+
+        function getWilayahLabel() {
+            const prov = localStorage.getItem(WILAYAH_PROV_KEY);
+            const kab = localStorage.getItem(WILAYAH_KAB_KEY);
+            if (kab) return kab;
+            if (prov) return prov;
+            return '';
+        }
+
         const ROLE_CONFIG = {
             kementerian: {
                 label: 'Admin Kementerian Pusat',
@@ -135,16 +189,16 @@
                 sidebarLabel: 'Kementerian Pusat'
             },
             dinas_prov: {
-                label: 'Admin Dinas Provinsi',
+                get label() { const w = localStorage.getItem(WILAYAH_PROV_KEY); return w ? `Admin Dinas Prov. ${w}` : 'Admin Dinas Provinsi'; },
                 avatar: 'P',
                 color: 'bg-blue-600',
-                sidebarLabel: 'Dinas Provinsi'
+                get sidebarLabel() { const w = localStorage.getItem(WILAYAH_PROV_KEY); return w ? `Dinas Prov. ${w}` : 'Dinas Provinsi'; }
             },
             dinas_kab: {
-                label: 'Admin Dinas Kab/Kota',
+                get label() { const w = localStorage.getItem(WILAYAH_KAB_KEY); return w ? `Admin Dinas ${w}` : 'Admin Dinas Kab/Kota'; },
                 avatar: 'D',
                 color: 'bg-green-600',
-                sidebarLabel: 'Dinas Kab/Kota'
+                get sidebarLabel() { const w = localStorage.getItem(WILAYAH_KAB_KEY); return w ? `Dinas ${w}` : 'Dinas Kab/Kota'; }
             }
         };
 
@@ -152,9 +206,145 @@
             return localStorage.getItem(ROLE_KEY) || 'kementerian';
         }
 
+        // ---- Wilayah Modal System ----
+        let pendingRole = null;
+
         function switchRole(role) {
-            localStorage.setItem(ROLE_KEY, role);
+            if (role === 'dinas_prov') {
+                pendingRole = role;
+                openWilayahModal('prov');
+            } else if (role === 'dinas_kab') {
+                pendingRole = role;
+                openWilayahModal('kab');
+            } else {
+                // Kementerian - no modal needed
+                localStorage.removeItem(WILAYAH_PROV_KEY);
+                localStorage.removeItem(WILAYAH_KAB_KEY);
+                localStorage.setItem(ROLE_KEY, role);
+                location.href = '/dashboard';
+            }
+        }
+
+        function openWilayahModal(mode) {
+            const modal = document.getElementById('wilayah-modal');
+            const title = document.getElementById('wilayah-modal-title');
+            const desc = document.getElementById('wilayah-modal-desc');
+            const stepProv = document.getElementById('wilayah-step-prov');
+            const stepKab = document.getElementById('wilayah-step-kab');
+            const search = document.getElementById('wilayah-search');
+
+            modal.dataset.mode = mode;
+            search.value = '';
+
+            if (mode === 'prov') {
+                title.textContent = 'Pilih Provinsi';
+                desc.textContent = 'Pilih provinsi untuk Admin Dinas Provinsi';
+            } else {
+                title.textContent = 'Pilih Wilayah';
+                desc.textContent = 'Pilih provinsi terlebih dahulu, lalu pilih kabupaten/kota';
+            }
+
+            stepProv.classList.remove('hidden');
+            stepKab.classList.add('hidden');
+
+            renderProvList();
+            modal.classList.remove('hidden');
+            search.focus();
+        }
+
+        function closeWilayahModal() {
+            document.getElementById('wilayah-modal').classList.add('hidden');
+            pendingRole = null;
+        }
+
+        function renderProvList(filter = '') {
+            const list = document.getElementById('wilayah-prov-list');
+            const provinces = Object.keys(WILAYAH_DATA).sort();
+            const filtered = filter ? provinces.filter(p => p.toLowerCase().includes(filter.toLowerCase())) : provinces;
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<p class="text-sm text-gray-400 py-3 text-center">Tidak ditemukan</p>';
+                return;
+            }
+
+            list.innerHTML = filtered.map(p => `
+                <button onclick="selectProvinsi('${p.replace(/'/g, "\\'")}')"
+                    class="w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-between group border border-transparent hover:border-blue-200 dark:hover:border-blue-800">
+                    <span class="text-gray-700 dark:text-gray-300 group-hover:text-blue-700 dark:group-hover:text-blue-400">${p}</span>
+                    <svg class="w-4 h-4 text-gray-300 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            `).join('');
+        }
+
+        function selectProvinsi(prov) {
+            const modal = document.getElementById('wilayah-modal');
+            const mode = modal.dataset.mode;
+
+            if (mode === 'prov') {
+                // Dinas Provinsi - just pick province and go
+                localStorage.setItem(WILAYAH_PROV_KEY, prov);
+                localStorage.removeItem(WILAYAH_KAB_KEY);
+                localStorage.setItem(ROLE_KEY, pendingRole);
+                closeWilayahModal();
+                location.href = '/dashboard';
+            } else {
+                // Dinas Kab/Kota - show kabupaten list
+                localStorage.setItem(WILAYAH_PROV_KEY, prov);
+                document.getElementById('selected-prov-label').textContent = prov;
+                document.getElementById('wilayah-step-prov').classList.add('hidden');
+                document.getElementById('wilayah-step-kab').classList.remove('hidden');
+                document.getElementById('wilayah-search').value = '';
+                document.getElementById('wilayah-modal-title').textContent = 'Pilih Kabupaten/Kota';
+                renderKabList(prov);
+            }
+        }
+
+        function renderKabList(prov, filter = '') {
+            const list = document.getElementById('wilayah-kab-list');
+            const kabList = (WILAYAH_DATA[prov] || []).sort();
+            const filtered = filter ? kabList.filter(k => k.toLowerCase().includes(filter.toLowerCase())) : kabList;
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<p class="text-sm text-gray-400 py-3 text-center">Tidak ditemukan</p>';
+                return;
+            }
+
+            list.innerHTML = filtered.map(k => `
+                <button onclick="selectKabupaten('${k.replace(/'/g, "\\'")}')"
+                    class="w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors flex items-center justify-between group border border-transparent hover:border-green-200 dark:hover:border-green-800">
+                    <span class="text-gray-700 dark:text-gray-300 group-hover:text-green-700 dark:group-hover:text-green-400">${k}</span>
+                    <svg class="w-4 h-4 text-gray-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </button>
+            `).join('');
+        }
+
+        function selectKabupaten(kab) {
+            localStorage.setItem(WILAYAH_KAB_KEY, kab);
+            localStorage.setItem(ROLE_KEY, pendingRole);
+            closeWilayahModal();
             location.href = '/dashboard';
+        }
+
+        function backToProvStep() {
+            document.getElementById('wilayah-step-prov').classList.remove('hidden');
+            document.getElementById('wilayah-step-kab').classList.add('hidden');
+            document.getElementById('wilayah-search').value = '';
+            document.getElementById('wilayah-modal-title').textContent = 'Pilih Wilayah';
+            renderProvList();
+        }
+
+        function filterWilayahList() {
+            const search = document.getElementById('wilayah-search').value;
+            const stepKab = document.getElementById('wilayah-step-kab');
+
+            if (stepKab.classList.contains('hidden')) {
+                // Filtering provinces
+                renderProvList(search);
+            } else {
+                // Filtering kabupaten
+                const prov = localStorage.getItem(WILAYAH_PROV_KEY);
+                renderKabList(prov, search);
+            }
         }
 
         function resetDemoData() {

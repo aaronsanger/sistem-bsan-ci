@@ -155,7 +155,7 @@ function buildLeaderRow(key, label, sublabel, colorClass, data) {
             </div>
             <div>
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email <span class="text-red-500">*</span></label>
-                <input type="email" class="leader-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.email || ''}" placeholder="${key === 'ketua' ? 'Email asli ketua' : 'Email'}" required>
+                <input type="email" class="leader-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.email || ''}" placeholder="Email" required>
             </div>
             <div>
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
@@ -304,8 +304,8 @@ function buildFormHTML(wilayah, existing) {
                         <input type="text" id="nama-pokja" value="${sk.namaPokja || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Pokja BSAN ${wilayah}">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No. Call Center Pokja <span class="text-gray-400">(opsional)</span></label>
-                        <input type="tel" id="call-center-pokja" value="${sk.callCenterPokja || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nomor call center Pokja">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No. Call Center Pokja <span class="text-red-500">*</span></label>
+                        <input type="tel" id="call-center-pokja" value="${sk.callCenterPokja || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nomor call center Pokja" required>
                     </div>
                 </div>
             </div>
