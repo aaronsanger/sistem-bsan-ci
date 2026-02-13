@@ -8,14 +8,21 @@ namespace App\Libraries;
  */
 class SupabaseClient
 {
+    // Public keys — safe to commit (security is via Supabase RLS policies)
+    private const SUPABASE_URL = 'https://pewplcngdxpcaopareaw.supabase.co';
+    private const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBld3BsY25nZHhwY2FvcGFyZWF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2NzU5MjEsImV4cCI6MjA4NTI1MTkyMX0.J0yWL6cN80ZBs1k-i6iV2-zK_cWHVO0ACTRXg3_S9zo';
+
     private string $url;
     private string $anonKey;
     private string $serviceKey;
 
     public function __construct()
     {
-        $this->url = $_ENV['SUPABASE_URL'] ?? getenv('SUPABASE_URL') ?? '';
-        $this->anonKey = $_ENV['SUPABASE_ANON_KEY'] ?? getenv('SUPABASE_ANON_KEY') ?? '';
+        // Public keys: use hardcoded defaults (env override optional)
+        $this->url = $_ENV['SUPABASE_URL'] ?? getenv('SUPABASE_URL') ?: self::SUPABASE_URL;
+        $this->anonKey = $_ENV['SUPABASE_ANON_KEY'] ?? getenv('SUPABASE_ANON_KEY') ?: self::SUPABASE_ANON_KEY;
+
+        // Service key: MUST be set via environment (Vercel Env Vars) — never hardcode
         $this->serviceKey = $_ENV['SUPABASE_SERVICE_KEY'] ?? getenv('SUPABASE_SERVICE_KEY') ?? '';
     }
 

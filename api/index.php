@@ -3,11 +3,9 @@
 /**
  * Vercel Serverless Entry Point for CodeIgniter 4
  * 
- * Best Practice: No .env on Vercel — use Vercel Environment Variables instead.
- * Set these in Vercel Dashboard > Settings > Environment Variables:
- *   - SUPABASE_URL
- *   - SUPABASE_ANON_KEY
- *   - SUPABASE_SERVICE_KEY
+ * Best Practice: Public Supabase keys (URL, anon key) are hardcoded in SupabaseClient.php.
+ * Only SUPABASE_SERVICE_KEY needs to be set via Vercel Environment Variables:
+ *   - SUPABASE_SERVICE_KEY (secret — bypasses RLS)
  */
 
 // Set working directory to project root
