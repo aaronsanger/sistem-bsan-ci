@@ -139,10 +139,26 @@
 <?= $this->section('scripts') ?>
 <script>
 const SD_KEY = 'bsan_sumber_rujukan';
+const POKJA_SUBMISSIONS_KEY = 'bsan_pokja_submissions';
 const role = localStorage.getItem('bsan_demo_role') || 'kementerian';
 
-// Only Kementerian and Koordinator (dinas) can input
-const canInput = (role === 'kementerian' || role === 'dinas_prov' || role === 'dinas_kab');
+// Check if Pokja is approved for current role
+function isPokjaApproved() {
+    if (role === 'kementerian') return true;
+    const subs = JSON.parse(localStorage.getItem(POKJA_SUBMISSIONS_KEY) || '[]');
+    const provName = localStorage.getItem('bsan_wilayah_prov') || '';
+    const kabName = localStorage.getItem('bsan_wilayah_kab') || '';
+    let wilayah;
+    if (role === 'dinas_prov') { wilayah = provName ? `Prov. ${provName}` : 'Provinsi'; }
+    else { wilayah = kabName || 'Kabupaten/Kota'; }
+    const mySub = subs.find(s => s.roleType === role && s.wilayah === wilayah);
+    return mySub && mySub.status === 'approved';
+}
+
+const pokjaApproved = isPokjaApproved();
+
+// Only allowed to input if role allows AND Pokja is approved
+const canInput = (role === 'kementerian' || ((role === 'dinas_prov' || role === 'dinas_kab') && pokjaApproved));
 
 // Kementerian-level K/L sources
 const KL_SOURCES = [
@@ -184,8 +200,22 @@ function renderPage() {
     const isPokja = (role === 'dinas_prov' || role === 'dinas_kab');
     const isKementerian = (role === 'kementerian');
 
-    // Header
-    let html = `
+    let html = '';
+
+    // Pokja gate banner for dinas who are not approved
+    if (isPokja && !pokjaApproved) {
+        html += `<div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
+            <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-yellow-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <div>
+                    <p class="font-semibold text-yellow-800 dark:text-yellow-300">\u26a0\ufe0f Pokja Belum Disetujui</p>
+                    <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Fitur Sumber Rujukan hanya aktif setelah Pokja disetujui oleh Admin Pusat. Anda masih dapat melihat data yang ada.</p>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    html += `
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <h2 class="text-xl font-bold text-gray-900 dark:text-white">Sumber Rujukan BSAN</h2>

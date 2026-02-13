@@ -3,12 +3,23 @@
 <?= $this->section('content') ?>
 
 <div class="space-y-6">
+    <!-- Pokja Not Approved Banner (injected by JS) -->
+    <div id="pokja-gate-banner" class="hidden bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
+        <div class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-yellow-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <div>
+                <p class="font-semibold text-yellow-800 dark:text-yellow-300">⚠️ Pokja Belum Disetujui</p>
+                <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Fitur Pelaporan hanya aktif setelah Pokja disetujui oleh Admin Pusat. Anda masih dapat melihat data yang ada.</p>
+            </div>
+        </div>
+    </div>
+
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <h2 class="text-xl font-bold text-gray-900 dark:text-white">Pelaporan Insidental</h2>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Buat dan kelola laporan kejadian insidental</p>
         </div>
-        <button onclick="openForm()" class="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">
+        <button id="btn-buat-laporan" onclick="openForm()" class="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Buat Laporan
         </button>
@@ -171,9 +182,34 @@
 <?= $this->section('scripts') ?>
 <script>
 const STORAGE_KEY = 'bsan_pelaporan_insidental';
+const POKJA_SUBMISSIONS_KEY = 'bsan_pokja_submissions';
+
+// Check if Pokja is approved for current role
+function isPokjaApproved() {
+    const role = localStorage.getItem('bsan_demo_role') || 'kementerian';
+    if (role === 'kementerian') return true; // Admin always has access
+    const subs = JSON.parse(localStorage.getItem(POKJA_SUBMISSIONS_KEY) || '[]');
+    const provName = localStorage.getItem('bsan_wilayah_prov') || '';
+    const kabName = localStorage.getItem('bsan_wilayah_kab') || '';
+    let wilayah;
+    if (role === 'dinas_prov') { wilayah = provName ? `Prov. ${provName}` : 'Provinsi'; }
+    else { wilayah = kabName || 'Kabupaten/Kota'; }
+    const mySub = subs.find(s => s.roleType === role && s.wilayah === wilayah);
+    return mySub && mySub.status === 'approved';
+}
+
+const pokjaApproved = isPokjaApproved();
 
 function getRecords() { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
 function saveRecords(d) { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
+
+// Apply feature gating on page load
+function applyFeatureGate() {
+    if (!pokjaApproved) {
+        document.getElementById('pokja-gate-banner').classList.remove('hidden');
+        document.getElementById('btn-buat-laporan').classList.add('hidden');
+    }
+}
 
 function openForm(editIdx) {
     document.getElementById('edit-index').value = editIdx ?? -1;
@@ -287,8 +323,8 @@ function renderRecords() {
             <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${statusColors[r.status] || ''}">${r.status}</span></td>
             <td class="px-4 py-3 flex gap-2">
                 <button onclick="showDetail(${i})" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 text-sm font-medium">Detail</button>
-                <button onclick="openForm(${i})" class="text-orange-600 hover:text-orange-800 dark:text-orange-400 text-sm font-medium">Edit</button>
-                <button onclick="deleteRecord(${i})" class="text-red-600 hover:text-red-800 dark:text-red-400 text-sm font-medium">Hapus</button>
+                ${pokjaApproved ? `<button onclick="openForm(${i})" class="text-orange-600 hover:text-orange-800 dark:text-orange-400 text-sm font-medium">Edit</button>
+                <button onclick="deleteRecord(${i})" class="text-red-600 hover:text-red-800 dark:text-red-400 text-sm font-medium">Hapus</button>` : ''}
             </td>
         </tr>`).join('');
 }
@@ -327,6 +363,6 @@ function deleteRecord(idx) {
     renderRecords();
 }
 
-$(document).ready(function() { renderRecords(); });
+$(document).ready(function() { applyFeatureGate(); renderRecords(); });
 </script>
 <?= $this->endSection() ?>

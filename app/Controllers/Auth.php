@@ -35,12 +35,6 @@ class Auth extends Controller
                 'user_name' => 'Admin Demo',
                 'user_role' => 'admin',
             ],
-            'koordinator@bsan.id' => [
-                'password' => 'koordinator123',
-                'user_id' => 'demo-koordinator',
-                'user_name' => 'Koordinator Demo',
-                'user_role' => 'koordinator',
-            ],
             'jateng@bsan.id' => [
                 'password' => 'jateng123',
                 'user_id' => 'demo-dinas-jateng',
