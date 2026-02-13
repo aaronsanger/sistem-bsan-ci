@@ -86,6 +86,17 @@ const JABATAN_MAP = {
     koordinator: 'Koordinator',
 };
 
+// Dynamic wilayah from localStorage
+function getWilayahName() {
+    if (role === 'dinas_prov') {
+        const prov = localStorage.getItem('bsan_wilayah_prov');
+        return prov ? `Prov. ${prov}` : 'Provinsi';
+    } else {
+        const kab = localStorage.getItem('bsan_wilayah_kab');
+        return kab || 'Kabupaten/Kota';
+    }
+}
+
 // Bidang options for Tambah Anggota dropdown
 const BIDANG_OPTIONS = [
     { value: 'Bidang Pendidikan', instansi: 'Dinas Pendidikan' },
@@ -118,7 +129,7 @@ function closeDemoInfo() {
 function renderPokjaPage() {
     const { sub } = getMySubmission();
     const app = document.getElementById('pokja-app');
-    const wilayah = role === 'dinas_prov' ? 'Prov. Aceh' : 'Kota Banda Aceh';
+    const wilayah = getWilayahName();
 
     if (!sub) renderCreationForm(app, wilayah);
     else if (sub.status === 'draft') renderDraftView(app, sub, wilayah);
@@ -476,7 +487,7 @@ function saveStruktur() {
 
     const subs = getSubmissions();
     const { idx } = getMySubmission();
-    const wilayah = role === 'dinas_prov' ? 'Prov. Aceh' : 'Kota Banda Aceh';
+    const wilayah = getWilayahName();
 
     const submission = idx >= 0 ? { ...subs[idx] } : { roleType: role, wilayah, status: 'draft', createdAt: new Date().toISOString() };
     submission.namaPokja = namaPokja;
@@ -609,7 +620,7 @@ function renderDeclinedView(app, sub, wilayah) {
 
 function editPokja(tab) {
     const { sub } = getMySubmission();
-    const wilayah = role === 'dinas_prov' ? 'Prov. Aceh' : 'Kota Banda Aceh';
+    const wilayah = getWilayahName();
     document.getElementById('pokja-app').innerHTML = buildFormHTML(wilayah, sub);
     if (tab) switchTab(tab);
 }
