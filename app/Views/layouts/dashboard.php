@@ -534,8 +534,47 @@
             document.getElementById('user-name').textContent = '<?= session()->get('user_name') ?>';
         <?php endif; ?>
 
+        // ---- Auto-set role from PHP session on login ----
+        <?php if (session()->get('user_role')): ?>
+        (function() {
+            const sessionRole = '<?= session()->get('user_role') ?>';
+            const roleMap = {
+                'admin': 'kementerian',
+                'koordinator': 'kementerian',
+                'dinas_prov': 'dinas_prov',
+                'dinas_kab': 'dinas_kab'
+            };
+            const mappedRole = roleMap[sessionRole] || 'kementerian';
+            const currentRole = localStorage.getItem(ROLE_KEY);
+
+            // Only auto-set if role hasn't been manually switched in this session
+            if (!currentRole || currentRole !== mappedRole) {
+                localStorage.setItem(ROLE_KEY, mappedRole);
+                // For dinas roles, set a flag to prompt wilayah selection
+                if (mappedRole === 'dinas_prov' || mappedRole === 'dinas_kab') {
+                    const hasWilayah = mappedRole === 'dinas_prov'
+                        ? localStorage.getItem(WILAYAH_PROV_KEY)
+                        : localStorage.getItem(WILAYAH_KAB_KEY);
+                    if (!hasWilayah) {
+                        // Will prompt wilayah selection after page loads
+                        window._needsWilayahPrompt = mappedRole;
+                    }
+                }
+            }
+        })();
+        <?php endif; ?>
+
         // Init
         buildSidebar();
+
+        // Prompt wilayah selection if needed (after sidebar is built)
+        if (window._needsWilayahPrompt) {
+            const role = window._needsWilayahPrompt;
+            pendingRole = role;
+            setTimeout(() => {
+                openWilayahModal(role === 'dinas_prov' ? 'prov' : 'kab');
+            }, 500);
+        }
     </script>
     <?= $this->renderSection('scripts') ?>
 </body>

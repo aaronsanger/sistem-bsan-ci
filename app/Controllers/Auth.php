@@ -41,6 +41,18 @@ class Auth extends Controller
                 'user_name' => 'Koordinator Demo',
                 'user_role' => 'koordinator',
             ],
+            'provinsi@bsan.id' => [
+                'password' => 'provinsi123',
+                'user_id' => 'demo-dinas-prov',
+                'user_name' => 'Dinas Pendidikan Provinsi',
+                'user_role' => 'dinas_prov',
+            ],
+            'kabupaten@bsan.id' => [
+                'password' => 'kabupaten123',
+                'user_id' => 'demo-dinas-kab',
+                'user_name' => 'Dinas Pendidikan Kab/Kota',
+                'user_role' => 'dinas_kab',
+            ],
         ];
 
         if (isset($demoAccounts[$email])) {
