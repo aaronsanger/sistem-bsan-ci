@@ -79,6 +79,9 @@
                                 <svg class="w-4 h-4 text-gray-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
                             <div id="profile-dropdown" class="dropdown-menu absolute right-0 mt-2 w-72 bg-white dark:bg-[#1a1414] rounded-xl border border-gray-200 dark:border-[#3f4739] shadow-xl z-50">
+                                <?php $sessionRole = session()->get('user_role') ?? 'admin'; ?>
+                                <?php if (in_array($sessionRole, ['admin', 'koordinator'])): ?>
+                                <!-- Admin/Koordinator: show role switcher -->
                                 <div class="p-3 border-b border-gray-100 dark:border-[#3f4739]">
                                     <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Ganti Peran Demo</p>
                                     <button onclick="switchRole('kementerian')" class="role-btn w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-3 mb-1" data-role="kementerian">
@@ -103,11 +106,28 @@
                                         </div>
                                     </button>
                                 </div>
+                                <?php else: ?>
+                                <!-- Dinas roles: show locked role info -->
+                                <div class="p-3 border-b border-gray-100 dark:border-[#3f4739]">
+                                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Peran Anda</p>
+                                    <div class="flex items-center gap-3 px-3 py-2">
+                                        <span class="w-8 h-8 rounded-full <?= $sessionRole === 'dinas_prov' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'bg-green-100 dark:bg-green-900/30 text-green-600' ?> flex items-center justify-center text-xs font-bold"><?= $sessionRole === 'dinas_prov' ? 'P' : 'D' ?></span>
+                                        <div>
+                                            <p class="font-medium text-gray-900 dark:text-white text-sm"><?= session()->get('user_name') ?></p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                <?= session()->get('wilayah_kabupaten') ?? session()->get('wilayah_provinsi') ?? '' ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endif; ?>
                                 <div class="p-2">
+                                    <?php if (in_array($sessionRole, ['admin', 'koordinator'])): ?>
                                     <button onclick="resetDemoData()" class="w-full text-left px-3 py-2 rounded-lg text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors flex items-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                         Reset Data Demo
                                     </button>
+                                    <?php endif; ?>
                                     <a href="/auth/logout" class="w-full text-left px-3 py-2 rounded-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                         Keluar
@@ -534,7 +554,7 @@
             document.getElementById('user-name').textContent = '<?= session()->get('user_name') ?>';
         <?php endif; ?>
 
-        // ---- Auto-set role from PHP session on login ----
+        // ---- Auto-set role & wilayah from PHP session ----
         <?php if (session()->get('user_role')): ?>
         (function() {
             const sessionRole = '<?= session()->get('user_role') ?>';
@@ -545,36 +565,24 @@
                 'dinas_kab': 'dinas_kab'
             };
             const mappedRole = roleMap[sessionRole] || 'kementerian';
-            const currentRole = localStorage.getItem(ROLE_KEY);
 
-            // Only auto-set if role hasn't been manually switched in this session
-            if (!currentRole || currentRole !== mappedRole) {
-                localStorage.setItem(ROLE_KEY, mappedRole);
-                // For dinas roles, set a flag to prompt wilayah selection
-                if (mappedRole === 'dinas_prov' || mappedRole === 'dinas_kab') {
-                    const hasWilayah = mappedRole === 'dinas_prov'
-                        ? localStorage.getItem(WILAYAH_PROV_KEY)
-                        : localStorage.getItem(WILAYAH_KAB_KEY);
-                    if (!hasWilayah) {
-                        // Will prompt wilayah selection after page loads
-                        window._needsWilayahPrompt = mappedRole;
-                    }
-                }
-            }
+            // Always set role from session (locked for dinas roles)
+            localStorage.setItem(ROLE_KEY, mappedRole);
+
+            // Set wilayah from PHP session (pre-determined, no modal needed)
+            <?php if (session()->get('wilayah_provinsi')): ?>
+            localStorage.setItem(WILAYAH_PROV_KEY, '<?= session()->get('wilayah_provinsi') ?>');
+            <?php endif; ?>
+            <?php if (session()->get('wilayah_kabupaten')): ?>
+            localStorage.setItem(WILAYAH_KAB_KEY, '<?= session()->get('wilayah_kabupaten') ?>');
+            <?php else: ?>
+            localStorage.removeItem(WILAYAH_KAB_KEY);
+            <?php endif; ?>
         })();
         <?php endif; ?>
 
         // Init
         buildSidebar();
-
-        // Prompt wilayah selection if needed (after sidebar is built)
-        if (window._needsWilayahPrompt) {
-            const role = window._needsWilayahPrompt;
-            pendingRole = role;
-            setTimeout(() => {
-                openWilayahModal(role === 'dinas_prov' ? 'prov' : 'kab');
-            }, 500);
-        }
     </script>
     <?= $this->renderSection('scripts') ?>
 </body>

@@ -41,31 +41,57 @@ class Auth extends Controller
                 'user_name' => 'Koordinator Demo',
                 'user_role' => 'koordinator',
             ],
-            'provinsi@bsan.id' => [
-                'password' => 'provinsi123',
-                'user_id' => 'demo-dinas-prov',
-                'user_name' => 'Dinas Pendidikan Provinsi',
+            'jateng@bsan.id' => [
+                'password' => 'jateng123',
+                'user_id' => 'demo-dinas-jateng',
+                'user_name' => 'Admin Dinas Prov. Jawa Tengah',
                 'user_role' => 'dinas_prov',
+                'wilayah_provinsi' => 'JAWA TENGAH',
             ],
-            'kabupaten@bsan.id' => [
-                'password' => 'kabupaten123',
-                'user_id' => 'demo-dinas-kab',
-                'user_name' => 'Dinas Pendidikan Kab/Kota',
+            'surakarta@bsan.id' => [
+                'password' => 'surakarta123',
+                'user_id' => 'demo-dinas-surakarta',
+                'user_name' => 'Admin Dinas Kota Surakarta',
                 'user_role' => 'dinas_kab',
+                'wilayah_provinsi' => 'JAWA TENGAH',
+                'wilayah_kabupaten' => 'KOTA SURAKARTA',
+            ],
+            'dki@bsan.id' => [
+                'password' => 'dki123',
+                'user_id' => 'demo-dinas-dki',
+                'user_name' => 'Admin Dinas Prov. DKI Jakarta',
+                'user_role' => 'dinas_prov',
+                'wilayah_provinsi' => 'DKI JAKARTA',
+            ],
+            'bandung@bsan.id' => [
+                'password' => 'bandung123',
+                'user_id' => 'demo-dinas-bandung',
+                'user_name' => 'Admin Dinas Kota Bandung',
+                'user_role' => 'dinas_kab',
+                'wilayah_provinsi' => 'JAWA BARAT',
+                'wilayah_kabupaten' => 'KOTA BANDUNG',
             ],
         ];
 
         if (isset($demoAccounts[$email])) {
             $demo = $demoAccounts[$email];
             if ($password === $demo['password']) {
-                session()->set([
+                $sessionData = [
                     'user_id' => $demo['user_id'],
                     'user_email' => $email,
                     'user_name' => $demo['user_name'],
                     'user_role' => $demo['user_role'],
                     'access_token' => 'demo-token',
                     'refresh_token' => '',
-                ]);
+                ];
+                // Store wilayah info in session for dinas roles
+                if (isset($demo['wilayah_provinsi'])) {
+                    $sessionData['wilayah_provinsi'] = $demo['wilayah_provinsi'];
+                }
+                if (isset($demo['wilayah_kabupaten'])) {
+                    $sessionData['wilayah_kabupaten'] = $demo['wilayah_kabupaten'];
+                }
+                session()->set($sessionData);
                 return redirect()->to('/dashboard');
             }
             return redirect()->back()->with('error', 'Password salah.');

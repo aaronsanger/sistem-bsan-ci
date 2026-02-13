@@ -106,20 +106,28 @@
                     <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-gray-500); margin-bottom: var(--spacing-3); font-weight: 600;">Demo Login</p>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
                         <button type="button" onclick="demoLogin('admin@bsan.id','admin123')" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-border); background: var(--color-bg-alt); color: var(--color-text); cursor: pointer; font-size: 0.75rem; text-align: center; transition: all 0.15s;">
-                            <span style="font-weight: 600; display: block;">Admin Pusat</span>
+                            <span style="font-weight: 600; display: block;">🏛️ Admin Pusat</span>
                             <span style="color: var(--color-gray-500); font-size: 0.65rem;">admin@bsan.id</span>
                         </button>
                         <button type="button" onclick="demoLogin('koordinator@bsan.id','koordinator123')" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-border); background: var(--color-bg-alt); color: var(--color-text); cursor: pointer; font-size: 0.75rem; text-align: center; transition: all 0.15s;">
-                            <span style="font-weight: 600; display: block;">Koordinator</span>
+                            <span style="font-weight: 600; display: block;">👤 Koordinator</span>
                             <span style="color: var(--color-gray-500); font-size: 0.65rem;">koordinator@bsan.id</span>
                         </button>
-                        <button type="button" onclick="demoLogin('provinsi@bsan.id','provinsi123')" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-border); background: var(--color-bg-alt); color: var(--color-text); cursor: pointer; font-size: 0.75rem; text-align: center; transition: all 0.15s;">
-                            <span style="font-weight: 600; display: block;">Dinas Provinsi</span>
-                            <span style="color: var(--color-gray-500); font-size: 0.65rem;">provinsi@bsan.id</span>
+                        <button type="button" onclick="demoLogin('jateng@bsan.id','jateng123')" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-border); background: var(--color-bg-alt); color: var(--color-text); cursor: pointer; font-size: 0.75rem; text-align: center; transition: all 0.15s;">
+                            <span style="font-weight: 600; display: block;">🏢 Prov. Jawa Tengah</span>
+                            <span style="color: var(--color-gray-500); font-size: 0.65rem;">jateng@bsan.id</span>
                         </button>
-                        <button type="button" onclick="demoLogin('kabupaten@bsan.id','kabupaten123')" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-border); background: var(--color-bg-alt); color: var(--color-text); cursor: pointer; font-size: 0.75rem; text-align: center; transition: all 0.15s;">
-                            <span style="font-weight: 600; display: block;">Dinas Kab/Kota</span>
-                            <span style="color: var(--color-gray-500); font-size: 0.65rem;">kabupaten@bsan.id</span>
+                        <button type="button" onclick="demoLogin('dki@bsan.id','dki123')" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-border); background: var(--color-bg-alt); color: var(--color-text); cursor: pointer; font-size: 0.75rem; text-align: center; transition: all 0.15s;">
+                            <span style="font-weight: 600; display: block;">🏢 Prov. DKI Jakarta</span>
+                            <span style="color: var(--color-gray-500); font-size: 0.65rem;">dki@bsan.id</span>
+                        </button>
+                        <button type="button" onclick="demoLogin('surakarta@bsan.id','surakarta123')" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-border); background: var(--color-bg-alt); color: var(--color-text); cursor: pointer; font-size: 0.75rem; text-align: center; transition: all 0.15s;">
+                            <span style="font-weight: 600; display: block;">🏫 Kota Surakarta</span>
+                            <span style="color: var(--color-gray-500); font-size: 0.65rem;">surakarta@bsan.id</span>
+                        </button>
+                        <button type="button" onclick="demoLogin('bandung@bsan.id','bandung123')" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-border); background: var(--color-bg-alt); color: var(--color-text); cursor: pointer; font-size: 0.75rem; text-align: center; transition: all 0.15s;">
+                            <span style="font-weight: 600; display: block;">🏫 Kota Bandung</span>
+                            <span style="color: var(--color-gray-500); font-size: 0.65rem;">bandung@bsan.id</span>
                         </button>
                     </div>
                 </div>
