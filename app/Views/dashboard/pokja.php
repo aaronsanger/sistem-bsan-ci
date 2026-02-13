@@ -2,9 +2,7 @@
 
 <?= $this->section('content') ?>
 
-<div class="space-y-6" id="pokja-app">
-    <!-- Loading / Init -->
-</div>
+<div class="space-y-6" id="pokja-app"></div>
 
 <!-- Demo Info Modal -->
 <div id="demo-info-modal" class="fixed inset-0 z-50 hidden">
@@ -69,7 +67,7 @@ function getMySubmission() {
     return { sub: subs.find(s => s.roleType === role), idx: subs.findIndex(s => s.roleType === role) };
 }
 
-// Role-to-Instansi mapping (auto-fill, non-editable)
+// Instansi auto-fill mapping (non-editable)
 const INSTANSI_MAP = {
     ketua: 'Sekretaris Daerah',
     wakil: 'Kepala Bappeda',
@@ -82,21 +80,25 @@ const INSTANSI_MAP = {
     'Bidang Kominfo': 'Dinas Kominfo',
 };
 
-// Jabatan mapping
 const JABATAN_MAP = {
     ketua: 'Ketua Pokja',
     wakil: 'Wakil Ketua',
     koordinator: 'Koordinator',
 };
 
-const defaultAnggota = [
-    { bidang: 'Bidang Pendidikan', nama: '', jabatan: 'Anggota', email: '', jenisKelamin: '', noWa: '', nomorCallCenter: '', nomorInstansi: '', nomorPribadi: '' },
-    { bidang: 'Bidang PPPA', nama: '', jabatan: 'Anggota', email: '', jenisKelamin: '', noWa: '', nomorCallCenter: '', nomorInstansi: '', nomorPribadi: '' },
-    { bidang: 'Bidang Sosial', nama: '', jabatan: 'Anggota', email: '', jenisKelamin: '', noWa: '', nomorCallCenter: '', nomorInstansi: '', nomorPribadi: '' },
-    { bidang: 'Bidang Kesehatan', nama: '', jabatan: 'Anggota', email: '', jenisKelamin: '', noWa: '', nomorCallCenter: '', nomorInstansi: '', nomorPribadi: '' },
-    { bidang: 'Bidang Dukbangga', nama: '', jabatan: 'Anggota', email: '', jenisKelamin: '', noWa: '', nomorCallCenter: '', nomorInstansi: '', nomorPribadi: '' },
-    { bidang: 'Bidang Kominfo', nama: '', jabatan: 'Anggota', email: '', jenisKelamin: '', noWa: '', nomorCallCenter: '', nomorInstansi: '', nomorPribadi: '' },
+// Bidang options for Tambah Anggota dropdown
+const BIDANG_OPTIONS = [
+    { value: 'Bidang Pendidikan', instansi: 'Dinas Pendidikan' },
+    { value: 'Bidang PPPA', instansi: 'Dinas PPPA' },
+    { value: 'Bidang Sosial', instansi: 'Dinas Sosial' },
+    { value: 'Bidang Kesehatan', instansi: 'Dinas Kesehatan' },
+    { value: 'Bidang Dukbangga', instansi: 'Dinas Dukbangga' },
+    { value: 'Bidang Kominfo', instansi: 'Dinas Kominfo' },
 ];
+
+const defaultAnggota = BIDANG_OPTIONS.map(b => ({
+    bidang: b.value, nama: '', email: '', jenisKelamin: '', noWa: '', nomorInstansi: '', nomorPribadi: ''
+}));
 
 const GENDER_OPTIONS = '<option value="">Pilih</option><option value="L">Laki-laki</option><option value="P">Perempuan</option>';
 
@@ -129,7 +131,7 @@ function renderCreationForm(app, wilayah) {
     app.innerHTML = buildFormHTML(wilayah, null);
 }
 
-// ---- Build Leader Row ----
+// ---- Build Leader Row (7 fields: Nama*, Jabatan*locked, Email*, JK*, WA*, No Instansi*, No Pribadi optional) ----
 function buildLeaderRow(key, label, sublabel, colorClass, data) {
     const d = data || {};
     const instansi = INSTANSI_MAP[key] || '';
@@ -145,101 +147,114 @@ function buildLeaderRow(key, label, sublabel, colorClass, data) {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama <span class="text-red-500">*</span></label>
-                <input type="text" class="leader-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nama || ''}" placeholder="Nama lengkap">
+                <input type="text" class="leader-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nama || ''}" placeholder="Nama lengkap" required>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan</label>
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan <span class="text-red-500">*</span></label>
                 <input type="text" class="leader-jabatan w-full px-3 py-2 border border-gray-200 dark:border-[#3f4739] rounded-lg bg-gray-50 dark:bg-[#1a1414] text-gray-500 dark:text-gray-400 text-sm cursor-not-allowed" value="${jabatan}" readonly>
             </div>
             <div>
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email <span class="text-red-500">*</span></label>
-                <input type="email" class="leader-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.email || ''}" placeholder="${key === 'ketua' ? 'Email asli ketua' : 'Email'}">
+                <input type="email" class="leader-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.email || ''}" placeholder="${key === 'ketua' ? 'Email asli ketua' : 'Email'}" required>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin</label>
-                <select class="leader-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none">${genderSel(d.jenisKelamin || '')}</select>
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
+                <select class="leader-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" required>${genderSel(d.jenisKelamin || '')}</select>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp</label>
-                <input type="tel" class="leader-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.noWa || ''}" placeholder="08xxxxxxxxxx">
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
+                <input type="tel" class="leader-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.noWa || ''}" placeholder="08xxxxxxxxxx" required>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Call Center Pokja <span class="text-gray-400">(opsional)</span></label>
-                <input type="tel" class="leader-callcenter w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorCallCenter || ''}" placeholder="Opsional">
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
+                <input type="tel" class="leader-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorInstansi || ''}" placeholder="No. telepon instansi" required>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi</label>
-                <input type="tel" class="leader-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorInstansi || ''}" placeholder="No. telepon instansi">
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi</label>
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi <span class="text-gray-400">(opsional)</span></label>
                 <input type="tel" class="leader-pribadi w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorPribadi || ''}" placeholder="No. HP pribadi">
             </div>
         </div>
     </div>`;
 }
 
-// ---- Build Anggota Row ----
-function buildAnggotaRow(a, i) {
+// ---- Build Anggota Row (default 6 bidang rows, locked bidang) ----
+function buildAnggotaRow(a, i, isExtra) {
     const instansi = INSTANSI_MAP[a.bidang] || 'Dinas terkait';
     const genderSel = GENDER_OPTIONS.replace(`value="${a.jenisKelamin || ''}"`, `value="${a.jenisKelamin || ''}" selected`);
 
-    return `<div class="border border-gray-200 dark:border-[#3f4739] rounded-xl p-4 anggota-row" data-index="${i}">
-        <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2">
-                <span class="px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">${a.bidang || 'Anggota'}</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">📌 ${instansi}</span>
-            </div>
-            ${i >= 6 ? `<button onclick="removeAnggota(${i})" class="text-red-500 hover:text-red-700 text-xs font-medium">Hapus</button>` : ''}
-        </div>
+    // For extra anggota: show bidang dropdown. For default 6: show locked bidang label.
+    let bidangHtml;
+    if (isExtra) {
+        const opts = BIDANG_OPTIONS.map(b =>
+            `<option value="${b.value}" ${a.bidang === b.value ? 'selected' : ''}>${b.value}</option>`
+        ).join('');
+        bidangHtml = `<div class="flex items-center gap-2 mb-3">
+            <select class="anggota-bidang-select px-2 py-1 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-[#3f4739]" onchange="updateAnggotaInstansi(this)">${opts}</select>
+            <span class="anggota-instansi-label text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">📌 ${instansi}</span>
+            <button onclick="removeAnggota(this)" class="ml-auto text-red-500 hover:text-red-700 text-xs font-medium">Hapus</button>
+        </div>`;
+    } else {
+        bidangHtml = `<div class="flex items-center gap-2 mb-3">
+            <span class="anggota-bidang-label px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">${a.bidang}</span>
+            <span class="anggota-instansi-label text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">📌 ${instansi}</span>
+        </div>`;
+    }
+
+    return `<div class="border border-gray-200 dark:border-[#3f4739] rounded-xl p-4 anggota-row" data-index="${i}" data-bidang="${a.bidang}" data-extra="${isExtra ? '1' : '0'}">
+        ${bidangHtml}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama</label>
-                <input type="text" value="${a.nama || ''}" class="anggota-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama">
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama <span class="text-red-500">*</span></label>
+                <input type="text" value="${a.nama || ''}" class="anggota-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama" required>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan</label>
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan <span class="text-red-500">*</span></label>
                 <input type="text" value="Anggota" class="anggota-jabatan w-full px-3 py-2 border border-gray-200 dark:border-[#3f4739] rounded-lg bg-gray-50 dark:bg-[#1a1414] text-gray-500 dark:text-gray-400 text-sm cursor-not-allowed" readonly>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email</label>
-                <input type="email" value="${a.email || ''}" class="anggota-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email">
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email <span class="text-red-500">*</span></label>
+                <input type="email" value="${a.email || ''}" class="anggota-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email" required>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin</label>
-                <select class="anggota-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none">${genderSel}</select>
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
+                <select class="anggota-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" required>${genderSel}</select>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp</label>
-                <input type="tel" value="${a.noWa || ''}" class="anggota-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="08xxxxxxxxxx">
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
+                <input type="tel" value="${a.noWa || ''}" class="anggota-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="08xxxxxxxxxx" required>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Call Center <span class="text-gray-400">(opsional)</span></label>
-                <input type="tel" value="${a.nomorCallCenter || ''}" class="anggota-callcenter w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Opsional">
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
+                <input type="tel" value="${a.nomorInstansi || ''}" class="anggota-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. telepon instansi" required>
             </div>
             <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi</label>
-                <input type="tel" value="${a.nomorInstansi || ''}" class="anggota-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. telepon instansi">
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi</label>
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi <span class="text-gray-400">(opsional)</span></label>
                 <input type="tel" value="${a.nomorPribadi || ''}" class="anggota-pribadi w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. HP pribadi">
             </div>
         </div>
     </div>`;
 }
 
+function updateAnggotaInstansi(selectEl) {
+    const row = selectEl.closest('.anggota-row');
+    const bidang = selectEl.value;
+    const instansi = INSTANSI_MAP[bidang] || 'Dinas terkait';
+    row.dataset.bidang = bidang;
+    row.querySelector('.anggota-instansi-label').textContent = '📌 ' + instansi;
+}
+
 function addAnggota() {
     const container = document.getElementById('anggota-container');
     const rows = container.querySelectorAll('.anggota-row');
     const newIdx = rows.length;
-    container.insertAdjacentHTML('beforeend', buildAnggotaRow({ bidang: `Anggota Tambahan ${newIdx - 5}`, nama: '', jabatan: 'Anggota', email: '', jenisKelamin: '', noWa: '', nomorCallCenter: '', nomorInstansi: '', nomorPribadi: '' }, newIdx));
+    const newAnggota = { bidang: 'Bidang Pendidikan', nama: '', email: '', jenisKelamin: '', noWa: '', nomorInstansi: '', nomorPribadi: '' };
+    container.insertAdjacentHTML('beforeend', buildAnggotaRow(newAnggota, newIdx, true));
 }
 
-function removeAnggota(idx) {
-    const rows = document.querySelectorAll('.anggota-row');
-    if (rows[idx]) rows[idx].remove();
-    document.querySelectorAll('.anggota-row').forEach((row, i) => row.dataset.index = i);
+function removeAnggota(btn) {
+    const row = btn.closest('.anggota-row');
+    row.remove();
+    document.querySelectorAll('.anggota-row').forEach((r, i) => r.dataset.index = i);
 }
 
 function buildFormHTML(wilayah, existing) {
@@ -280,10 +295,19 @@ function buildFormHTML(wilayah, existing) {
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Lengkapi struktur Pokja sebelum mengunggah SK</p>
             </div>
 
+            <!-- Identitas Pokja + No. Call Center Pokja -->
             <div>
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Identitas Pokja</h4>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Pokja <span class="text-red-500">*</span></label>
-                <input type="text" id="nama-pokja" value="${sk.namaPokja || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Pokja BSAN ${wilayah}">
+                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Identitas Pokja</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Pokja <span class="text-red-500">*</span></label>
+                        <input type="text" id="nama-pokja" value="${sk.namaPokja || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Pokja BSAN ${wilayah}">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No. Call Center Pokja <span class="text-gray-400">(opsional)</span></label>
+                        <input type="tel" id="call-center-pokja" value="${sk.callCenterPokja || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nomor call center Pokja">
+                    </div>
+                </div>
             </div>
 
             <hr class="dark:border-[#3f4739]">
@@ -300,7 +324,10 @@ function buildFormHTML(wilayah, existing) {
             <div>
                 <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Anggota Pokja</h4>
                 <div id="anggota-container" class="space-y-3">
-                    ${anggotaList.map((a, i) => buildAnggotaRow(a, i)).join('')}
+                    ${anggotaList.map((a, i) => {
+                        const isExtra = a.isExtra || false;
+                        return buildAnggotaRow(a, i, isExtra);
+                    }).join('')}
                 </div>
                 <button onclick="addAnggota()" class="mt-3 inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 text-sm font-medium hover:text-blue-800 dark:hover:text-blue-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
@@ -321,29 +348,26 @@ function buildFormHTML(wilayah, existing) {
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Data SK Pokja ${wilayah}</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Lengkapi data SK sebelum mengajukan ke Admin Pusat</p>
             </div>
-            <div>
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Informasi SK</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor SK <span class="text-red-500">*</span></label>
-                        <input type="text" id="nomor-sk" value="${sk.nomorSK || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nomor SK">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal SK <span class="text-red-500">*</span></label>
-                        <input type="date" id="tanggal-sk" value="${sk.tanggalSK || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Periode Mulai <span class="text-red-500">*</span></label>
-                        <input type="date" id="periode-mulai" value="${sk.periodeMulai || ''}" onchange="autoSetPeriodeSelesai()" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Periode Selesai <span class="text-red-500">*</span></label>
-                        <input type="date" id="periode-selesai" value="${sk.periodeSelesai || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor SK <span class="text-red-500">*</span></label>
+                    <input type="text" id="nomor-sk" value="${sk.nomorSK || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nomor SK">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal SK <span class="text-red-500">*</span></label>
+                    <input type="date" id="tanggal-sk" value="${sk.tanggalSK || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Periode Mulai <span class="text-red-500">*</span></label>
+                    <input type="date" id="periode-mulai" value="${sk.periodeMulai || ''}" onchange="autoSetPeriodeSelesai()" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Periode Selesai <span class="text-red-500">*</span></label>
+                    <input type="date" id="periode-selesai" value="${sk.periodeSelesai || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
             </div>
             <div>
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Dokumen SK</h4>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dokumen SK</label>
                 <input type="file" id="sk-file" accept=".pdf" class="w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900/30 dark:file:text-blue-300 hover:file:bg-blue-100">
                 <p class="text-xs text-gray-400 mt-1">Maksimal 2MB, format PDF</p>
                 ${sk.skFileName ? `<p class="text-sm text-green-600 dark:text-green-400 mt-1">📄 ${sk.skFileName}</p>` : ''}
@@ -387,7 +411,6 @@ function gatherLeader(key) {
         email: el.querySelector('.leader-email')?.value || '',
         jenisKelamin: el.querySelector('.leader-gender')?.value || '',
         noWa: el.querySelector('.leader-wa')?.value || '',
-        nomorCallCenter: el.querySelector('.leader-callcenter')?.value || '',
         nomorInstansi: el.querySelector('.leader-instansi-no')?.value || '',
         nomorPribadi: el.querySelector('.leader-pribadi')?.value || '',
     };
@@ -399,17 +422,19 @@ function gatherStruktur() {
         wakil: gatherLeader('wakil'),
         koordinator: gatherLeader('koordinator'),
         anggota: Array.from(document.querySelectorAll('.anggota-row')).map((row) => {
-            const bidangEl = row.querySelector('.text-xs.font-semibold');
-            const bidang = bidangEl ? bidangEl.textContent.trim() : 'Anggota';
+            const isExtra = row.dataset.extra === '1';
+            const bidang = isExtra
+                ? (row.querySelector('.anggota-bidang-select')?.value || 'Bidang Pendidikan')
+                : (row.dataset.bidang || 'Anggota');
             return {
                 bidang,
+                isExtra,
                 nama: row.querySelector('.anggota-nama')?.value || '',
                 jabatan: 'Anggota',
                 instansi: INSTANSI_MAP[bidang] || 'Dinas terkait',
                 email: row.querySelector('.anggota-email')?.value || '',
                 jenisKelamin: row.querySelector('.anggota-gender')?.value || '',
                 noWa: row.querySelector('.anggota-wa')?.value || '',
-                nomorCallCenter: row.querySelector('.anggota-callcenter')?.value || '',
                 nomorInstansi: row.querySelector('.anggota-instansi-no')?.value || '',
                 nomorPribadi: row.querySelector('.anggota-pribadi')?.value || '',
             };
@@ -417,11 +442,37 @@ function gatherStruktur() {
     };
 }
 
+function validateRequired(struktur) {
+    // Validate leaders
+    for (const key of ['ketua', 'wakil', 'koordinator']) {
+        const m = struktur[key];
+        if (!m.nama) return `Nama ${JABATAN_MAP[key]} wajib diisi.`;
+        if (!m.email) return `Email ${JABATAN_MAP[key]} wajib diisi.`;
+        if (!m.jenisKelamin) return `Jenis Kelamin ${JABATAN_MAP[key]} wajib diisi.`;
+        if (!m.noWa) return `No. WhatsApp ${JABATAN_MAP[key]} wajib diisi.`;
+        if (!m.nomorInstansi) return `No. Instansi ${JABATAN_MAP[key]} wajib diisi.`;
+    }
+    // Validate anggota
+    for (let i = 0; i < struktur.anggota.length; i++) {
+        const a = struktur.anggota[i];
+        if (!a.nama) return `Nama anggota ${a.bidang} wajib diisi.`;
+        if (!a.email) return `Email anggota ${a.bidang} wajib diisi.`;
+        if (!a.jenisKelamin) return `Jenis Kelamin anggota ${a.bidang} wajib diisi.`;
+        if (!a.noWa) return `No. WhatsApp anggota ${a.bidang} wajib diisi.`;
+        if (!a.nomorInstansi) return `No. Instansi anggota ${a.bidang} wajib diisi.`;
+    }
+    return null;
+}
+
 function saveStruktur() {
     const namaPokja = document.getElementById('nama-pokja').value.trim();
     if (!namaPokja) { alert('Masukkan Nama Pokja.'); return; }
+
     const struktur = gatherStruktur();
-    if (!struktur.ketua.nama) { alert('Masukkan nama Ketua Pokja.'); return; }
+    const err = validateRequired(struktur);
+    if (err) { alert(err); return; }
+
+    const callCenterPokja = document.getElementById('call-center-pokja').value.trim();
 
     const subs = getSubmissions();
     const { idx } = getMySubmission();
@@ -429,6 +480,7 @@ function saveStruktur() {
 
     const submission = idx >= 0 ? { ...subs[idx] } : { roleType: role, wilayah, status: 'draft', createdAt: new Date().toISOString() };
     submission.namaPokja = namaPokja;
+    submission.callCenterPokja = callCenterPokja;
     submission.struktur = struktur;
     submission.updatedAt = new Date().toISOString();
 
@@ -473,9 +525,8 @@ function renderMemberCard(label, m) {
             <span>📧 ${m.email || '-'}</span>
             <span>🚻 ${gLabel}</span>
             <span>📱 WA: ${m.noWa || '-'}</span>
-            <span>📞 Pribadi: ${m.nomorPribadi || '-'}</span>
             <span>🏢 Instansi: ${m.nomorInstansi || '-'}</span>
-            <span>☎️ Call Center: ${m.nomorCallCenter || '-'}</span>
+            <span>📞 Pribadi: ${m.nomorPribadi || '-'}</span>
         </div>
     </div>`;
 }
@@ -503,8 +554,8 @@ function renderReadonlySummary(sub) {
             <p class="font-bold text-gray-900 dark:text-white mt-1">${sub.periodeMulai && sub.periodeSelesai ? sub.periodeMulai + ' s/d ' + sub.periodeSelesai : '-'}</p>
         </div>
         <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Dokumen SK</p>
-            <p class="font-bold text-gray-900 dark:text-white mt-1">${sub.skFileName ? '📄 ' + sub.skFileName : '-'}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Call Center Pokja</p>
+            <p class="font-bold text-gray-900 dark:text-white mt-1">${sub.callCenterPokja || '-'}</p>
         </div>
     </div>
     <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6">
@@ -516,7 +567,6 @@ function renderReadonlySummary(sub) {
 function renderDraftView(app, sub, wilayah) {
     const hasSK = sub.nomorSK;
     const canSubmit = sub.struktur?.ketua && hasSK;
-
     app.innerHTML = `
     <div><h2 class="text-xl font-bold text-gray-900 dark:text-white">Data Pokja ${wilayah}</h2><p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Review dan ajukan Pokja ke Admin Pusat</p></div>
     ${!hasSK ? `<div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 flex items-start gap-3"><span class="text-xl">📄</span><div class="flex-1"><p class="font-semibold text-blue-800 dark:text-blue-300">Dokumen SK</p><p class="text-sm text-blue-700 dark:text-blue-400">Lengkapi dan unggah file SK agar Pokja dapat diajukan ke Admin Pusat.</p></div><button onclick="editPokja('sk')" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap">Lengkapi Data SK</button></div>` : ''}

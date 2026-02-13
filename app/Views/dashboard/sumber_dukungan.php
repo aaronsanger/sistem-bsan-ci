@@ -12,7 +12,7 @@
     <div class="relative flex items-center justify-center min-h-screen p-4">
         <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
             <div class="sticky top-0 bg-white dark:bg-[#0F0A0A] px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center justify-between z-10">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white" id="entry-modal-title">Tambah Sumber Dukungan</h3>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white" id="entry-modal-title">Tambah Sumber Rujukan</h3>
                 <button onclick="closeEntryModal()" class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739]"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="p-6 space-y-5">
@@ -126,7 +126,7 @@
     <div class="relative flex items-center justify-center min-h-screen p-4">
         <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
             <div class="sticky top-0 bg-white dark:bg-[#0F0A0A] px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center justify-between">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail Sumber Dukungan</h3>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail Sumber Rujukan</h3>
                 <button onclick="closeDetailModal()" class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739]"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div id="sd-detail-content" class="p-6 space-y-3"></div>
@@ -138,7 +138,7 @@
 
 <?= $this->section('scripts') ?>
 <script>
-const SD_KEY = 'bsan_sumber_dukungan';
+const SD_KEY = 'bsan_sumber_rujukan';
 const role = localStorage.getItem('bsan_demo_role') || 'kementerian';
 
 // Only Kementerian and Koordinator (dinas) can input
@@ -188,8 +188,8 @@ function renderPage() {
     let html = `
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Sumber Dukungan BSAN</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Informasi penyedia sumber dukungan BSAN sesuai Permendikdasmen 6/2026</p>
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Sumber Rujukan BSAN</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Informasi penyedia sumber rujukan BSAN sesuai Permendikdasmen 6/2026</p>
         </div>
         ${canInput ? `<button onclick="openEntryModal()" class="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
@@ -201,7 +201,7 @@ function renderPage() {
     if (isKementerian) {
         html += `<div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
             <h4 class="font-semibold text-blue-800 dark:text-blue-300 text-sm mb-2">📋 Proses Input — Kementerian/Lembaga</h4>
-            <p class="text-sm text-blue-700 dark:text-blue-400">Menghimpun data sumber dukungan dari ${KL_SOURCES.length} K/L terkait.</p>
+            <p class="text-sm text-blue-700 dark:text-blue-400">Menghimpun data sumber rujukan dari ${KL_SOURCES.length} K/L terkait.</p>
             <div class="mt-3 flex flex-wrap gap-2">
                 ${KL_SOURCES.map(s => `<span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded text-xs">${s.label}</span>`).join('')}
             </div>
@@ -212,7 +212,7 @@ function renderPage() {
     if (isPokja) {
         html += `<div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4">
             <h4 class="font-semibold text-green-800 dark:text-green-300 text-sm mb-2">📋 Proses Input — Pokja (Perangkat Daerah)</h4>
-            <p class="text-sm text-green-700 dark:text-green-400">Menghimpun data sumber dukungan dari perangkat daerah.</p>
+            <p class="text-sm text-green-700 dark:text-green-400">Menghimpun data sumber rujukan dari perangkat daerah.</p>
             <div class="mt-3 flex flex-wrap gap-2">
                 ${POKJA_SOURCES.map(s => `<span class="px-2 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded text-xs">${s.label}</span>`).join('')}
             </div>
@@ -269,7 +269,7 @@ function renderPage() {
                 <tbody id="sd-tbody"></tbody>
             </table>
         </div>
-        <div id="sd-empty" class="text-center py-8 text-gray-500 dark:text-gray-400 hidden">Belum ada data sumber dukungan.</div>
+        <div id="sd-empty" class="text-center py-8 text-gray-500 dark:text-gray-400 hidden">Belum ada data sumber rujukan.</div>
     </div>`;
 
     app.innerHTML = html;
@@ -333,7 +333,7 @@ function updateAsalOptions() {
 
 function openEntryModal(editIdx) {
     document.getElementById('entry-edit-idx').value = editIdx ?? -1;
-    document.getElementById('entry-modal-title').textContent = editIdx >= 0 ? 'Edit Sumber Dukungan' : 'Tambah Sumber Dukungan';
+    document.getElementById('entry-modal-title').textContent = editIdx >= 0 ? 'Edit Sumber Rujukan' : 'Tambah Sumber Rujukan';
     updateAsalOptions();
 
     if (editIdx >= 0) {
@@ -428,7 +428,7 @@ function showDetail(idx) {
 function closeDetailModal() { document.getElementById('sd-detail-modal').classList.add('hidden'); }
 
 function deleteEntry(idx) {
-    if (!confirm('Hapus data sumber dukungan ini?')) return;
+    if (!confirm('Hapus data sumber rujukan ini?')) return;
     const entries = getEntries();
     entries.splice(idx, 1);
     saveEntries(entries);

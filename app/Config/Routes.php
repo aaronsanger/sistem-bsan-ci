@@ -40,11 +40,7 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('pokja', 'Pokja::index');
     $routes->post('pokja/invite', 'Pokja::invite');
     $routes->get('pelaporan', 'Pelaporan::index');
-    $routes->get('sumber-dukungan', 'SumberDukungan::index');
-    $routes->get('rujukan', 'Rujukan::index');
-    $routes->post('rujukan', 'Rujukan::store');
-    $routes->post('rujukan/update', 'Rujukan::update');
-    $routes->post('rujukan/delete', 'Rujukan::delete');
+    $routes->get('sumber-rujukan', 'SumberDukungan::index');
     $routes->get('admin', 'Admin::index');
     $routes->post('admin/invite', 'Admin::invite');
     $routes->post('admin/update-role', 'Admin::updateRole');
@@ -57,6 +53,5 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
 $routes->group('api', function ($routes) {
     $routes->get('dashboard/stats', 'Dashboard::stats');
     $routes->get('pokja/list', 'Pokja::list');
-    $routes->get('rujukan/list', 'Rujukan::list');
     $routes->get('admin/users', 'Admin::users');
 });
