@@ -14,23 +14,6 @@ $routes->get('/', 'Home::index');
 $routes->get('/data-publik', 'DataPublik::index');
 $routes->get('/faq', 'Faq::index');
 
-// Temporary diagnostic route for Vercel debugging (remove after fix)
-$routes->get('/debug-env', static function () {
-    $app = config('App');
-    return json_encode([
-        'baseURL' => $app->baseURL,
-        'indexPage' => $app->indexPage,
-        'VERCEL' => $_ENV['VERCEL'] ?? $_SERVER['VERCEL'] ?? getenv('VERCEL'),
-        'CI_ENVIRONMENT' => $_ENV['CI_ENVIRONMENT'] ?? 'not_set',
-        'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? 'not_set',
-        'SERVER_NAME' => $_SERVER['SERVER_NAME'] ?? 'not_set',
-        'env_app_baseURL' => $_ENV['app.baseURL'] ?? 'not_set',
-        'server_app_baseURL' => $_SERVER['app.baseURL'] ?? 'not_set',
-        'getenv_app_baseURL' => getenv('app.baseURL') ?: 'not_set',
-        'WRITEPATH' => defined('WRITEPATH') ? WRITEPATH : 'not_defined',
-    ], JSON_PRETTY_PRINT);
-});
-
 // ==========================================
 // AUTH ROUTES
 // ==========================================

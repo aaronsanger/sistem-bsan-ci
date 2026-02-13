@@ -2,7 +2,12 @@
 
 /**
  * Vercel Serverless Entry Point for CodeIgniter 4
- * Routes all requests through CI4's front controller
+ * 
+ * Best Practice: No .env on Vercel — use Vercel Environment Variables instead.
+ * Set these in Vercel Dashboard > Settings > Environment Variables:
+ *   - SUPABASE_URL
+ *   - SUPABASE_ANON_KEY
+ *   - SUPABASE_SERVICE_KEY
  */
 
 // Set working directory to project root
@@ -29,18 +34,13 @@ foreach (['logs', 'cache', 'session', 'uploads', 'debugbar'] as $dir) {
 // Boot::definePathConstants() skips WRITEPATH if already defined
 define('WRITEPATH', $writablePath . '/');
 
-// Load environment variables
-if (is_file($projectRoot . '/.env')) {
-    $dotenv = parse_ini_file($projectRoot . '/.env');
-    if ($dotenv !== false) {
-        foreach ($dotenv as $key => $value) {
-            $_ENV[$key] = $value;
-            $_SERVER[$key] = $value;
-        }
-    }
-}
+// =========================================================
+// VERCEL ENVIRONMENT CONFIGURATION
+// No .env on Vercel — all config via Vercel Environment Variables
+// or auto-detected from request headers.
+// =========================================================
 
-// Set CI_ENVIRONMENT for production on Vercel
+// Force production environment
 $_ENV['CI_ENVIRONMENT'] = 'production';
 $_SERVER['CI_ENVIRONMENT'] = 'production';
 putenv('CI_ENVIRONMENT=production');
@@ -50,28 +50,31 @@ $_ENV['VERCEL'] = '1';
 $_SERVER['VERCEL'] = '1';
 putenv('VERCEL=1');
 
-// Auto-detect baseURL on Vercel (override localhost from .env / App.php)
-$scheme = 'https'; // Vercel always uses HTTPS
+// Auto-detect baseURL from request (no hardcoded URLs needed)
+$scheme = 'https'; // Vercel always terminates SSL
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
     $scheme = $_SERVER['HTTP_X_FORWARDED_PROTO'];
 }
 $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? 'sistem-bsan-dev.vercel.app';
 $autoBaseURL = $scheme . '://' . $host . '/';
+
+// Set at ALL levels so CI4's BaseConfig picks it up
 $_ENV['app.baseURL'] = $autoBaseURL;
 $_SERVER['app.baseURL'] = $autoBaseURL;
 putenv("app.baseURL={$autoBaseURL}");
 
-// Remove index.php from URLs on Vercel (rewrite handles routing)
+// Remove index.php from URLs (Vercel rewrite handles routing)
 $_ENV['app.indexPage'] = '';
 $_SERVER['app.indexPage'] = '';
 putenv('app.indexPage=');
 
-// Load paths config and override writable directory
+// =========================================================
+// Load paths config and boot CI4
+// =========================================================
 require $projectRoot . '/app/Config/Paths.php';
 $paths = new Config\Paths();
 $paths->writableDirectory = $writablePath;
 
-// Load the framework bootstrap
 require $paths->systemDirectory . '/Boot.php';
 
 exit(CodeIgniter\Boot::bootWeb($paths));
