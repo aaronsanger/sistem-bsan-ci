@@ -24,6 +24,16 @@ class Dashboard extends Controller
         return view('dashboard/index', $data);
     }
 
+    public function logAktivitas()
+    {
+        $data = [
+            'title' => 'Log Aktivitas',
+            'pageTitle' => 'Log Aktivitas',
+        ];
+
+        return view('dashboard/log-aktivitas', $data);
+    }
+
     /**
      * API endpoint for dashboard stats (AJAX)
      */

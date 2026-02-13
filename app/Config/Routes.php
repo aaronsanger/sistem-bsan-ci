@@ -41,6 +41,7 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->post('pokja/invite', 'Pokja::invite');
     $routes->get('pelaporan', 'Pelaporan::index');
     $routes->get('sumber-rujukan', 'SumberDukungan::index');
+    $routes->get('log-aktivitas', 'Dashboard::logAktivitas');
     $routes->get('admin', 'Admin::index');
     $routes->post('admin/invite', 'Admin::invite');
     $routes->post('admin/update-role', 'Admin::updateRole');

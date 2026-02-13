@@ -68,6 +68,37 @@ function getMySubmission() {
     return { sub: subs.find(s => s.roleType === role && s.wilayah === w), idx: subs.findIndex(s => s.roleType === role && s.wilayah === w) };
 }
 
+// ---- Phone normalizer: any format → 628xxxxxxxxx ----
+function normalizePhone(val) {
+    let digits = val.replace(/[^0-9]/g, '');
+    if (digits.startsWith('0')) digits = '62' + digits.substring(1);
+    else if (!digits.startsWith('62') && digits.length > 0) digits = '62' + digits;
+    return digits;
+}
+
+// ---- Email validator ----
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// ---- Live phone normalization via event delegation ----
+document.addEventListener('DOMContentLoaded', function() {
+    const app = document.getElementById('pokja-app');
+    if (!app) return;
+    app.addEventListener('blur', function(e) {
+        const el = e.target;
+        if (el.tagName !== 'INPUT' || el.type !== 'tel') return;
+        const raw = el.value.trim();
+        if (raw) el.value = normalizePhone(raw);
+    }, true);
+    // Also restrict to digits only on keypress
+    app.addEventListener('input', function(e) {
+        const el = e.target;
+        if (el.tagName !== 'INPUT' || el.type !== 'tel') return;
+        el.value = el.value.replace(/[^0-9\-+]/g, '');
+    }, true);
+});
+
 // Instansi auto-fill mapping (non-editable)
 const INSTANSI_MAP = {
     ketua: 'Sekretaris Daerah',
@@ -175,7 +206,7 @@ function buildLeaderRow(key, label, sublabel, colorClass, data) {
             </div>
             <div>
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
-                <input type="tel" class="leader-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.noWa || ''}" placeholder="08xxxxxxxxxx" required>
+                <input type="tel" class="leader-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.noWa || ''}" placeholder="628xxxxxxxxx" required>
             </div>
             <div>
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
@@ -233,7 +264,7 @@ function buildAnggotaRow(a, i, isExtra) {
             </div>
             <div>
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
-                <input type="tel" value="${a.noWa || ''}" class="anggota-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="08xxxxxxxxxx" required>
+                <input type="tel" value="${a.noWa || ''}" class="anggota-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="628xxxxxxxxx" required>
             </div>
             <div>
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
@@ -458,20 +489,24 @@ function validateRequired(struktur) {
     // Validate leaders
     for (const key of ['ketua', 'wakil', 'koordinator']) {
         const m = struktur[key];
-        if (!m.nama) return `Nama ${JABATAN_MAP[key]} wajib diisi.`;
-        if (!m.email) return `Email ${JABATAN_MAP[key]} wajib diisi.`;
-        if (!m.jenisKelamin) return `Jenis Kelamin ${JABATAN_MAP[key]} wajib diisi.`;
-        if (!m.noWa) return `No. WhatsApp ${JABATAN_MAP[key]} wajib diisi.`;
-        if (!m.nomorInstansi) return `No. Instansi ${JABATAN_MAP[key]} wajib diisi.`;
+        const label = JABATAN_MAP[key];
+        if (!m.nama) return `Nama ${label} wajib diisi.`;
+        if (!m.email) return `Email ${label} wajib diisi.`;
+        if (m.email && !isValidEmail(m.email)) return `Email ${label} tidak valid.`;
+        if (!m.jenisKelamin) return `Jenis Kelamin ${label} wajib diisi.`;
+        if (!m.noWa) return `No. WhatsApp ${label} wajib diisi.`;
+        if (!m.nomorInstansi) return `No. Instansi ${label} wajib diisi.`;
     }
     // Validate anggota
     for (let i = 0; i < struktur.anggota.length; i++) {
         const a = struktur.anggota[i];
-        if (!a.nama) return `Nama anggota ${a.bidang} wajib diisi.`;
-        if (!a.email) return `Email anggota ${a.bidang} wajib diisi.`;
-        if (!a.jenisKelamin) return `Jenis Kelamin anggota ${a.bidang} wajib diisi.`;
-        if (!a.noWa) return `No. WhatsApp anggota ${a.bidang} wajib diisi.`;
-        if (!a.nomorInstansi) return `No. Instansi anggota ${a.bidang} wajib diisi.`;
+        const label = a.bidang;
+        if (!a.nama) return `Nama ${label} wajib diisi.`;
+        if (!a.email) return `Email ${label} wajib diisi.`;
+        if (a.email && !isValidEmail(a.email)) return `Email ${label} tidak valid.`;
+        if (!a.jenisKelamin) return `Jenis Kelamin ${label} wajib diisi.`;
+        if (!a.noWa) return `No. WhatsApp ${label} wajib diisi.`;
+        if (!a.nomorInstansi) return `No. Instansi ${label} wajib diisi.`;
     }
     return null;
 }
@@ -582,9 +617,20 @@ function renderDraftView(app, sub, wilayah) {
     app.innerHTML = `
     <div><h2 class="text-xl font-bold text-gray-900 dark:text-white">Data Pokja ${wilayah}</h2><p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Review dan ajukan Pokja ke Admin Pusat</p></div>
     ${!hasSK ? `<div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 flex items-start gap-3"><span class="text-xl">📄</span><div class="flex-1"><p class="font-semibold text-blue-800 dark:text-blue-300">Dokumen SK</p><p class="text-sm text-blue-700 dark:text-blue-400">Lengkapi dan unggah file SK agar Pokja dapat diajukan ke Admin Pusat.</p></div><button onclick="editPokja('sk')" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap">Lengkapi Data SK</button></div>` : ''}
-    ${canSubmit ? `<div class="flex justify-end"><button onclick="confirmSubmit()" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Ajukan ke Admin Pusat</button></div>` : ''}
-    ${renderReadonlySummary(sub)}
-    <div class="flex justify-end"><button onclick="editPokja('struktur')" class="text-blue-600 dark:text-blue-400 text-sm font-medium hover:text-blue-800">✏️ Edit Struktur Pokja</button></div>`;
+    <div class="flex flex-wrap items-center gap-3">
+        <button onclick="editPokja('struktur')" class="inline-flex items-center gap-2 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium px-4 py-2.5 rounded-lg transition-colors text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Edit Struktur
+        </button>
+        <button onclick="editPokja('sk')" class="inline-flex items-center gap-2 border border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 font-medium px-4 py-2.5 rounded-lg transition-colors text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Update SK
+        </button>
+        ${canSubmit ? `<button onclick="confirmSubmit()" class="ml-auto inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors text-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Ajukan ke Admin Pusat
+        </button>` : ''}
+    </div>
+    ${renderReadonlySummary(sub)}`;
 }
 
 function renderPendingView(app, sub, wilayah) {
@@ -615,8 +661,21 @@ function renderDeclinedView(app, sub, wilayah) {
         <svg class="w-5 h-5 text-red-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <div><p class="font-semibold text-red-800 dark:text-red-300">Pengajuan Ditolak</p><p class="text-sm text-red-700 dark:text-red-400 mt-1">${sub.declineReason || 'Tidak ada alasan.'}</p></div>
     </div>
-    ${renderReadonlySummary(sub)}
-    <div class="flex justify-end"><button onclick="resubmit()" class="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Edit & Ajukan Ulang</button></div>`;
+    <div class="flex flex-wrap items-center gap-3">
+        <button onclick="resubmit('struktur')" class="inline-flex items-center gap-2 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium px-4 py-2.5 rounded-lg transition-colors text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Edit Struktur
+        </button>
+        <button onclick="resubmit('sk')" class="inline-flex items-center gap-2 border border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 font-medium px-4 py-2.5 rounded-lg transition-colors text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Update SK
+        </button>
+        <button onclick="resubmit('struktur')" class="ml-auto inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors text-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Edit & Ajukan Ulang
+        </button>
+    </div>
+    ${renderReadonlySummary(sub)}`;
 }
 
 function editPokja(tab) {
@@ -640,13 +699,13 @@ function submitToAdmin() {
     renderPokjaPage();
 }
 
-function resubmit() {
+function resubmit(tab) {
     const subs = getSubmissions();
     const { idx } = getMySubmission();
     if (idx < 0) return;
     subs[idx].status = 'draft'; subs[idx].declineReason = '';
     saveSubmissions(subs);
-    editPokja('struktur');
+    editPokja(tab || 'struktur');
 }
 
 $(document).ready(function() { init(); });

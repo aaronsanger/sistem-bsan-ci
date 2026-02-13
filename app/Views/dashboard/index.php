@@ -40,6 +40,7 @@
                         <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Jenis</th>
                         <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Tanggal</th>
                         <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Status</th>
+                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Terakhir Diproses</th>
                         <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Aksi</th>
                     </tr>
                 </thead>
@@ -158,6 +159,37 @@
                 </button>
             </div>
             <div id="approval-detail-content" class="p-6 space-y-4"></div>
+            <!-- PDF Preview Section -->
+            <div id="pdf-preview-section" class="hidden px-6 pb-4">
+                <div class="bg-gray-50 dark:bg-[#1a1414] border border-gray-200 dark:border-[#3f4739] rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                            Preview Dokumen SK
+                        </h4>
+                        <button id="pdf-open-tab" onclick="openPdfInNewTab()" class="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            Buka di Tab Baru
+                        </button>
+                    </div>
+                    <div id="pdf-preview-frame" class="rounded-lg overflow-hidden bg-white dark:bg-gray-900 border border-gray-200 dark:border-[#3f4739]" style="height: 400px;">
+                        <div class="flex items-center justify-center h-full text-gray-400">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                <p class="text-sm font-medium" id="pdf-filename">dokumen.pdf</p>
+                                <p class="text-xs text-gray-400 mt-1">Preview PDF (mode demo)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Action History -->
+            <div id="action-history-section" class="hidden px-6 pb-4">
+                <div class="bg-gray-50 dark:bg-[#1a1414] border border-gray-200 dark:border-[#3f4739] rounded-xl p-4">
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Riwayat Aksi</h4>
+                    <div id="action-history-list" class="space-y-2 text-sm"></div>
+                </div>
+            </div>
             <div id="approval-actions" class="px-6 pb-6 flex gap-3">
                 <button onclick="showDeclineForm()" class="flex-1 px-4 py-2.5 border border-red-300 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors font-medium">Tolak</button>
                 <button onclick="approvePokja()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Setujui</button>
@@ -179,10 +211,25 @@
 <?= $this->section('scripts') ?>
 <script>
     const POKJA_SUBMISSIONS_KEY = 'bsan_pokja_submissions';
+    const POKJA_ACTION_LOG_KEY = 'bsan_pokja_action_log';
     let currentApprovalIdx = -1;
 
     function getSubmissions() { return JSON.parse(localStorage.getItem(POKJA_SUBMISSIONS_KEY) || '[]'); }
     function saveSubmissions(d) { localStorage.setItem(POKJA_SUBMISSIONS_KEY, JSON.stringify(d)); }
+    function getActionLog() { return JSON.parse(localStorage.getItem(POKJA_ACTION_LOG_KEY) || '[]'); }
+    function saveActionLog(log) { localStorage.setItem(POKJA_ACTION_LOG_KEY, JSON.stringify(log)); }
+
+    function addActionLogEntry(action, wilayah, reason) {
+        const log = getActionLog();
+        log.unshift({
+            action,
+            wilayah,
+            reason: reason || '',
+            admin: '<?= session()->get('user_name') ?? 'Admin Demo' ?>',
+            timestamp: new Date().toISOString(),
+        });
+        saveActionLog(log);
+    }
 
     function initDashboard() {
         const role = localStorage.getItem('bsan_demo_role') || 'kementerian';
@@ -233,11 +280,22 @@
             const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
             const jenisLabel = s.roleType === 'dinas_prov' ? 'Provinsi' : 'Kab/Kota';
 
+            // Recent action info
+            let terakhirHtml = '<span class="text-gray-400">-</span>';
+            if (s.approvedAt) {
+                const d = new Date(s.approvedAt);
+                terakhirHtml = `<span class="text-green-600 dark:text-green-400 text-xs">✅ ${s.approvedBy || 'Admin'}<br>${d.toLocaleDateString('id-ID', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>`;
+            } else if (s.declinedAt) {
+                const d = new Date(s.declinedAt);
+                terakhirHtml = `<span class="text-red-600 dark:text-red-400 text-xs">❌ ${s.declinedBy || 'Admin'}<br>${d.toLocaleDateString('id-ID', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>`;
+            }
+
             return `<tr class="border-b dark:border-[#3f4739] hover:bg-gray-50 dark:hover:bg-[#1a1414]">
                 <td class="px-4 py-3 dark:text-white font-medium">${s.wilayah || s.namaPokja || '-'}</td>
                 <td class="px-4 py-3 dark:text-gray-300">${jenisLabel}</td>
                 <td class="px-4 py-3 dark:text-gray-300 text-sm">${dateStr}</td>
                 <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${statusColors[s.status]}">${statusLabel[s.status]}${s.status === 'declined' && s.declineReason ? ' (' + s.declineReason.substring(0, 30) + ')' : ''}</span></td>
+                <td class="px-4 py-3">${terakhirHtml}</td>
                 <td class="px-4 py-3">
                     <button onclick="openApprovalDetail(${i})" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 text-sm font-medium">Detail</button>
                 </td>
@@ -285,6 +343,37 @@
             </div>
         `;
 
+        // PDF Preview
+        const pdfSection = document.getElementById('pdf-preview-section');
+        if (s.skFileName) {
+            pdfSection.classList.remove('hidden');
+            document.getElementById('pdf-filename').textContent = s.skFileName;
+        } else {
+            pdfSection.classList.add('hidden');
+        }
+
+        // Action History
+        const historySection = document.getElementById('action-history-section');
+        const historyList = document.getElementById('action-history-list');
+        const log = getActionLog().filter(l => l.wilayah === s.wilayah);
+        if (log.length > 0) {
+            historySection.classList.remove('hidden');
+            historyList.innerHTML = log.map(l => {
+                const d = new Date(l.timestamp);
+                const dateStr = d.toLocaleDateString('id-ID', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+                const actionColor = l.action === 'approved' ? 'text-green-600' : 'text-red-600';
+                const actionLabel = l.action === 'approved' ? '✅ Disetujui' : '❌ Ditolak';
+                return `<div class="flex items-center gap-2 text-sm">
+                    <span class="${actionColor} font-medium">${actionLabel}</span>
+                    <span class="text-gray-500">oleh ${l.admin}</span>
+                    <span class="text-gray-400 ml-auto">${dateStr}</span>
+                    ${l.reason ? `<span class="text-xs text-red-500">(${l.reason})</span>` : ''}
+                </div>`;
+            }).join('');
+        } else {
+            historySection.classList.add('hidden');
+        }
+
         // Show/hide actions based on status
         const actionsEl = document.getElementById('approval-actions');
         const declineFormEl = document.getElementById('decline-form');
@@ -308,6 +397,8 @@
         const subs = getSubmissions();
         subs[currentApprovalIdx].status = 'approved';
         subs[currentApprovalIdx].approvedAt = new Date().toISOString();
+        subs[currentApprovalIdx].approvedBy = '<?= session()->get('user_name') ?? 'Admin Demo' ?>';
+        addActionLogEntry('approved', subs[currentApprovalIdx].wilayah);
         saveSubmissions(subs);
         closeApprovalModal();
         renderKementerianDashboard();
@@ -331,10 +422,20 @@
         subs[currentApprovalIdx].status = 'declined';
         subs[currentApprovalIdx].declineReason = reason;
         subs[currentApprovalIdx].declinedAt = new Date().toISOString();
+        subs[currentApprovalIdx].declinedBy = '<?= session()->get('user_name') ?? 'Admin Demo' ?>';
+        addActionLogEntry('declined', subs[currentApprovalIdx].wilayah, reason);
         saveSubmissions(subs);
         alert('Pengajuan ditolak.');
         closeApprovalModal();
         renderKementerianDashboard();
+    }
+
+    function openPdfInNewTab() {
+        // Demo mode — no real PDF, show placeholder
+        const w = window.open('', '_blank');
+        const subs = getSubmissions();
+        const s = subs[currentApprovalIdx];
+        w.document.write(`<html><head><title>${s?.skFileName || 'SK Pokja'}</title></head><body style="font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f9fafb;"><div style="text-align:center;"><h1 style="font-size:3rem;">📄</h1><h2>Preview Dokumen SK</h2><p style="color:#666;">${s?.skFileName || '-'}</p><p style="color:#999;font-size:0.8rem;">Mode Demo — file PDF tidak tersimpan di server</p></div></body></html>`);
     }
 
     // ---- Dinas Dashboard ----
