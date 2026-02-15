@@ -173,7 +173,7 @@
             <svg class="icon-sm" style="color:#16a34a" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
             Peta Sebaran Pokja
         </h3>
-        <div class="map-panel" style="display:grid;grid-template-columns:280px 1fr;gap:1rem;align-items:start">
+        <div class="map-panel" style="display:grid;grid-template-columns:280px 1fr;gap:1rem;align-items:center">
             <!-- Status Summary Sidebar -->
             <div class="status-summary" id="status-summary">
                 <!-- Level filter tabs -->
@@ -252,33 +252,29 @@
         <h3 class="dash-card__title" style="font-size:0.875rem;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem"><svg class="icon-sm" style="color:#ea580c" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Log Pengajuan Pokja</h3>
         <!-- Filters Row -->
         <div class="log-toolbar">
-            <div class="log-toolbar__left">
-                <div class="log-toolbar__entries">
-                    <label>Tampilkan</label>
-                    <select id="log-per-page" onchange="logPerPageChanged()" class="form-select log-toolbar__select">
-                        <option value="10" selected>10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="-1">Semua</option>
-                    </select>
-                    <label>data</label>
-                </div>
-                <input id="log-search" type="text" placeholder="Cari wilayah..." oninput="logFilterChanged()" class="form-input log-toolbar__search" />
-            </div>
-            <div class="log-toolbar__right">
-                <select id="log-status-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
-                    <option value="">Semua Status</option>
-                    <option value="approved">Disetujui</option>
-                    <option value="pending">Pending</option>
-                    <option value="draft">Draft</option>
-                    <option value="declined">Ditolak</option>
+            <div class="log-toolbar__entries">
+                <label>Tampilkan</label>
+                <select id="log-per-page" onchange="logPerPageChanged()" class="form-select log-toolbar__select">
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="-1">Semua</option>
                 </select>
-                <select id="log-jenis-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
-                    <option value="">Semua Jenis</option>
-                    <option value="dinas_prov">Provinsi</option>
-                    <option value="dinas_kab">Kab/Kota</option>
-                </select>
+                <label>data</label>
             </div>
+            <input id="log-search" type="text" placeholder="Cari wilayah..." oninput="logFilterChanged()" class="form-input log-toolbar__search" />
+            <select id="log-status-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
+                <option value="">Semua Status</option>
+                <option value="approved">Disetujui</option>
+                <option value="pending">Pending</option>
+                <option value="draft">Draft</option>
+                <option value="declined">Ditolak</option>
+            </select>
+            <select id="log-jenis-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
+                <option value="">Semua Jenis</option>
+                <option value="dinas_prov">Provinsi</option>
+                <option value="dinas_kab">Kab/Kota</option>
+            </select>
         </div>
         <span id="log-count" class="log-count"></span>
         <div class="dash-table__wrapper">
