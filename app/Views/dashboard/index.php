@@ -89,7 +89,7 @@
         .admin-donut-legend span { display: flex; align-items: center; gap: clamp(3px, 0.5vw, 5px); }
         .admin-donut-legend i { width: clamp(7px, 0.75vw + 4px, 10px); height: clamp(7px, 0.75vw + 4px, 10px); border-radius: 50%; display: inline-block; }
     </style>
-    <div class="dash-grid--3" style="display:grid">
+    <div class="dash-grid--4" style="display:grid">
         <!-- Donut 1: Status Pengajuan -->
         <div class="dash-card admin-donut-card">
             <h3 style="justify-content:center"><svg style="color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>Status Pengajuan Pokja</h3>
@@ -160,44 +160,127 @@
                 </div>
             </div>
         </div>
+        <!-- Chart 4: Komposisi Gender per Jabatan -->
+        <div class="dash-card">
+            <h3 class="dash-card__title" style="font-size:clamp(0.7rem,0.4vw+0.45rem,0.8rem);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.375rem;justify-content:center"><svg class="icon-sm" style="color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Gender per Jabatan</h3>
+            <div style="position:relative;height:clamp(140px, 16vw + 60px, 220px);"><canvas id="chart-gender"></canvas></div>
+        </div>
     </div>
 
-    <!-- Gender Chart -->
-    <div class="dash-card">
-        <h3 class="dash-card__title" style="font-size:0.875rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem"><svg class="icon-sm" style="color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Komposisi Gender per Jabatan</h3>
-        <div style="position:relative;height:clamp(180px, 20vw + 100px, 260px);"><canvas id="chart-gender"></canvas></div>
-    </div>
-
-    <!-- Admin Map -->
+    <!-- Map + Status Summary -->
     <div class="dash-card">
         <h3 class="dash-card__title" style="font-size:0.875rem;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem">
             <svg class="icon-sm" style="color:#16a34a" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
             Peta Sebaran Pokja
         </h3>
-        <div id="admin-map-container" style="min-height:clamp(250px, 30vw + 100px, 420px);"></div>
+        <div class="map-panel" style="display:grid;grid-template-columns:280px 1fr;gap:1rem;align-items:start">
+            <!-- Status Summary Sidebar -->
+            <div class="status-summary" id="status-summary">
+                <!-- Level filter tabs -->
+                <div class="status-summary__tabs">
+                    <button class="status-summary__tab status-summary__tab--active" data-level="all" onclick="filterStatusLevel('all',this)">Semua</button>
+                    <button class="status-summary__tab" data-level="prov" onclick="filterStatusLevel('prov',this)">Provinsi</button>
+                    <button class="status-summary__tab" data-level="kab" onclick="filterStatusLevel('kab',this)">Kab/Kota</button>
+                </div>
+
+                <!-- Status items -->
+                <div class="status-summary__list">
+                    <div class="status-summary__item status-summary__item--green" onclick="filterByStatus('approved')">
+                        <div class="status-summary__indicator" style="background:#10b981"></div>
+                        <div class="status-summary__info">
+                            <span class="status-summary__name">Disetujui</span>
+                            <span class="status-summary__desc">Pokja aktif & terverifikasi</span>
+                        </div>
+                        <span class="status-summary__count" id="summary-approved">0</span>
+                    </div>
+                    <div class="status-summary__item status-summary__item--amber" onclick="filterByStatus('pending')">
+                        <div class="status-summary__indicator" style="background:#f59e0b"></div>
+                        <div class="status-summary__info">
+                            <span class="status-summary__name">Pending</span>
+                            <span class="status-summary__desc">Menunggu persetujuan</span>
+                        </div>
+                        <span class="status-summary__count" id="summary-pending">0</span>
+                    </div>
+                    <div class="status-summary__item status-summary__item--gray" onclick="filterByStatus('draft')">
+                        <div class="status-summary__indicator" style="background:#6b7280"></div>
+                        <div class="status-summary__info">
+                            <span class="status-summary__name">Draft</span>
+                            <span class="status-summary__desc">Belum diajukan</span>
+                        </div>
+                        <span class="status-summary__count" id="summary-draft">0</span>
+                    </div>
+                    <div class="status-summary__item status-summary__item--red" onclick="filterByStatus('declined')">
+                        <div class="status-summary__indicator" style="background:#ef4444"></div>
+                        <div class="status-summary__info">
+                            <span class="status-summary__name">Ditolak</span>
+                            <span class="status-summary__desc">Perlu perbaikan</span>
+                        </div>
+                        <span class="status-summary__count" id="summary-declined">0</span>
+                    </div>
+                    <div class="status-summary__item status-summary__item--slate" onclick="filterByStatus('none')">
+                        <div class="status-summary__indicator" style="background:#cbd5e1"></div>
+                        <div class="status-summary__info">
+                            <span class="status-summary__name">Belum Ada</span>
+                            <span class="status-summary__desc">Belum membentuk Pokja</span>
+                        </div>
+                        <span class="status-summary__count" id="summary-none">0</span>
+                    </div>
+                </div>
+
+                <!-- Total bar -->
+                <div class="status-summary__total">
+                    <span>Total Wilayah</span>
+                    <span class="status-summary__total-num" id="summary-total">0</span>
+                </div>
+
+                <!-- Mini progress bar -->
+                <div class="status-summary__progress">
+                    <div class="status-summary__bar" id="summary-bar-approved" style="background:#10b981"></div>
+                    <div class="status-summary__bar" id="summary-bar-pending" style="background:#f59e0b"></div>
+                    <div class="status-summary__bar" id="summary-bar-draft" style="background:#6b7280"></div>
+                    <div class="status-summary__bar" id="summary-bar-declined" style="background:#ef4444"></div>
+                    <div class="status-summary__bar" id="summary-bar-none" style="background:#cbd5e1"></div>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div id="admin-map-container" style="min-height:clamp(250px, 30vw + 100px, 420px);"></div>
+        </div>
     </div>
 
     <div class="dash-card">
         <h3 class="dash-card__title" style="font-size:0.875rem;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem"><svg class="icon-sm" style="color:#ea580c" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Log Pengajuan Pokja</h3>
-        <!-- Search + Filter -->
-        <div class="d-flex d-flex--between d-flex--wrap d-flex--gap-3" style="margin-bottom:1rem">
-            <div class="d-flex d-flex--gap-2" style="align-items:center">
-                <input id="log-search" type="text" placeholder="Cari wilayah..." oninput="logFilterChanged()" class="form-input" style="width:14rem;padding:0.375rem 0.75rem" />
-                <select id="log-status-filter" onchange="logFilterChanged()" class="form-select" style="padding:0.375rem 0.75rem;width:auto">
+        <!-- Filters Row -->
+        <div class="log-toolbar">
+            <div class="log-toolbar__left">
+                <div class="log-toolbar__entries">
+                    <label>Tampilkan</label>
+                    <select id="log-per-page" onchange="logPerPageChanged()" class="form-select log-toolbar__select">
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="-1">Semua</option>
+                    </select>
+                    <label>data</label>
+                </div>
+                <input id="log-search" type="text" placeholder="Cari wilayah..." oninput="logFilterChanged()" class="form-input log-toolbar__search" />
+            </div>
+            <div class="log-toolbar__right">
+                <select id="log-status-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
                     <option value="">Semua Status</option>
                     <option value="approved">Disetujui</option>
                     <option value="pending">Pending</option>
                     <option value="draft">Draft</option>
                     <option value="declined">Ditolak</option>
                 </select>
-                <select id="log-jenis-filter" onchange="logFilterChanged()" class="form-select" style="padding:0.375rem 0.75rem;width:auto">
+                <select id="log-jenis-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
                     <option value="">Semua Jenis</option>
                     <option value="dinas_prov">Provinsi</option>
                     <option value="dinas_kab">Kab/Kota</option>
                 </select>
             </div>
-            <span id="log-count" style="font-size:0.75rem;color:var(--dash-text-muted)"></span>
         </div>
+        <span id="log-count" class="log-count"></span>
         <div class="dash-table__wrapper">
             <table class="dash-table">
                 <thead><tr>
@@ -212,9 +295,9 @@
             </table>
         </div>
         <!-- Pagination -->
-        <div id="log-pagination" class="d-flex d-flex--between" style="margin-top:1rem;font-size:0.875rem;color:var(--dash-text-muted)">
-            <span id="log-page-info"></span>
-            <div id="log-page-buttons" class="d-flex d-flex--gap-1"></div>
+        <div id="log-pagination" class="log-pagination">
+            <span id="log-page-info" class="log-pagination__info"></span>
+            <div id="log-page-buttons" class="log-pagination__buttons"></div>
         </div>
         <div id="log-empty" style="display:none" class="dash-table__empty">Belum ada pengajuan Pokja.</div>
     </div>
@@ -383,7 +466,8 @@
     let _cachedDemoData = null; // cache demo data to avoid re-generation
     let _activeSubs = [];       // current active submissions (for detail modal)
     let _logPage = 1;
-    const _logPerPage = 25;
+    let _logPerPage = 10;
+    let _statusFilterLevel = 'all';
 
     function getSubmissions() { return JSON.parse(localStorage.getItem(POKJA_SUBMISSIONS_KEY) || '[]'); }
     function saveSubmissions(d) { localStorage.setItem(POKJA_SUBMISSIONS_KEY, JSON.stringify(d)); _cachedDemoData = null; }
@@ -726,6 +810,9 @@
 
         // Render paginated table
         renderLogTable();
+
+        // Update status summary sidebar
+        updateStatusSummary();
     }
 
     function logFilterChanged() {
@@ -735,6 +822,13 @@
 
     function logGoToPage(p) {
         _logPage = p;
+        renderLogTable();
+    }
+
+    function logPerPageChanged() {
+        const v = parseInt(document.getElementById('log-per-page').value);
+        _logPerPage = v === -1 ? 99999 : v;
+        _logPage = 1;
         renderLogTable();
     }
 
@@ -749,7 +843,7 @@
         const jenisF = document.getElementById('log-jenis-filter')?.value || '';
 
         const filtered = subs.filter((s, i) => {
-            s._origIdx = i; // preserve original index for detail
+            s._origIdx = i;
             if (searchQ && !(s.wilayah || '').toLowerCase().includes(searchQ)) return false;
             if (statusF && s.status !== statusF) return false;
             if (jenisF && s.roleType !== jenisF) return false;
@@ -767,19 +861,20 @@
         document.getElementById('log-pagination').style.display = '';
 
         // Pagination
-        const totalPages = Math.ceil(filtered.length / _logPerPage);
+        const effectivePerPage = _logPerPage >= 99999 ? filtered.length : _logPerPage;
+        const totalPages = Math.ceil(filtered.length / effectivePerPage);
         if (_logPage > totalPages) _logPage = totalPages;
-        const start = (_logPage - 1) * _logPerPage;
-        const pageData = filtered.slice(start, start + _logPerPage);
+        const start = (_logPage - 1) * effectivePerPage;
+        const pageData = filtered.slice(start, start + effectivePerPage);
 
         document.getElementById('log-count').textContent = `${filtered.length} data ditemukan`;
 
-        const statusColors = { draft: 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400', pending: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300', approved: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300', declined: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' };
+        const statusBg = { draft: '#f3f4f6', pending: '#fef3c7', approved: '#dcfce7', declined: '#fee2e2' };
+        const statusFg = { draft: '#4b5563', pending: '#b45309', approved: '#15803d', declined: '#dc2626' };
         const statusLabel = { draft: 'Draft', pending: 'Pending', approved: 'Disetujui', declined: 'Ditolak' };
 
         tbody.innerHTML = pageData.map(s => {
             const jenisLabel = s.roleType === 'dinas_prov' ? 'Provinsi' : 'Kab/Kota';
-            // Inline member count (avoid per-row function calls)
             let mCount = 0, fCount = 0, total = 0;
             if (s.struktur) {
                 ['ketua','wakil','koordinator'].forEach(k => {
@@ -787,32 +882,120 @@
                 });
                 (s.struktur.anggota || []).forEach(a => { total++; if (a.jenisKelamin==='L') mCount++; else fCount++; });
             }
-            return `<tr class="border-b dark:border-[#3f4739] hover:bg-gray-50 dark:hover:bg-[#1a1414] cursor-pointer" onclick="openApprovalDetail(${s._origIdx})">
-                <td class="px-4 py-3 dark:text-white font-medium">${s.wilayah || s.namaPokja || '-'}</td>
-                <td class="px-4 py-3 dark:text-gray-300">${jenisLabel}</td>
-                <td class="px-4 py-3 dark:text-gray-300">${total}</td>
-                <td class="px-4 py-3"><span class="text-cyan-600">${mCount}L</span> / <span class="text-pink-600">${fCount}P</span></td>
-                <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${statusColors[s.status]}">${statusLabel[s.status]}</span></td>
-                <td class="px-4 py-3"><button onclick="event.stopPropagation();openApprovalDetail(${s._origIdx})" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 text-sm font-medium">Detail</button></td>
+            return `<tr style="cursor:pointer" onclick="openApprovalDetail(${s._origIdx})">
+                <td data-label="">${s.wilayah || s.namaPokja || '-'}</td>
+                <td data-label="Jenis">${jenisLabel}</td>
+                <td data-label="Anggota">${total}</td>
+                <td data-label="L / P"><span style="color:#0891b2">${mCount}L</span> / <span style="color:#db2777">${fCount}P</span></td>
+                <td data-label="Status"><span style="display:inline-block;padding:0.15rem 0.5rem;border-radius:9999px;font-size:0.6875rem;font-weight:600;background:${statusBg[s.status]};color:${statusFg[s.status]}">${statusLabel[s.status]}</span></td>
+                <td data-label=""><button onclick="event.stopPropagation();openApprovalDetail(${s._origIdx})" style="color:#2563eb;font-size:0.8125rem;font-weight:500;background:none;border:none;cursor:pointer">Detail →</button></td>
             </tr>`;
         }).join('');
 
-        // Render pagination buttons
+        // Modern pagination
         const pageInfo = document.getElementById('log-page-info');
         const pageBtns = document.getElementById('log-page-buttons');
-        pageInfo.textContent = `Halaman ${_logPage} dari ${totalPages} (${filtered.length} data)`;
+        const showStart = start + 1;
+        const showEnd = Math.min(start + effectivePerPage, filtered.length);
+        pageInfo.textContent = `${showStart}–${showEnd} dari ${filtered.length} data`;
 
-        let btnsHtml = '';
-        btnsHtml += `<button onclick="logGoToPage(${_logPage - 1})" ${_logPage <= 1 ? 'disabled' : ''} class="px-3 py-1 rounded border border-gray-300 dark:border-[#3f4739] ${_logPage <= 1 ? 'opacity-40 cursor-not-allowed' : 'hover:bg-gray-100 dark:hover:bg-[#1a1414]'}">←</button>`;
-        const maxBtns = 7;
-        let startP = Math.max(1, _logPage - 3);
+        if (totalPages <= 1) { pageBtns.innerHTML = ''; return; }
+
+        const btnStyle = (active) => `style="display:inline-flex;align-items:center;justify-content:center;min-width:2rem;height:2rem;padding:0 0.5rem;border-radius:0.375rem;font-size:0.75rem;font-weight:500;border:1px solid ${active ? '#2563eb' : 'var(--dash-border)'};background:${active ? '#2563eb' : 'var(--dash-bg-card)'};color:${active ? '#fff' : 'var(--dash-text-secondary)'};cursor:pointer;transition:all 120ms"`;
+        const arrowStyle = (disabled) => `style="display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:0.375rem;font-size:0.875rem;border:1px solid var(--dash-border);background:var(--dash-bg-card);color:var(--dash-text-secondary);cursor:${disabled ? 'not-allowed' : 'pointer'};opacity:${disabled ? '0.35' : '1'};transition:all 120ms"`;
+
+        let btnsHtml = `<button onclick="logGoToPage(${_logPage - 1})" ${_logPage <= 1 ? 'disabled' : ''} ${arrowStyle(_logPage <= 1)}>‹</button>`;
+        const maxBtns = 5;
+        let startP = Math.max(1, _logPage - 2);
         let endP = Math.min(totalPages, startP + maxBtns - 1);
         if (endP - startP < maxBtns - 1) startP = Math.max(1, endP - maxBtns + 1);
+        if (startP > 1) btnsHtml += `<button onclick="logGoToPage(1)" ${btnStyle(false)}>1</button><span style="padding:0 0.25rem;color:var(--dash-text-muted)">…</span>`;
         for (let p = startP; p <= endP; p++) {
-            btnsHtml += `<button onclick="logGoToPage(${p})" class="px-3 py-1 rounded border ${p === _logPage ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-300 dark:border-[#3f4739] hover:bg-gray-100 dark:hover:bg-[#1a1414]'}">${p}</button>`;
+            btnsHtml += `<button onclick="logGoToPage(${p})" ${btnStyle(p === _logPage)}>${p}</button>`;
         }
-        btnsHtml += `<button onclick="logGoToPage(${_logPage + 1})" ${_logPage >= totalPages ? 'disabled' : ''} class="px-3 py-1 rounded border border-gray-300 dark:border-[#3f4739] ${_logPage >= totalPages ? 'opacity-40 cursor-not-allowed' : 'hover:bg-gray-100 dark:hover:bg-[#1a1414]'}">→</button>`;
+        if (endP < totalPages) btnsHtml += `<span style="padding:0 0.25rem;color:var(--dash-text-muted)">…</span><button onclick="logGoToPage(${totalPages})" ${btnStyle(false)}>${totalPages}</button>`;
+        btnsHtml += `<button onclick="logGoToPage(${_logPage + 1})" ${_logPage >= totalPages ? 'disabled' : ''} ${arrowStyle(_logPage >= totalPages)}>›</button>`;
         pageBtns.innerHTML = btnsHtml;
+    }
+
+    // === Status Summary Panel ===
+    function updateStatusSummary() {
+        const subs = _activeSubs;
+        let counts = { approved: 0, pending: 0, draft: 0, declined: 0, none: 0 };
+
+        // Count by level filter
+        const level = _statusFilterLevel;
+        const filtered = level === 'all' ? subs : subs.filter(s => {
+            if (level === 'prov') return s.roleType === 'dinas_prov';
+            if (level === 'kab') return s.roleType === 'dinas_kab';
+            return true;
+        });
+
+        filtered.forEach(s => {
+            if (counts.hasOwnProperty(s.status)) counts[s.status]++;
+        });
+
+        // Calculate 'Belum Ada' — total possible minus those with submissions
+        let totalWilayah = 552; // default
+        if (level === 'prov') totalWilayah = 38;
+        else if (level === 'kab') totalWilayah = 514;
+        const submittedCount = filtered.length;
+        counts.none = Math.max(0, totalWilayah - submittedCount);
+
+        // Update DOM
+        const ids = ['approved','pending','draft','declined','none'];
+        ids.forEach(id => {
+            const el = document.getElementById('summary-' + id);
+            if (el) {
+                const target = counts[id];
+                // Animate count
+                const current = parseInt(el.textContent) || 0;
+                if (current !== target) {
+                    let start = current;
+                    const step = Math.ceil(Math.abs(target - start) / 12);
+                    const anim = () => {
+                        start += start < target ? step : -step;
+                        if ((step > 0 && start >= target) || (step < 0 && start <= target) || step === 0) { el.textContent = target; return; }
+                        el.textContent = start;
+                        requestAnimationFrame(anim);
+                    };
+                    requestAnimationFrame(anim);
+                }
+            }
+        });
+
+        document.getElementById('summary-total').textContent = totalWilayah;
+
+        // Progress bar
+        ids.forEach(id => {
+            const bar = document.getElementById('summary-bar-' + id);
+            if (bar) bar.style.width = totalWilayah > 0 ? (counts[id] / totalWilayah * 100) + '%' : '0%';
+        });
+    }
+
+    function filterStatusLevel(level, btn) {
+        _statusFilterLevel = level;
+        document.querySelectorAll('.status-summary__tab').forEach(t => t.classList.remove('status-summary__tab--active'));
+        btn.classList.add('status-summary__tab--active');
+        updateStatusSummary();
+    }
+
+    function filterByStatus(status) {
+        // Set the status filter dropdown and trigger table re-render
+        const sel = document.getElementById('log-status-filter');
+        if (sel) {
+            if (status === 'none') {
+                sel.value = '';
+            } else {
+                sel.value = sel.value === status ? '' : status;
+            }
+            logFilterChanged();
+        }
+        // Visual active state
+        document.querySelectorAll('.status-summary__item').forEach(item => item.classList.remove('status-summary__item--active'));
+        if (status !== 'none') {
+            event.currentTarget?.classList.add('status-summary__item--active');
+        }
     }
 
     function openApprovalDetail(idx) {
