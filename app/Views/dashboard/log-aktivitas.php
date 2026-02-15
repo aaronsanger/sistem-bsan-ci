@@ -4,47 +4,47 @@
 
 <div class="space-y-6">
     <div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Log Aktivitas Admin</h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Riwayat lengkap aksi Admin Pusat terhadap pengajuan Pokja</p>
+        <h2 class="dash-card__title" style="font-size:1.25rem">Log Aktivitas Admin</h2>
+        <p class="dash-card__subtitle">Riwayat lengkap aksi Admin Pusat terhadap pengajuan Pokja</p>
     </div>
 
     <!-- Filter / Stats -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-4">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Total Aksi</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1" id="stat-total-actions">0</p>
+    <div class="dash-grid--4">
+        <div class="stat-card">
+            <p class="stat-card__label">Total Aksi</p>
+            <p class="stat-card__value" id="stat-total-actions">0</p>
         </div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-4">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Disetujui</p>
-            <p class="text-2xl font-bold text-green-600 mt-1" id="stat-approved-actions">0</p>
+        <div class="stat-card">
+            <p class="stat-card__label">Disetujui</p>
+            <p class="stat-card__value" id="stat-approved-actions" style="color:#16a34a">0</p>
         </div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-4">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Ditolak</p>
-            <p class="text-2xl font-bold text-red-600 mt-1" id="stat-declined-actions">0</p>
+        <div class="stat-card">
+            <p class="stat-card__label">Ditolak</p>
+            <p class="stat-card__value" id="stat-declined-actions" style="color:#dc2626">0</p>
         </div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-4">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Aksi Terakhir</p>
-            <p class="text-sm font-bold text-gray-900 dark:text-white mt-1" id="stat-last-action">-</p>
+        <div class="stat-card">
+            <p class="stat-card__label">Aksi Terakhir</p>
+            <p class="stat-card__value" id="stat-last-action" style="font-size:0.875rem">-</p>
         </div>
     </div>
 
     <!-- Log Table -->
-    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+    <div class="dash-card">
+        <div class="dash-table__wrapper">
+            <table class="dash-table">
                 <thead>
-                    <tr class="bg-gray-50 dark:bg-[#1a1414]">
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Waktu</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Aksi</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Wilayah</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Admin</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Keterangan</th>
+                    <tr>
+                        <th>Waktu</th>
+                        <th>Aksi</th>
+                        <th>Wilayah</th>
+                        <th>Admin</th>
+                        <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody id="activity-log-tbody"></tbody>
             </table>
         </div>
-        <div id="log-empty" class="hidden text-center py-8 text-gray-500 dark:text-gray-400">
+        <div id="log-empty" style="display:none" class="dash-table__empty">
             Belum ada aktivitas tercatat.
         </div>
     </div>
@@ -78,25 +78,25 @@
 
         if (log.length === 0) {
             tbody.innerHTML = '';
-            empty.classList.remove('hidden');
+            empty.style.display = '';
             return;
         }
 
-        empty.classList.add('hidden');
+        empty.style.display = 'none';
         tbody.innerHTML = log.map(l => {
             const d = new Date(l.timestamp);
             const dateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
             const isApproved = l.action === 'approved';
             const actionBadge = isApproved
-                ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">✅ Disetujui</span>'
-                : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300">❌ Ditolak</span>';
+                ? '<span class="badge badge--success">✅ Disetujui</span>'
+                : '<span class="badge badge--danger">❌ Ditolak</span>';
 
-            return `<tr class="border-b dark:border-[#3f4739] hover:bg-gray-50 dark:hover:bg-[#1a1414]">
-                <td class="px-4 py-3 text-gray-500 dark:text-gray-400 text-sm whitespace-nowrap">${dateStr}</td>
-                <td class="px-4 py-3">${actionBadge}</td>
-                <td class="px-4 py-3 dark:text-white font-medium">${l.wilayah || '-'}</td>
-                <td class="px-4 py-3 dark:text-gray-300">${l.admin || '-'}</td>
-                <td class="px-4 py-3 text-gray-500 dark:text-gray-400 text-sm">${l.reason || '-'}</td>
+            return `<tr>
+                <td style="white-space:nowrap">${dateStr}</td>
+                <td>${actionBadge}</td>
+                <td class="dash-table__cell--primary">${l.wilayah || '-'}</td>
+                <td>${l.admin || '-'}</td>
+                <td>${l.reason || '-'}</td>
             </tr>`;
         }).join('');
     }

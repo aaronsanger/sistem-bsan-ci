@@ -5,82 +5,82 @@
 <div class="space-y-6" id="pokja-app"></div>
 
 <!-- Demo Info Modal -->
-<div id="demo-info-modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50"></div>
-    <div class="relative flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-lg shadow-2xl">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center gap-3">
-                <span class="text-2xl">⚠️</span>
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Informasi Penting — Mode Demo Pokja</h3>
+<div id="demo-info-modal" class="modal" style="display:none">
+    <div class="modal__backdrop"></div>
+    <div class="modal__container" style="max-width:32rem">
+        <div class="modal__content">
+            <div class="modal__header">
+                <span style="font-size:1.5rem">⚠️</span>
+                <h3 class="modal__title">Informasi Penting — Mode Demo Pokja</h3>
             </div>
             <div class="p-6 space-y-4">
-                <p class="text-sm text-gray-600 dark:text-gray-400">Mohon diperhatikan sebelum mengisi struktur Pokja:</p>
-                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                    <h4 class="font-semibold text-blue-800 dark:text-blue-300 text-sm mb-1">📧 Email Ketua Pokja</h4>
-                    <p class="text-sm text-blue-700 dark:text-blue-400">Khusus Ketua Pokja diisi memakai <strong>email asli</strong> sebagai contoh simulasi pengiriman link verifikasi.</p>
-                    <p class="text-sm text-blue-700 dark:text-blue-400 mt-1">Password dapat dibuat sendiri setelah pemilik email klik link verifikasi dan proses verifikasi berhasil.</p>
+                <p style="font-size:0.875rem;color:var(--dash-text-muted)">Mohon diperhatikan sebelum mengisi struktur Pokja:</p>
+                <div class="dash-alert dash-alert--info">
+                    <h4 style="font-weight:600;font-size:0.875rem;margin-bottom:0.25rem">📧 Email Ketua Pokja</h4>
+                    <p style="font-size:0.875rem">Khusus Ketua Pokja diisi memakai <strong>email asli</strong> sebagai contoh simulasi pengiriman link verifikasi.</p>
+                    <p style="font-size:0.875rem;margin-top:0.25rem">Password dapat dibuat sendiri setelah pemilik email klik link verifikasi dan proses verifikasi berhasil.</p>
                 </div>
-                <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-                    <h4 class="font-semibold text-yellow-800 dark:text-yellow-300 text-sm mb-1">📧 Email selain Ketua Pokja</h4>
-                    <p class="text-sm text-yellow-700 dark:text-yellow-400">Selain Ketua Pokja <strong>jangan menggunakan</strong> alamat email asli.</p>
-                    <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Email selain Ketua akan langsung aktif dan bisa digunakan login Masuk Anggota Pokja.</p>
-                    <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Password masuk: <code class="bg-yellow-100 dark:bg-yellow-900/50 px-2 py-0.5 rounded font-mono font-bold">pokja12345</code></p>
+                <div class="dash-alert dash-alert--warning">
+                    <h4 style="font-weight:600;font-size:0.875rem;margin-bottom:0.25rem">📧 Email selain Ketua Pokja</h4>
+                    <p style="font-size:0.875rem">Selain Ketua Pokja <strong>jangan menggunakan</strong> alamat email asli.</p>
+                    <p style="font-size:0.875rem;margin-top:0.25rem">Email selain Ketua akan langsung aktif dan bisa digunakan login Masuk Anggota Pokja.</p>
+                    <p style="font-size:0.875rem;margin-top:0.25rem">Password masuk: <code style="background:var(--dash-bg-secondary);padding:0.125rem 0.5rem;border-radius:0.25rem;font-family:monospace;font-weight:700">pokja12345</code></p>
                 </div>
             </div>
-            <div class="px-6 pb-6">
-                <button onclick="closeDemoInfo()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Saya Mengerti</button>
+            <div style="padding:0 1.5rem 1.5rem">
+                <button onclick="closeDemoInfo()" class="btn-dash btn-dash--primary" style="width:100%">Saya Mengerti</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Submit Confirmation Modal -->
-<div id="submit-confirm-modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50"></div>
-    <div class="relative flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-md shadow-2xl p-8 text-center">
-            <div class="w-16 h-16 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+<div id="submit-confirm-modal" class="modal" style="display:none">
+    <div class="modal__backdrop"></div>
+    <div class="modal__container" style="max-width:28rem">
+        <div class="modal__content" style="padding:2rem;text-align:center">
+            <div style="width:4rem;height:4rem;border-radius:50%;background:var(--dash-bg-secondary);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">
+                <svg style="width:2rem;height:2rem;color:#d97706" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Ajukan Pokja ke Admin Pusat?</h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Data akan dikunci dan tidak bisa diedit selama proses review.</p>
-            <div class="flex gap-3">
-                <button onclick="closeSubmitConfirm()" class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1414] transition-colors font-medium">Cancel</button>
-                <button onclick="submitToAdmin()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">OK</button>
+            <h3 class="modal__title" style="margin-bottom:0.5rem">Ajukan Pokja ke Admin Pusat?</h3>
+            <p style="font-size:0.875rem;color:var(--dash-text-muted);margin-bottom:1.5rem">Data akan dikunci dan tidak bisa diedit selama proses review.</p>
+            <div style="display:flex;gap:0.75rem">
+                <button onclick="closeSubmitConfirm()" class="btn-dash btn-dash--outline" style="flex:1">Cancel</button>
+                <button onclick="submitToAdmin()" class="btn-dash btn-dash--primary" style="flex:1">OK</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Import Excel Modal -->
-<div id="import-excel-modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="closeImportModal()"></div>
-    <div class="relative flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-lg shadow-2xl">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center justify-between">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Import Data dari Excel</h3>
-                <button onclick="closeImportModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+<div id="import-excel-modal" class="modal" style="display:none">
+    <div class="modal__backdrop" onclick="closeImportModal()"></div>
+    <div class="modal__container" style="max-width:32rem">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 class="modal__title">Import Data dari Excel</h3>
+                <button onclick="closeImportModal()" class="modal__close">
+                    <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
             <div class="p-6">
-                <div id="import-dropzone" class="border-2 border-dashed border-gray-300 dark:border-[#3f4739] rounded-xl p-8 text-center cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all"
+                <div id="import-dropzone" style="border:2px dashed var(--dash-border);border-radius:0.75rem;padding:2rem;text-align:center;cursor:pointer;transition:all 0.2s"
                      onclick="document.getElementById('import-file-input').click()">
-                    <svg class="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Drag & drop file Excel di sini</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">atau klik untuk mencari file</p>
-                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Format: .xlsx, .xls</p>
+                    <svg style="width:3rem;height:3rem;margin:0 auto;color:var(--dash-text-muted);margin-bottom:0.75rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                    <p style="font-size:0.875rem;font-weight:500">Drag & drop file Excel di sini</p>
+                    <p style="font-size:0.75rem;color:var(--dash-text-muted);margin-top:0.25rem">atau klik untuk mencari file</p>
+                    <p style="font-size:0.75rem;color:var(--dash-text-muted);margin-top:0.5rem">Format: .xlsx, .xls</p>
                 </div>
-                <div id="import-file-info" class="hidden mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-2">
-                    <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span id="import-file-name" class="text-sm text-green-700 dark:text-green-400 font-medium truncate"></span>
-                    <button onclick="clearImportFile()" class="ml-auto text-green-600 hover:text-red-500 shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                <div id="import-file-info" style="display:none;margin-top:0.75rem" class="dash-alert dash-alert--success d-flex d-flex--gap-2" >
+                    <svg style="width:1.25rem;height:1.25rem;color:#16a34a;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span id="import-file-name" style="font-size:0.875rem;font-weight:500;overflow:hidden;text-overflow:ellipsis"></span>
+                    <button onclick="clearImportFile()" style="margin-left:auto;flex-shrink:0;color:#16a34a"><svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                 </div>
-                <input type="file" id="import-file-input" accept=".xlsx,.xls" class="hidden" onchange="onImportFileSelected(this)">
+                <input type="file" id="import-file-input" accept=".xlsx,.xls" style="display:none" onchange="onImportFileSelected(this)">
             </div>
-            <div class="px-6 pb-6 flex gap-3">
-                <button onclick="closeImportModal()" class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1414] transition-colors font-medium">Batal</button>
-                <button id="btn-do-import" onclick="doImport()" disabled class="flex-1 bg-blue-700 hover:bg-blue-800 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Import Data</button>
+            <div style="padding:0 1.5rem 1.5rem;display:flex;gap:0.75rem">
+                <button onclick="closeImportModal()" class="btn-dash btn-dash--outline" style="flex:1">Batal</button>
+                <button id="btn-do-import" onclick="doImport()" disabled class="btn-dash btn-dash--primary" style="flex:1">Import Data</button>
             </div>
         </div>
     </div>
@@ -190,13 +190,13 @@ function init() {
     // Always show info modal for non-approved accounts
     const { sub } = getMySubmission();
     if (!sub || sub.status !== 'approved') {
-        document.getElementById('demo-info-modal').classList.remove('hidden');
+        document.getElementById('demo-info-modal').style.display = '';
     }
     renderPokjaPage();
 }
 
 function closeDemoInfo() {
-    document.getElementById('demo-info-modal').classList.add('hidden');
+    document.getElementById('demo-info-modal').style.display = 'none';
 }
 
 function renderPokjaPage() {
@@ -223,43 +223,43 @@ function buildLeaderRow(key, label, sublabel, colorClass, data) {
     const genderSel = (val) => GENDER_OPTIONS.replace(`value="${val}"`, `value="${val}" selected`);
     const initials = d.nama ? d.nama.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() : label[0];
 
-    return `<div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] border-l-4 ${colorClass.split(' ').filter(c => c.startsWith('border-'))[0] || 'border-blue-200'} mb-4 overflow-hidden" data-leader="${key}">
-        <div class="px-4 py-3 bg-gray-50 dark:bg-[#1a1414] border-b border-gray-200 dark:border-[#3f4739] flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full ${colorClass} flex items-center justify-center text-xs font-bold">${initials}</div>
+    return `<div class="dash-card" style="border-left:4px solid ${key === 'ketua' ? '#ef4444' : key === 'wakil' ? '#3b82f6' : '#8b5cf6'};margin-bottom:1rem;overflow:hidden" data-leader="${key}">
+        <div style="padding:0.75rem 1rem;background:var(--dash-bg-secondary);border-bottom:1px solid var(--dash-border);display:flex;align-items:center;gap:0.75rem">
+            <div style="width:2rem;height:2rem;border-radius:50%;background:${key === 'ketua' ? 'rgba(239,68,68,0.15)' : key === 'wakil' ? 'rgba(59,130,246,0.15)' : 'rgba(139,92,246,0.15)'};color:${key === 'ketua' ? '#dc2626' : key === 'wakil' ? '#2563eb' : '#7c3aed'};display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700">${initials}</div>
             <div>
-                <span class="font-semibold text-gray-900 dark:text-white text-sm">${label}</span>
-                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">${sublabel}</span>
+                <span style="font-weight:600;font-size:0.875rem">${label}</span>
+                <span style="font-size:0.75rem;color:var(--dash-text-muted);margin-left:0.5rem">${sublabel}</span>
             </div>
         </div>
-        <div class="p-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div style="padding:1rem">
+            <div class="dash-grid dash-grid--4">
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama <span class="text-red-500">*</span></label>
-                    <input type="text" class="leader-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nama || ''}" placeholder="Nama lengkap" required>
+                    <label class="form-dash__label">Nama <span style="color:#ef4444">*</span></label>
+                    <input type="text" class="leader-nama form-dash__input" value="${d.nama || ''}" placeholder="Nama lengkap" required>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan <span class="text-red-500">*</span></label>
-                    <input type="text" class="leader-jabatan w-full px-3 py-2 border border-gray-200 dark:border-[#3f4739] rounded-lg bg-gray-50 dark:bg-[#1a1414] text-gray-500 dark:text-gray-400 text-sm cursor-not-allowed" value="${jabatan}" readonly>
+                    <label class="form-dash__label">Jabatan <span style="color:#ef4444">*</span></label>
+                    <input type="text" class="leader-jabatan form-dash__input" style="background:var(--dash-bg-secondary);color:var(--dash-text-muted);cursor:not-allowed" value="${jabatan}" readonly>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email <span class="text-red-500">*</span></label>
-                    <input type="email" class="leader-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.email || ''}" placeholder="Email" required>
+                    <label class="form-dash__label">Email <span style="color:#ef4444">*</span></label>
+                    <input type="email" class="leader-email form-dash__input" value="${d.email || ''}" placeholder="Email" required>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
-                    <select class="leader-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" required>${genderSel(d.jenisKelamin || '')}</select>
+                    <label class="form-dash__label">Jenis Kelamin <span style="color:#ef4444">*</span></label>
+                    <select class="leader-gender form-dash__input" required>${genderSel(d.jenisKelamin || '')}</select>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
-                    <input type="tel" class="leader-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.noWa || ''}" placeholder="628xxxxxxxxx" required>
+                    <label class="form-dash__label">No. WhatsApp <span style="color:#ef4444">*</span></label>
+                    <input type="tel" class="leader-wa form-dash__input" value="${d.noWa || ''}" placeholder="628xxxxxxxxx" required>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
-                    <input type="tel" class="leader-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorInstansi || ''}" placeholder="No. telepon instansi" required>
+                    <label class="form-dash__label">No. Instansi <span style="color:#ef4444">*</span></label>
+                    <input type="tel" class="leader-instansi-no form-dash__input" value="${d.nomorInstansi || ''}" placeholder="No. telepon instansi" required>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi <span class="text-gray-400">(opsional)</span></label>
-                    <input type="tel" class="leader-pribadi w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" value="${d.nomorPribadi || ''}" placeholder="No. HP pribadi">
+                    <label class="form-dash__label">No. Pribadi <span style="color:var(--dash-text-muted)">(opsional)</span></label>
+                    <input type="tel" class="leader-pribadi form-dash__input" value="${d.nomorPribadi || ''}" placeholder="No. HP pribadi">
                 </div>
             </div>
         </div>
@@ -278,51 +278,51 @@ function buildAnggotaRow(a, i, isExtra) {
         const opts = BIDANG_OPTIONS.map(b =>
             `<option value="${b.value}" ${a.bidang === b.value ? 'selected' : ''}>${b.value}</option>`
         ).join('');
-        headerHtml = `<div class="px-4 py-3 bg-gray-50 dark:bg-[#1a1414] border-b border-gray-200 dark:border-[#3f4739] flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">${initials}</div>
-            <select class="anggota-bidang-select px-2 py-1 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-[#3f4739]" onchange="updateAnggotaInstansi(this)">${opts}</select>
-            <span class="anggota-instansi-label text-xs text-gray-500 dark:text-gray-400">${instansi}</span>
-            <button onclick="removeAnggota(this)" class="ml-auto text-red-500 hover:text-red-700 text-xs font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">Hapus</button>
+        headerHtml = `<div style="padding:0.75rem 1rem;background:var(--dash-bg-secondary);border-bottom:1px solid var(--dash-border);display:flex;align-items:center;gap:0.75rem">
+            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--dash-bg-secondary);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--dash-text-muted)">${initials}</div>
+            <select class="anggota-bidang-select form-dash__input" style="width:auto;padding:0.25rem 0.5rem;font-size:0.75rem;font-weight:600" onchange="updateAnggotaInstansi(this)">${opts}</select>
+            <span class="anggota-instansi-label" style="font-size:0.75rem;color:var(--dash-text-muted)">${instansi}</span>
+            <button onclick="removeAnggota(this)" style="margin-left:auto;color:#ef4444;font-size:0.75rem;font-weight:500;padding:0.25rem 0.5rem;border-radius:0.25rem">Hapus</button>
         </div>`;
     } else {
-        headerHtml = `<div class="px-4 py-3 bg-gray-50 dark:bg-[#1a1414] border-b border-gray-200 dark:border-[#3f4739] flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">${initials}</div>
-            <span class="anggota-bidang-label font-semibold text-gray-900 dark:text-white text-sm">${a.bidang}</span>
-            <span class="anggota-instansi-label text-xs text-gray-500 dark:text-gray-400">${instansi}</span>
+        headerHtml = `<div style="padding:0.75rem 1rem;background:var(--dash-bg-secondary);border-bottom:1px solid var(--dash-border);display:flex;align-items:center;gap:0.75rem">
+            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--dash-bg-secondary);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--dash-text-muted)">${initials}</div>
+            <span class="anggota-bidang-label" style="font-weight:600;font-size:0.875rem">${a.bidang}</span>
+            <span class="anggota-instansi-label" style="font-size:0.75rem;color:var(--dash-text-muted)">${instansi}</span>
         </div>`;
     }
 
-    return `<div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] overflow-hidden anggota-row" data-index="${i}" data-bidang="${a.bidang}" data-extra="${isExtra ? '1' : '0'}">
+    return `<div class="dash-card anggota-row" style="overflow:hidden" data-index="${i}" data-bidang="${a.bidang}" data-extra="${isExtra ? '1' : '0'}">
         ${headerHtml}
-        <div class="p-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div style="padding:1rem">
+            <div class="dash-grid dash-grid--4">
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama <span class="text-red-500">*</span></label>
-                    <input type="text" value="${a.nama || ''}" class="anggota-nama w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama" required>
+                    <label class="form-dash__label">Nama <span style="color:#ef4444">*</span></label>
+                    <input type="text" value="${a.nama || ''}" class="anggota-nama form-dash__input" placeholder="Nama" required>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jabatan <span class="text-red-500">*</span></label>
-                    <input type="text" value="Anggota" class="anggota-jabatan w-full px-3 py-2 border border-gray-200 dark:border-[#3f4739] rounded-lg bg-gray-50 dark:bg-[#1a1414] text-gray-500 dark:text-gray-400 text-sm cursor-not-allowed" readonly>
+                    <label class="form-dash__label">Jabatan <span style="color:#ef4444">*</span></label>
+                    <input type="text" value="Anggota" class="anggota-jabatan form-dash__input" style="background:var(--dash-bg-secondary);color:var(--dash-text-muted);cursor:not-allowed" readonly>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email <span class="text-red-500">*</span></label>
-                    <input type="email" value="${a.email || ''}" class="anggota-email w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email" required>
+                    <label class="form-dash__label">Email <span style="color:#ef4444">*</span></label>
+                    <input type="email" value="${a.email || ''}" class="anggota-email form-dash__input" placeholder="Email" required>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
-                    <select class="anggota-gender w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" required>${genderSel}</select>
+                    <label class="form-dash__label">Jenis Kelamin <span style="color:#ef4444">*</span></label>
+                    <select class="anggota-gender form-dash__input" required>${genderSel}</select>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. WhatsApp <span class="text-red-500">*</span></label>
-                    <input type="tel" value="${a.noWa || ''}" class="anggota-wa w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="628xxxxxxxxx" required>
+                    <label class="form-dash__label">No. WhatsApp <span style="color:#ef4444">*</span></label>
+                    <input type="tel" value="${a.noWa || ''}" class="anggota-wa form-dash__input" placeholder="628xxxxxxxxx" required>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Instansi <span class="text-red-500">*</span></label>
-                    <input type="tel" value="${a.nomorInstansi || ''}" class="anggota-instansi-no w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. telepon instansi" required>
+                    <label class="form-dash__label">No. Instansi <span style="color:#ef4444">*</span></label>
+                    <input type="tel" value="${a.nomorInstansi || ''}" class="anggota-instansi-no form-dash__input" placeholder="No. telepon instansi" required>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi <span class="text-gray-400">(opsional)</span></label>
-                    <input type="tel" value="${a.nomorPribadi || ''}" class="anggota-pribadi w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. HP pribadi">
+                    <label class="form-dash__label">No. Pribadi <span style="color:var(--dash-text-muted)">(opsional)</span></label>
+                    <input type="tel" value="${a.nomorPribadi || ''}" class="anggota-pribadi form-dash__input" placeholder="No. HP pribadi">
                 </div>
             </div>
         </div>
@@ -358,148 +358,147 @@ function buildFormHTML(wilayah, existing) {
     const activeTab = existing?.nomorSK ? 'sk' : 'struktur';
 
     return `
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem">
         <div>
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Bentuk Pokja</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Lengkapi data Pokja ${wilayah}</p>
+            <h2 class="dash-section__title">Bentuk Pokja</h2>
+            <p style="font-size:0.875rem;color:var(--dash-text-muted);margin-top:0.25rem">Lengkapi data Pokja ${wilayah}</p>
         </div>
     </div>
 
     ${sk.nomorSK ? '' : `
-    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 flex items-start gap-3" id="sk-reminder">
-        <span class="text-xl">📄</span>
-        <div class="flex-1">
-            <p class="font-semibold text-blue-800 dark:text-blue-300">Dokumen SK</p>
-            <p class="text-sm text-blue-700 dark:text-blue-400">Lengkapi dan unggah file SK agar Pokja dapat diajukan ke Admin Pusat.</p>
+    <div class="dash-alert dash-alert--info" style="display:flex;align-items:flex-start;gap:0.75rem" id="sk-reminder">
+        <span style="font-size:1.25rem">📄</span>
+        <div style="flex:1">
+            <p style="font-weight:600">Dokumen SK</p>
+            <p style="font-size:0.875rem">Lengkapi dan unggah file SK agar Pokja dapat diajukan ke Admin Pusat.</p>
         </div>
-        <button onclick="switchTab('sk')" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap">Lengkapi Data SK</button>
+        <button onclick="switchTab('sk')" class="btn-dash btn-dash--primary" style="white-space:nowrap;font-size:0.875rem">Lengkapi Data SK</button>
     </div>
     `}
 
-    <div class="flex gap-1 bg-gray-100 dark:bg-[#1a1414] p-1 rounded-lg">
-        <button onclick="switchTab('struktur')" id="tab-btn-struktur" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === 'struktur' ? 'bg-white dark:bg-[#0F0A0A] text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'}">1. Struktur Pokja</button>
-        <button onclick="switchTab('sk')" id="tab-btn-sk" class="flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === 'sk' ? 'bg-white dark:bg-[#0F0A0A] text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'}">2. Data SK</button>
+    <div style="display:flex;gap:0.25rem;background:var(--dash-bg-secondary);padding:0.25rem;border-radius:0.5rem">
+        <button onclick="switchTab('struktur')" id="tab-btn-struktur" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:500;background:${activeTab === 'struktur' ? 'var(--dash-card-bg)' : 'transparent'};color:${activeTab === 'struktur' ? 'var(--dash-text)' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'struktur' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none'};border:none;cursor:pointer">1. Struktur Pokja</button>
+        <button onclick="switchTab('sk')" id="tab-btn-sk" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:500;background:${activeTab === 'sk' ? 'var(--dash-card-bg)' : 'transparent'};color:${activeTab === 'sk' ? 'var(--dash-text)' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'sk' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none'};border:none;cursor:pointer">2. Data SK</button>
     </div>
 
     <!-- Tab 1: Struktur Pokja -->
-    <div id="tab-struktur" class="${activeTab === 'struktur' ? '' : 'hidden'}">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6 space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div id="tab-struktur" style="${activeTab === 'struktur' ? '' : 'display:none'}">
+        <div class="dash-card" style="padding:1.5rem">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2"><svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Struktur & Anggota Pokja ${wilayah}</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Lengkapi struktur Pokja sebelum mengunggah SK</p>
+                    <h3 style="font-size:1.125rem;font-weight:600;display:flex;align-items:center;gap:0.5rem"><svg style="width:1.25rem;height:1.25rem;color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Struktur & Anggota Pokja ${wilayah}</h3>
+                    <p style="font-size:0.875rem;color:var(--dash-text-muted);margin-top:0.25rem">Lengkapi struktur Pokja sebelum mengunggah SK</p>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="exportDummyData()" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors" title="Download data contoh">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <div style="display:flex;gap:0.5rem">
+                    <button onclick="exportDummyData()" class="btn-dash btn-dash--outline" style="font-size:0.875rem;color:#c2410c;border-color:#fdba74" title="Download data contoh">
+                        <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         Data Contoh
                     </button>
-                    <button onclick="exportExcelTemplate()" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" title="Download template Excel">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <button onclick="exportExcelTemplate()" class="btn-dash btn-dash--outline" style="font-size:0.875rem;color:#15803d;border-color:#86efac" title="Download template Excel">
+                        <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         Export Template
                     </button>
-                    <button onclick="openImportModal()" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" title="Import data dari Excel">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    <button onclick="openImportModal()" class="btn-dash btn-dash--outline" style="font-size:0.875rem" title="Import data dari Excel">
+                        <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                         Import Excel
                     </button>
                 </div>
             </div>
 
             <!-- Identitas Pokja -->
-            <div>
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Identitas Pokja</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div style="margin-top:1.5rem">
+                <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem"><svg style="width:1rem;height:1rem;color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Identitas Pokja</h4>
+                <div class="dash-grid dash-grid--2">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Pokja <span class="text-red-500">*</span></label>
-                        <input type="text" id="nama-pokja" value="${sk.namaPokja || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Pokja BSAN ${wilayah}">
+                        <label class="form-dash__label">Nama Pokja <span style="color:#ef4444">*</span></label>
+                        <input type="text" id="nama-pokja" value="${sk.namaPokja || ''}" class="form-dash__input" placeholder="Contoh: Pokja BSAN ${wilayah}">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No. Call Center Pokja <span class="text-red-500">*</span></label>
-                        <input type="tel" id="call-center-pokja" value="${sk.callCenterPokja || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nomor call center Pokja" required>
+                        <label class="form-dash__label">No. Call Center Pokja <span style="color:#ef4444">*</span></label>
+                        <input type="tel" id="call-center-pokja" value="${sk.callCenterPokja || ''}" class="form-dash__input" placeholder="Nomor call center Pokja" required>
                     </div>
                 </div>
             </div>
 
-            <hr class="dark:border-[#3f4739]">
+            <hr style="border-color:var(--dash-border)">
 
             <div>
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>Pimpinan Pokja</h4>
-                ${buildLeaderRow('ketua', 'Ketua Pokja', 'Sekretaris Daerah', 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300', s.ketua)}
-                ${buildLeaderRow('wakil', 'Wakil Ketua', 'Kepala Bappeda', 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300', s.wakil)}
-                ${buildLeaderRow('koordinator', 'Koordinator', 'Kepala Dinas Pendidikan', 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300', s.koordinator)}
+                <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem"><svg style="width:1rem;height:1rem;color:#ef4444" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>Pimpinan Pokja</h4>
+                ${buildLeaderRow('ketua', 'Ketua Pokja', 'Sekretaris Daerah', '', s.ketua)}
+                ${buildLeaderRow('wakil', 'Wakil Ketua', 'Kepala Bappeda', '', s.wakil)}
+                ${buildLeaderRow('koordinator', 'Koordinator', 'Kepala Dinas Pendidikan', '', s.koordinator)}
             </div>
 
-            <hr class="dark:border-[#3f4739]">
+            <hr style="border-color:var(--dash-border)">
 
             <div>
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>Anggota Pokja</h4>
-                <div id="anggota-container" class="space-y-3">
+                <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem"><svg style="width:1rem;height:1rem;color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>Anggota Pokja</h4>
+                <div id="anggota-container" style="display:flex;flex-direction:column;gap:0.75rem">
                     ${anggotaList.map((a, i) => {
                         const isExtra = a.isExtra || false;
                         return buildAnggotaRow(a, i, isExtra);
                     }).join('')}
                 </div>
-                <button onclick="addAnggota()" class="mt-3 inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 text-sm font-medium hover:text-blue-800 dark:hover:text-blue-300">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                <button onclick="addAnggota()" style="margin-top:0.75rem;display:inline-flex;align-items:center;gap:0.5rem;color:#2563eb;font-size:0.875rem;font-weight:500;background:none;border:none;cursor:pointer">
+                    <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                     Tambah Anggota
                 </button>
             </div>
 
-            <div class="flex justify-end pt-4 border-t dark:border-[#3f4739]">
-                <button onclick="saveStruktur()" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors">Simpan Struktur Pokja</button>
+            <div style="display:flex;justify-content:flex-end;padding-top:1rem;border-top:1px solid var(--dash-border)">
+                <button onclick="saveStruktur()" class="btn-dash btn-dash--primary">Simpan Struktur Pokja</button>
             </div>
         </div>
     </div>
 
     <!-- Tab 2: Data SK -->
-    <div id="tab-sk" class="${activeTab === 'sk' ? '' : 'hidden'}">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6 space-y-5">
+    <div id="tab-sk" style="${activeTab === 'sk' ? '' : 'display:none'}">
+        <div class="dash-card" style="padding:1.5rem">
             <div>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Data SK Pokja ${wilayah}</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Lengkapi data SK sebelum mengajukan ke Admin Pusat</p>
+                <h3 style="font-size:1.125rem;font-weight:600">Data SK Pokja ${wilayah}</h3>
+                <p style="font-size:0.875rem;color:var(--dash-text-muted);margin-top:0.25rem">Lengkapi data SK sebelum mengajukan ke Admin Pusat</p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="dash-grid dash-grid--2" style="margin-top:1.25rem">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor SK <span class="text-red-500">*</span></label>
-                    <input type="text" id="nomor-sk" value="${sk.nomorSK || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nomor SK">
+                    <label class="form-dash__label">Nomor SK <span style="color:#ef4444">*</span></label>
+                    <input type="text" id="nomor-sk" value="${sk.nomorSK || ''}" class="form-dash__input" placeholder="Nomor SK">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal SK <span class="text-red-500">*</span></label>
-                    <input type="date" id="tanggal-sk" value="${sk.tanggalSK || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="form-dash__label">Tanggal SK <span style="color:#ef4444">*</span></label>
+                    <input type="date" id="tanggal-sk" value="${sk.tanggalSK || ''}" class="form-dash__input">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Periode Mulai <span class="text-red-500">*</span></label>
-                    <input type="date" id="periode-mulai" value="${sk.periodeMulai || ''}" onchange="autoSetPeriodeSelesai()" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="form-dash__label">Periode Mulai <span style="color:#ef4444">*</span></label>
+                    <input type="date" id="periode-mulai" value="${sk.periodeMulai || ''}" onchange="autoSetPeriodeSelesai()" class="form-dash__input">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Periode Selesai <span class="text-red-500">*</span></label>
-                    <input type="date" id="periode-selesai" value="${sk.periodeSelesai || ''}" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="form-dash__label">Periode Selesai <span style="color:#ef4444">*</span></label>
+                    <input type="date" id="periode-selesai" value="${sk.periodeSelesai || ''}" class="form-dash__input">
                 </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dokumen SK</label>
-                <input type="file" id="sk-file" accept=".pdf" class="w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900/30 dark:file:text-blue-300 hover:file:bg-blue-100">
-                <p class="text-xs text-gray-400 mt-1">Maksimal 2MB, format PDF</p>
-                ${sk.skFileName ? `<p class="text-sm text-green-600 dark:text-green-400 mt-1">📄 ${sk.skFileName}</p>` : ''}
+            <div style="margin-top:1.25rem">
+                <label class="form-dash__label">Dokumen SK</label>
+                <input type="file" id="sk-file" accept=".pdf" class="form-dash__input" style="padding:0">
+                <p style="font-size:0.75rem;color:var(--dash-text-muted);margin-top:0.25rem">Maksimal 2MB, format PDF</p>
+                ${sk.skFileName ? `<p style="font-size:0.875rem;color:#16a34a;margin-top:0.25rem">📄 ${sk.skFileName}</p>` : ''}
             </div>
-            <div class="flex gap-3 pt-4 border-t dark:border-[#3f4739]">
-                <button onclick="switchTab('struktur')" class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1414] transition-colors font-medium">Batal</button>
-                <button onclick="saveSK()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Simpan Data SK</button>
+            <div style="display:flex;gap:0.75rem;padding-top:1rem;border-top:1px solid var(--dash-border);margin-top:1.25rem">
+                <button onclick="switchTab('struktur')" class="btn-dash btn-dash--outline" style="flex:1">Batal</button>
+                <button onclick="saveSK()" class="btn-dash btn-dash--primary" style="flex:1">Simpan Data SK</button>
             </div>
         </div>
     </div>`;
 }
 
 function switchTab(tab) {
-    document.getElementById('tab-struktur').classList.toggle('hidden', tab !== 'struktur');
-    document.getElementById('tab-sk').classList.toggle('hidden', tab !== 'sk');
+    document.getElementById('tab-struktur').style.display = tab === 'struktur' ? '' : 'none';
+    document.getElementById('tab-sk').style.display = tab === 'sk' ? '' : 'none';
     ['struktur', 'sk'].forEach(t => {
         const btn = document.getElementById('tab-btn-' + t);
         const active = t === tab;
-        btn.classList.toggle('bg-white', active); btn.classList.toggle('dark:bg-[#0F0A0A]', active);
-        btn.classList.toggle('text-gray-900', active); btn.classList.toggle('dark:text-white', active);
-        btn.classList.toggle('shadow-sm', active);
-        btn.classList.toggle('text-gray-500', !active); btn.classList.toggle('dark:text-gray-400', !active);
+        btn.style.background = active ? 'var(--dash-card-bg)' : 'transparent';
+        btn.style.color = active ? 'var(--dash-text)' : 'var(--dash-text-muted)';
+        btn.style.boxShadow = active ? '0 1px 2px rgba(0,0,0,0.05)' : 'none';
     });
 }
 
@@ -635,10 +634,10 @@ function saveSK() {
 
 // ---- View Renderers ----
 function getRoleBadge(label) {
-    if (label.includes('Ketua') && !label.includes('Wakil')) return { color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' };
-    if (label.includes('Wakil')) return { color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800' };
-    if (label.includes('Koordinator')) return { color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800' };
-    return { color: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700' };
+    if (label.includes('Ketua') && !label.includes('Wakil')) return { bg: 'rgba(239,68,68,0.15)', color: '#dc2626', border: '#fecaca' };
+    if (label.includes('Wakil')) return { bg: 'rgba(59,130,246,0.15)', color: '#2563eb', border: '#bfdbfe' };
+    if (label.includes('Koordinator')) return { bg: 'rgba(139,92,246,0.15)', color: '#7c3aed', border: '#c4b5fd' };
+    return { bg: 'var(--dash-bg-secondary)', color: 'var(--dash-text-muted)', border: 'var(--dash-border)' };
 }
 
 function renderMemberCard(label, m, index) {
@@ -647,21 +646,20 @@ function renderMemberCard(label, m, index) {
     const badge = getRoleBadge(label);
     const initials = m.nama.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
     const isLeader = label.includes('Ketua') || label.includes('Wakil') || label.includes('Koordinator');
-    const borderLeft = isLeader ? 'border-l-4 ' + badge.color.split(' ').filter(c => c.startsWith('border-'))[0] : '';
-    return `<div class="bg-white dark:bg-[#0F0A0A] rounded-xl border ${borderLeft} border-gray-200 dark:border-[#3f4739] p-4 hover:shadow-md transition-shadow">
-        <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-full ${badge.color.split(' ').slice(0, 2).join(' ')} flex items-center justify-center text-sm font-bold shrink-0">${initials}</div>
-            <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2 flex-wrap">
-                    <span class="font-semibold text-gray-900 dark:text-white text-sm">${m.nama}</span>
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border ${badge.color}">${m.jabatan || label}</span>
+    return `<div class="dash-card" style="padding:1rem;${isLeader ? 'border-left:4px solid ' + badge.color : ''}">
+        <div style="display:flex;align-items:flex-start;gap:0.75rem">
+            <div style="width:2.5rem;height:2.5rem;border-radius:50%;background:${badge.bg};color:${badge.color};display:flex;align-items:center;justify-content:center;font-size:0.875rem;font-weight:700;flex-shrink:0">${initials}</div>
+            <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                    <span style="font-weight:600;font-size:0.875rem">${m.nama}</span>
+                    <span style="display:inline-flex;align-items:center;padding:0.125rem 0.5rem;border-radius:9999px;font-size:0.75rem;font-weight:500;border:1px solid ${badge.border};background:${badge.bg};color:${badge.color}">${m.jabatan || label}</span>
                 </div>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${m.instansi || INSTANSI_MAP[label] || '-'}</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 mt-2">
-                    <div class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"><svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><span class="truncate">${m.email || '-'}</span></div>
-                    <div class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"><svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>${gLabel}</div>
-                    <div class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"><svg class="w-3.5 h-3.5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>WA: ${m.noWa || '-'}</div>
-                    <div class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"><svg class="w-3.5 h-3.5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Kantor: ${m.nomorInstansi || '-'}</div>
+                <p style="font-size:0.75rem;color:var(--dash-text-muted);margin-top:0.125rem">${m.instansi || INSTANSI_MAP[label] || '-'}</p>
+                <div class="dash-grid dash-grid--2" style="margin-top:0.5rem;gap:0.25rem 1rem">
+                    <div style="display:flex;align-items:center;gap:0.375rem;font-size:0.75rem;color:var(--dash-text-muted)"><svg style="width:0.875rem;height:0.875rem;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">${m.email || '-'}</span></div>
+                    <div style="display:flex;align-items:center;gap:0.375rem;font-size:0.75rem;color:var(--dash-text-muted)"><svg style="width:0.875rem;height:0.875rem;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>${gLabel}</div>
+                    <div style="display:flex;align-items:center;gap:0.375rem;font-size:0.75rem;color:var(--dash-text-muted)"><svg style="width:0.875rem;height:0.875rem;color:#22c55e;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>WA: ${m.noWa || '-'}</div>
+                    <div style="display:flex;align-items:center;gap:0.375rem;font-size:0.75rem;color:var(--dash-text-muted)"><svg style="width:0.875rem;height:0.875rem;color:#3b82f6;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Kantor: ${m.nomorInstansi || '-'}</div>
                 </div>
             </div>
         </div>
@@ -685,52 +683,52 @@ function renderReadonlySummary(sub) {
     const totalMembers = (s.ketua ? 1 : 0) + (s.wakil ? 1 : 0) + (s.koordinator ? 1 : 0) + (s.anggota ? s.anggota.length : 0);
 
     return `
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-5">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center"><svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
-                <p class="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider">Nama Pokja</p>
+    <div class="dash-grid dash-grid--4">
+        <div class="dash-card" style="padding:1.25rem;border-left:4px solid #3b82f6">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
+                <div style="width:2.25rem;height:2.25rem;border-radius:0.5rem;background:rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center"><svg style="width:1.25rem;height:1.25rem;color:#2563eb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
+                <p style="font-size:0.75rem;font-weight:500;color:#2563eb;text-transform:uppercase;letter-spacing:0.05em">Nama Pokja</p>
             </div>
-            <p class="font-bold text-gray-900 dark:text-white text-base leading-tight">${sub.namaPokja || '-'}</p>
+            <p style="font-weight:700;font-size:1rem;line-height:1.25">${sub.namaPokja || '-'}</p>
         </div>
-        <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-200 dark:border-purple-800 p-5">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center"><svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
-                <p class="text-xs font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wider">Nomor SK</p>
+        <div class="dash-card" style="padding:1.25rem;border-left:4px solid #7c3aed">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
+                <div style="width:2.25rem;height:2.25rem;border-radius:0.5rem;background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center"><svg style="width:1.25rem;height:1.25rem;color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+                <p style="font-size:0.75rem;font-weight:500;color:#7c3aed;text-transform:uppercase;letter-spacing:0.05em">Nomor SK</p>
             </div>
-            <p class="font-bold text-gray-900 dark:text-white text-base font-mono">${sub.nomorSK || '-'}</p>
+            <p style="font-weight:700;font-size:1rem;font-family:monospace">${sub.nomorSK || '-'}</p>
         </div>
-        <div class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-200 dark:border-amber-800 p-5">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center"><svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
-                <p class="text-xs font-medium text-amber-600 dark:text-amber-400 uppercase tracking-wider">Masa Berlaku SK</p>
+        <div class="dash-card" style="padding:1.25rem;border-left:4px solid #d97706">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
+                <div style="width:2.25rem;height:2.25rem;border-radius:0.5rem;background:rgba(217,119,6,0.15);display:flex;align-items:center;justify-content:center"><svg style="width:1.25rem;height:1.25rem;color:#d97706" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+                <p style="font-size:0.75rem;font-weight:500;color:#d97706;text-transform:uppercase;letter-spacing:0.05em">Masa Berlaku SK</p>
             </div>
-            <p class="font-bold text-gray-900 dark:text-white text-sm">${sub.periodeMulai ? formatDate(sub.periodeMulai) : '-'}</p>
-            ${sub.periodeSelesai ? `<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">s/d ${formatDate(sub.periodeSelesai)}</p>` : ''}
+            <p style="font-weight:700;font-size:0.875rem">${sub.periodeMulai ? formatDate(sub.periodeMulai) : '-'}</p>
+            ${sub.periodeSelesai ? `<p style="font-size:0.75rem;color:var(--dash-text-muted);margin-top:0.125rem">s/d ${formatDate(sub.periodeSelesai)}</p>` : ''}
         </div>
-        <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border border-green-200 dark:border-green-800 p-5">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-900/40 flex items-center justify-center"><svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
-                <p class="text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider">Call Center</p>
+        <div class="dash-card" style="padding:1.25rem;border-left:4px solid #16a34a">
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
+                <div style="width:2.25rem;height:2.25rem;border-radius:0.5rem;background:rgba(22,163,74,0.15);display:flex;align-items:center;justify-content:center"><svg style="width:1.25rem;height:1.25rem;color:#16a34a" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
+                <p style="font-size:0.75rem;font-weight:500;color:#16a34a;text-transform:uppercase;letter-spacing:0.05em">Call Center</p>
             </div>
-            <p class="font-bold text-gray-900 dark:text-white text-base font-mono">${sub.callCenterPokja || '-'}</p>
+            <p style="font-weight:700;font-size:1rem;font-family:monospace">${sub.callCenterPokja || '-'}</p>
         </div>
     </div>
-    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-[#3f4739]">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Struktur & Anggota Pokja</h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">${totalMembers} anggota terdaftar</p>
+    <div class="dash-card" style="overflow:hidden">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--dash-border)">
+            <h3 style="font-size:1.125rem;font-weight:600">Struktur & Anggota Pokja</h3>
+            <p style="font-size:0.875rem;color:var(--dash-text-muted);margin-top:0.125rem">${totalMembers} anggota terdaftar</p>
         </div>
-        <div class="p-6 space-y-4">
+        <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem">
             ${leadersHtml ? `<div>
-                <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Pimpinan Pokja</h4>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">${leadersHtml}</div>
+                <h4 style="font-size:0.75rem;font-weight:600;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem">Pimpinan Pokja</h4>
+                <div class="dash-grid dash-grid--3">${leadersHtml}</div>
             </div>` : ''}
-            ${anggotaHtml ? `<div class="pt-2">
-                <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Anggota Pokja</h4>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">${anggotaHtml}</div>
+            ${anggotaHtml ? `<div style="padding-top:0.5rem">
+                <h4 style="font-size:0.75rem;font-weight:600;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.75rem">Anggota Pokja</h4>
+                <div class="dash-grid dash-grid--2">${anggotaHtml}</div>
             </div>` : ''}
-            ${!leadersHtml && !anggotaHtml ? '<p class="text-gray-400 text-center py-8">Tidak ada data struktur.</p>' : ''}
+            ${!leadersHtml && !anggotaHtml ? '<p style="color:var(--dash-text-muted);text-align:center;padding:2rem 0">Tidak ada data struktur.</p>' : ''}
         </div>
     </div>`;
 }
@@ -739,19 +737,19 @@ function renderDraftView(app, sub, wilayah) {
     const hasSK = sub.nomorSK;
     const canSubmit = sub.struktur?.ketua && hasSK;
     app.innerHTML = `
-    <div><h2 class="text-xl font-bold text-gray-900 dark:text-white">Data Pokja ${wilayah}</h2><p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Review dan ajukan Pokja ke Admin Pusat</p></div>
-    ${!hasSK ? `<div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 flex items-start gap-3"><span class="text-xl">📄</span><div class="flex-1"><p class="font-semibold text-blue-800 dark:text-blue-300">Dokumen SK</p><p class="text-sm text-blue-700 dark:text-blue-400">Lengkapi dan unggah file SK agar Pokja dapat diajukan ke Admin Pusat.</p></div><button onclick="editPokja('sk')" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap">Lengkapi Data SK</button></div>` : ''}
-    <div class="flex flex-wrap items-center gap-3">
-        <button onclick="editPokja('struktur')" class="inline-flex items-center gap-2 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium px-4 py-2.5 rounded-lg transition-colors text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+    <div><h2 class="dash-section__title">Data Pokja ${wilayah}</h2><p style="font-size:0.875rem;color:var(--dash-text-muted);margin-top:0.25rem">Review dan ajukan Pokja ke Admin Pusat</p></div>
+    ${!hasSK ? `<div class="dash-alert dash-alert--info" style="display:flex;align-items:flex-start;gap:0.75rem"><span style="font-size:1.25rem">📄</span><div style="flex:1"><p style="font-weight:600">Dokumen SK</p><p style="font-size:0.875rem">Lengkapi dan unggah file SK agar Pokja dapat diajukan ke Admin Pusat.</p></div><button onclick="editPokja('sk')" class="btn-dash btn-dash--primary" style="white-space:nowrap;font-size:0.875rem">Lengkapi Data SK</button></div>` : ''}
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.75rem">
+        <button onclick="editPokja('struktur')" class="btn-dash btn-dash--outline" style="font-size:0.875rem">
+            <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             Edit Struktur
         </button>
-        <button onclick="editPokja('sk')" class="inline-flex items-center gap-2 border border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 font-medium px-4 py-2.5 rounded-lg transition-colors text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <button onclick="editPokja('sk')" class="btn-dash btn-dash--outline" style="font-size:0.875rem;color:#7c3aed;border-color:#c4b5fd">
+            <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Update SK
         </button>
-        ${canSubmit ? `<button onclick="confirmSubmit()" class="ml-auto inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors text-sm">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Ajukan ke Admin Pusat
+        ${canSubmit ? `<button onclick="confirmSubmit()" class="btn-dash btn-dash--success" style="margin-left:auto;font-size:0.875rem">
+            <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Ajukan ke Admin Pusat
         </button>` : ''}
     </div>
     ${renderReadonlySummary(sub)}`;
@@ -759,35 +757,35 @@ function renderDraftView(app, sub, wilayah) {
 
 function renderPendingView(app, sub, wilayah) {
     app.innerHTML = `
-    <div><h2 class="text-xl font-bold text-gray-900 dark:text-white">Data Pokja ${wilayah}</h2></div>
-    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6 text-center">
-        <div class="w-16 h-16 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center mx-auto mb-4"><svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-        <h3 class="text-lg font-bold text-yellow-800 dark:text-yellow-300">⏳ Menunggu Approval</h3>
-        <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-2">Pengajuan Pokja sedang diproses oleh Admin Pusat.</p>
+    <div><h2 class="dash-section__title">Data Pokja ${wilayah}</h2></div>
+    <div class="dash-alert dash-alert--warning" style="padding:1.5rem;text-align:center">
+        <div style="width:4rem;height:4rem;border-radius:50%;background:rgba(234,179,8,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><svg style="width:2rem;height:2rem;color:#ca8a04" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <h3 style="font-size:1.125rem;font-weight:700">⏳ Menunggu Approval</h3>
+        <p style="font-size:0.875rem;margin-top:0.5rem">Pengajuan Pokja sedang diproses oleh Admin Pusat.</p>
     </div>
     ${renderReadonlySummary(sub)}`;
 }
 
 function renderApprovedView(app, sub, wilayah) {
     app.innerHTML = `
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div><h2 class="text-xl font-bold text-gray-900 dark:text-white">Data Pokja ${wilayah}</h2></div>
-        <div class="flex gap-2">
-            <button onclick="editPokja('struktur')" class="inline-flex items-center gap-2 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium px-4 py-2 rounded-lg transition-colors text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem">
+        <div><h2 class="dash-section__title">Data Pokja ${wilayah}</h2></div>
+        <div style="display:flex;gap:0.5rem">
+            <button onclick="editPokja('struktur')" class="btn-dash btn-dash--outline" style="font-size:0.875rem">
+                <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                 Edit Struktur
             </button>
-            <button onclick="editPokja('sk')" class="inline-flex items-center gap-2 border border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 font-medium px-4 py-2 rounded-lg transition-colors text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <button onclick="editPokja('sk')" class="btn-dash btn-dash--outline" style="font-size:0.875rem;color:#7c3aed;border-color:#c4b5fd">
+                <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 Update SK
             </button>
         </div>
     </div>
-    <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center shrink-0"><svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+    <div class="dash-alert dash-alert--success" style="display:flex;align-items:center;gap:0.75rem">
+        <div style="width:2.5rem;height:2.5rem;border-radius:50%;background:rgba(22,163,74,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:1.5rem;height:1.5rem;color:#16a34a" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
         <div>
-            <h3 class="font-bold text-green-800 dark:text-green-300">Pokja Disetujui</h3>
-            <p class="text-sm text-green-700 dark:text-green-400">Struktur Pokja telah diverifikasi. Anda tetap dapat memperbarui data Struktur atau SK jika ada perubahan anggota.</p>
+            <h3 style="font-weight:700">Pokja Disetujui</h3>
+            <p style="font-size:0.875rem">Struktur Pokja telah diverifikasi. Anda tetap dapat memperbarui data Struktur atau SK jika ada perubahan anggota.</p>
         </div>
     </div>
     ${renderReadonlySummary(sub)}`;
@@ -795,22 +793,22 @@ function renderApprovedView(app, sub, wilayah) {
 
 function renderDeclinedView(app, sub, wilayah) {
     app.innerHTML = `
-    <div><h2 class="text-xl font-bold text-gray-900 dark:text-white">Data Pokja ${wilayah}</h2></div>
-    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 flex items-start gap-3">
-        <svg class="w-5 h-5 text-red-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <div><p class="font-semibold text-red-800 dark:text-red-300">Pengajuan Ditolak</p><p class="text-sm text-red-700 dark:text-red-400 mt-1">${sub.declineReason || 'Tidak ada alasan.'}</p></div>
+    <div><h2 class="dash-section__title">Data Pokja ${wilayah}</h2></div>
+    <div class="dash-alert dash-alert--danger" style="display:flex;align-items:flex-start;gap:0.75rem">
+        <svg style="width:1.25rem;height:1.25rem;color:#dc2626;margin-top:0.125rem;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div><p style="font-weight:600">Pengajuan Ditolak</p><p style="font-size:0.875rem;margin-top:0.25rem">${sub.declineReason || 'Tidak ada alasan.'}</p></div>
     </div>
-    <div class="flex flex-wrap items-center gap-3">
-        <button onclick="resubmit('struktur')" class="inline-flex items-center gap-2 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium px-4 py-2.5 rounded-lg transition-colors text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.75rem">
+        <button onclick="resubmit('struktur')" class="btn-dash btn-dash--outline" style="font-size:0.875rem">
+            <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             Edit Struktur
         </button>
-        <button onclick="resubmit('sk')" class="inline-flex items-center gap-2 border border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 font-medium px-4 py-2.5 rounded-lg transition-colors text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <button onclick="resubmit('sk')" class="btn-dash btn-dash--outline" style="font-size:0.875rem;color:#7c3aed;border-color:#c4b5fd">
+            <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Update SK
         </button>
-        <button onclick="resubmit('struktur')" class="ml-auto inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors text-sm">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        <button onclick="resubmit('struktur')" class="btn-dash btn-dash--primary" style="margin-left:auto;font-size:0.875rem">
+            <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             Edit & Ajukan Ulang
         </button>
     </div>
@@ -824,8 +822,8 @@ function editPokja(tab) {
     if (tab) switchTab(tab);
 }
 
-function confirmSubmit() { document.getElementById('submit-confirm-modal').classList.remove('hidden'); }
-function closeSubmitConfirm() { document.getElementById('submit-confirm-modal').classList.add('hidden'); }
+function confirmSubmit() { document.getElementById('submit-confirm-modal').style.display = ''; }
+function closeSubmitConfirm() { document.getElementById('submit-confirm-modal').style.display = 'none'; }
 
 function submitToAdmin() {
     const subs = getSubmissions();
@@ -953,15 +951,15 @@ let importPendingFile = null;
 function openImportModal() {
     importPendingFile = null;
     const modal = document.getElementById('import-excel-modal');
-    modal.classList.remove('hidden');
-    document.getElementById('import-file-info').classList.add('hidden');
+    modal.style.display = '';
+    document.getElementById('import-file-info').style.display = 'none';
     document.getElementById('btn-do-import').disabled = true;
     document.getElementById('import-file-input').value = '';
     setupDropzone();
 }
 
 function closeImportModal() {
-    document.getElementById('import-excel-modal').classList.add('hidden');
+    document.getElementById('import-excel-modal').style.display = 'none';
     importPendingFile = null;
 }
 
@@ -993,14 +991,14 @@ function onImportFileSelected(input) {
 }
 
 function showImportFileInfo(name) {
-    document.getElementById('import-file-info').classList.remove('hidden');
+    document.getElementById('import-file-info').style.display = '';
     document.getElementById('import-file-name').textContent = name;
     document.getElementById('btn-do-import').disabled = false;
 }
 
 function clearImportFile() {
     importPendingFile = null;
-    document.getElementById('import-file-info').classList.add('hidden');
+    document.getElementById('import-file-info').style.display = 'none';
     document.getElementById('btn-do-import').disabled = true;
     document.getElementById('import-file-input').value = '';
 }

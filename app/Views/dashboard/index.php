@@ -3,53 +3,54 @@
 <?= $this->section('content') ?>
 
 <!-- Admin Kementerian Dashboard -->
-<div id="view-kementerian" class="hidden space-y-6">
+<div id="view-kementerian" style="display:none" class="space-y-6">
     <!-- Header with Toggle -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div class="d-flex d-flex--between" style="flex-wrap:wrap;gap:0.75rem">
         <div>
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Dashboard Admin Kementerian Pusat</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Monitoring dan approval Pokja seluruh wilayah</p>
+            <h2 class="dash-card__title" style="font-size:1.25rem">Dashboard Admin Kementerian Pusat</h2>
+            <p class="dash-card__subtitle">Monitoring dan approval Pokja seluruh wilayah</p>
         </div>
-        <div class="flex items-center gap-3">
-            <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="demo-data-toggle" class="sr-only peer" onchange="toggleDataMode(this.checked)">
-                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+        <div class="d-flex d-flex--gap-3" style="align-items:center">
+            <label style="position:relative;display:inline-flex;align-items:center;cursor:pointer">
+                <input type="checkbox" id="demo-data-toggle" style="position:absolute;opacity:0;width:0;height:0" onchange="toggleDataMode(this.checked)">
+                <span class="toggle-track"></span>
             </label>
-            <span class="text-sm font-medium text-gray-700 dark:text-gray-300" id="data-mode-label">Entry Data</span>
+            <span style="font-size:0.875rem;font-weight:500;color:var(--dash-text-secondary)" id="data-mode-label">Entry Data</span>
         </div>
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div class="bg-gradient-to-br from-slate-50 to-gray-100 dark:from-gray-900/40 dark:to-gray-800/30 rounded-xl border border-gray-200 dark:border-[#3f4739] p-4">
-            <div class="flex items-center gap-2 mb-1"><div class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center"><svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div></div>
-            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">Wilayah</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white" id="stat-total">552</p>
+    <div class="stat-cards" style="grid-template-columns:repeat(2,1fr)">
+        <style>@media(min-width:640px){.stat-cards--6{grid-template-columns:repeat(3,1fr)!important}}@media(min-width:1024px){.stat-cards--6{grid-template-columns:repeat(6,1fr)!important}}.toggle-track{width:2.75rem;height:1.5rem;background:var(--dash-border);border-radius:9999px;position:relative;transition:background 200ms}.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:1.25rem;height:1.25rem;background:#fff;border-radius:9999px;transition:transform 200ms}input:checked+.toggle-track{background:#2563eb}input:checked+.toggle-track::after{transform:translateX(1.25rem)}</style>
+        <div class="stat-cards--6 stat-card">
+            <div class="stat-card__icon stat-card__icon--blue" style="width:2rem;height:2rem"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <p class="stat-card__label">Wilayah</p>
+            <p class="stat-card__value" id="stat-total">552</p>
         </div>
-        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-4">
-            <div class="flex items-center gap-2 mb-1"><div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center"><svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div></div>
-            <p class="text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider">Total Anggota</p>
-            <p class="text-2xl font-bold text-blue-700 dark:text-blue-300" id="stat-members">0</p>
+        <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--blue" style="width:2rem;height:2rem"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+            <p class="stat-card__label" style="color:#2563eb">Total Anggota</p>
+            <p class="stat-card__value" style="color:#1d4ed8" id="stat-members">0</p>
         </div>
-        <div class="bg-gradient-to-br from-cyan-50 to-sky-50 dark:from-cyan-900/20 dark:to-sky-900/20 rounded-xl border border-cyan-200 dark:border-cyan-800 p-4">
-            <div class="flex items-center gap-2 mb-1"><div class="w-8 h-8 rounded-lg bg-cyan-100 dark:bg-cyan-900/40 flex items-center justify-center"><svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div></div>
-            <p class="text-xs text-cyan-600 dark:text-cyan-400 uppercase tracking-wider">Laki-laki</p>
-            <p class="text-2xl font-bold text-cyan-700 dark:text-cyan-300" id="stat-male">0</p>
+        <div class="stat-card">
+            <div class="stat-card__icon" style="width:2rem;height:2rem;background:#cffafe;color:#0891b2"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+            <p class="stat-card__label" style="color:#0891b2">Laki-laki</p>
+            <p class="stat-card__value" style="color:#0e7490" id="stat-male">0</p>
         </div>
-        <div class="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-xl border border-pink-200 dark:border-pink-800 p-4">
-            <div class="flex items-center gap-2 mb-1"><div class="w-8 h-8 rounded-lg bg-pink-100 dark:bg-pink-900/40 flex items-center justify-center"><svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div></div>
-            <p class="text-xs text-pink-600 dark:text-pink-400 uppercase tracking-wider">Perempuan</p>
-            <p class="text-2xl font-bold text-pink-700 dark:text-pink-300" id="stat-female">0</p>
+        <div class="stat-card">
+            <div class="stat-card__icon" style="width:2rem;height:2rem;background:#fce7f3;color:#db2777"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+            <p class="stat-card__label" style="color:#db2777">Perempuan</p>
+            <p class="stat-card__value" style="color:#be185d" id="stat-female">0</p>
         </div>
-        <div class="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-xl border border-amber-200 dark:border-amber-800 p-4">
-            <div class="flex items-center gap-2 mb-1"><div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center"><svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div></div>
-            <p class="text-xs text-amber-600 dark:text-amber-400 uppercase tracking-wider">Pending</p>
-            <p class="text-2xl font-bold text-amber-700 dark:text-amber-300" id="stat-pending">0</p>
+        <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--amber" style="width:2rem;height:2rem"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <p class="stat-card__label" style="color:#d97706">Pending</p>
+            <p class="stat-card__value" style="color:#b45309" id="stat-pending">0</p>
         </div>
-        <div class="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800 p-4">
-            <div class="flex items-center gap-2 mb-1"><div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center"><svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div></div>
-            <p class="text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Disetujui</p>
-            <p class="text-2xl font-bold text-emerald-700 dark:text-emerald-300" id="stat-approved">0</p>
+        <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--green" style="width:2rem;height:2rem"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <p class="stat-card__label" style="color:#16a34a">Disetujui</p>
+            <p class="stat-card__value" style="color:#15803d" id="stat-approved">0</p>
         </div>
     </div>
 
@@ -72,9 +73,9 @@
         .admin-donut-legend span { display: flex; align-items: center; gap: 5px; }
         .admin-donut-legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
     </style>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="dash-grid--3">
         <!-- Donut 1: Status Pengajuan -->
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6 admin-donut-card">
+        <div class="dash-card admin-donut-card">
             <h3 class="text-gray-900 dark:text-white justify-center"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>Status Pengajuan Pokja</h3>
             <div class="admin-donut-wrap">
                 <div class="admin-donut-container">
@@ -100,7 +101,7 @@
             </div>
         </div>
         <!-- Donut 2: Persentase Pokja Provinsi -->
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6 admin-donut-card">
+        <div class="dash-card admin-donut-card">
             <h3 class="text-gray-900 dark:text-white justify-center"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Persentase Pokja Provinsi</h3>
             <div class="admin-donut-wrap">
                 <div class="admin-donut-container">
@@ -122,7 +123,7 @@
             </div>
         </div>
         <!-- Donut 3: Persentase Pokja Kab/Kota -->
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6 admin-donut-card">
+        <div class="dash-card admin-donut-card">
             <h3 class="text-gray-900 dark:text-white justify-center"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Persentase Pokja Kab/Kota</h3>
             <div class="admin-donut-wrap">
                 <div class="admin-donut-container">
@@ -146,166 +147,166 @@
     </div>
 
     <!-- Gender Chart -->
-    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6">
-        <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Komposisi Gender per Jabatan</h3>
+    <div class="dash-card">
+        <h3 class="dash-card__title" style="font-size:0.875rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem"><svg class="icon-sm" style="color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Komposisi Gender per Jabatan</h3>
         <div style="position:relative;height:260px;"><canvas id="chart-gender"></canvas></div>
     </div>
 
     <!-- Admin Map -->
-    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6">
-        <h3 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
-            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+    <div class="dash-card">
+        <h3 class="dash-card__title" style="font-size:0.875rem;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem">
+            <svg class="icon-sm" style="color:#16a34a" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
             Peta Sebaran Pokja
         </h3>
         <div id="admin-map-container" style="min-height:420px;"></div>
     </div>
 
-    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6">
-        <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2"><svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Log Pengajuan Pokja</h3>
+    <div class="dash-card">
+        <h3 class="dash-card__title" style="font-size:0.875rem;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem"><svg class="icon-sm" style="color:#ea580c" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Log Pengajuan Pokja</h3>
         <!-- Search + Filter -->
-        <div class="flex flex-wrap gap-3 mb-4 items-center justify-between">
-            <div class="flex items-center gap-2">
-                <input id="log-search" type="text" placeholder="Cari wilayah..." oninput="logFilterChanged()" class="px-3 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-sm bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white w-56 focus:ring-2 focus:ring-blue-500 outline-none" />
-                <select id="log-status-filter" onchange="logFilterChanged()" class="px-3 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-sm bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <div class="d-flex d-flex--between d-flex--wrap d-flex--gap-3" style="margin-bottom:1rem">
+            <div class="d-flex d-flex--gap-2" style="align-items:center">
+                <input id="log-search" type="text" placeholder="Cari wilayah..." oninput="logFilterChanged()" class="form-input" style="width:14rem;padding:0.375rem 0.75rem" />
+                <select id="log-status-filter" onchange="logFilterChanged()" class="form-select" style="padding:0.375rem 0.75rem;width:auto">
                     <option value="">Semua Status</option>
                     <option value="approved">Disetujui</option>
                     <option value="pending">Pending</option>
                     <option value="draft">Draft</option>
                     <option value="declined">Ditolak</option>
                 </select>
-                <select id="log-jenis-filter" onchange="logFilterChanged()" class="px-3 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-sm bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                <select id="log-jenis-filter" onchange="logFilterChanged()" class="form-select" style="padding:0.375rem 0.75rem;width:auto">
                     <option value="">Semua Jenis</option>
                     <option value="dinas_prov">Provinsi</option>
                     <option value="dinas_kab">Kab/Kota</option>
                 </select>
             </div>
-            <span id="log-count" class="text-xs text-gray-500 dark:text-gray-400"></span>
+            <span id="log-count" style="font-size:0.75rem;color:var(--dash-text-muted)"></span>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead><tr class="bg-gray-50 dark:bg-[#1a1414]">
-                    <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Wilayah</th>
-                    <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Jenis</th>
-                    <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Anggota</th>
-                    <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">L / P</th>
-                    <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Status</th>
-                    <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Aksi</th>
+        <div class="dash-table__wrapper">
+            <table class="dash-table">
+                <thead><tr>
+                    <th>Wilayah</th>
+                    <th>Jenis</th>
+                    <th>Anggota</th>
+                    <th>L / P</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
                 </tr></thead>
                 <tbody id="log-tbody"></tbody>
             </table>
         </div>
         <!-- Pagination -->
-        <div id="log-pagination" class="flex items-center justify-between mt-4 text-sm text-gray-600 dark:text-gray-400">
+        <div id="log-pagination" class="d-flex d-flex--between" style="margin-top:1rem;font-size:0.875rem;color:var(--dash-text-muted)">
             <span id="log-page-info"></span>
-            <div id="log-page-buttons" class="flex gap-1"></div>
+            <div id="log-page-buttons" class="d-flex d-flex--gap-1"></div>
         </div>
-        <div id="log-empty" class="hidden text-center py-8 text-gray-500 dark:text-gray-400">Belum ada pengajuan Pokja.</div>
+        <div id="log-empty" style="display:none" class="dash-table__empty">Belum ada pengajuan Pokja.</div>
     </div>
 </div>
 
 <!-- Admin Dinas Dashboard -->
-<div id="view-dinas" class="hidden space-y-6">
+<div id="view-dinas" style="display:none" class="space-y-6">
     <div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white" id="dinas-title">Dashboard</h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="dinas-subtitle">Kelola Pokja daerah Anda</p>
+        <h2 class="dash-card__title" style="font-size:1.25rem" id="dinas-title">Dashboard</h2>
+        <p class="dash-card__subtitle" id="dinas-subtitle">Kelola Pokja daerah Anda</p>
     </div>
 
     <!-- Decline Banner -->
-    <div id="decline-banner" class="hidden bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
-        <div class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-red-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <div id="decline-banner" style="display:none" class="dash-alert dash-alert--danger" >
+        <div style="display:flex;align-items:flex-start;gap:0.75rem">
+            <svg style="width:1.25rem;height:1.25rem;color:#dc2626;flex-shrink:0;margin-top:2px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             <div>
-                <p class="font-semibold text-red-800 dark:text-red-300">Pengajuan Ditolak</p>
-                <p class="text-sm text-red-700 dark:text-red-400 mt-1" id="decline-reason"></p>
+                <p style="font-weight:600">Pengajuan Ditolak</p>
+                <p style="font-size:0.875rem;margin-top:0.25rem" id="decline-reason"></p>
             </div>
         </div>
     </div>
 
     <!-- Pending Banner -->
-    <div id="pending-banner" class="hidden bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
-        <div class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-yellow-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <div id="pending-banner" style="display:none" class="dash-alert dash-alert--warning">
+        <div style="display:flex;align-items:flex-start;gap:0.75rem">
+            <svg style="width:1.25rem;height:1.25rem;color:#d97706;flex-shrink:0;margin-top:2px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             <div>
-                <p class="font-semibold text-yellow-800 dark:text-yellow-300">⏳ Menunggu Approval</p>
-                <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Pengajuan Pokja sedang diproses oleh Admin Pusat.</p>
+                <p style="font-weight:600">⏳ Menunggu Approval</p>
+                <p style="font-size:0.875rem;margin-top:0.25rem">Pengajuan Pokja sedang diproses oleh Admin Pusat.</p>
             </div>
         </div>
     </div>
 
     <!-- Approved Banner -->
-    <div id="approved-banner" class="hidden bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4">
-        <div class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <div id="approved-banner" style="display:none" class="dash-alert dash-alert--success">
+        <div style="display:flex;align-items:flex-start;gap:0.75rem">
+            <svg style="width:1.25rem;height:1.25rem;color:#16a34a;flex-shrink:0;margin-top:2px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             <div>
-                <p class="font-semibold text-green-800 dark:text-green-300">✅ Pokja Disetujui</p>
-                <p class="text-sm text-green-700 dark:text-green-400 mt-1">Pokja Anda telah disetujui oleh Admin Pusat.</p>
+                <p style="font-weight:600">✅ Pokja Disetujui</p>
+                <p style="font-size:0.875rem;margin-top:0.25rem">Pokja Anda telah disetujui oleh Admin Pusat.</p>
             </div>
         </div>
     </div>
 
     <!-- SK Card Spotlight -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-800 dark:to-blue-950 rounded-xl p-6 text-white">
-        <p class="text-sm text-blue-100 mb-1">Nomor SK Pokja</p>
-        <p class="text-2xl font-bold" id="sk-nomor-display">-</p>
+    <div style="background:linear-gradient(to right,#2563eb,#1e40af);border-radius:0.75rem;padding:1.5rem;color:#fff">
+        <p style="font-size:0.875rem;opacity:0.8;margin-bottom:0.25rem">Nomor SK Pokja</p>
+        <p style="font-size:1.5rem;font-weight:700" id="sk-nomor-display">-</p>
     </div>
 
     <!-- Status Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Status Pokja</p>
-            <p class="text-lg font-bold mt-1" id="status-pokja">Belum Ada</p>
+    <div class="dash-grid--3">
+        <div class="stat-card">
+            <p class="stat-card__label">Status Pokja</p>
+            <p class="stat-card__value" id="status-pokja">Belum Ada</p>
         </div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Masa Berlaku SK</p>
-            <p class="text-lg font-bold text-gray-900 dark:text-white mt-1" id="masa-berlaku">-</p>
+        <div class="stat-card">
+            <p class="stat-card__label">Masa Berlaku SK</p>
+            <p class="stat-card__value" id="masa-berlaku">-</p>
         </div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Status Pengajuan</p>
-            <p class="text-lg font-bold mt-1" id="status-pengajuan">-</p>
+        <div class="stat-card">
+            <p class="stat-card__label">Status Pengajuan</p>
+            <p class="stat-card__value" id="status-pengajuan">-</p>
         </div>
     </div>
 
     <!-- Bentuk Pokja Button -->
-    <div id="bentuk-pokja-section" class="text-center py-6">
-        <a href="/dashboard/pokja" class="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-3 rounded-lg transition-colors text-lg">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+    <div id="bentuk-pokja-section" style="text-align:center;padding:1.5rem 0">
+        <a href="/dashboard/pokja" class="btn-dash btn-dash--primary" style="display:inline-flex;align-items:center;gap:0.5rem;font-size:1.125rem;padding:0.75rem 1.5rem">
+            <svg style="width:1.5rem;height:1.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Bentuk Pokja
         </a>
     </div>
 
     <!-- Quick Links (Dinas only) -->
-    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Menu Cepat</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <a href="/dashboard" class="flex flex-col items-center p-4 rounded-xl bg-gray-50 dark:bg-gray-900/20 hover:bg-gray-100 dark:hover:bg-gray-900/30 transition-colors">
-                <svg class="w-8 h-8 text-gray-600 dark:text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                <span class="text-sm font-medium text-gray-800 dark:text-gray-300">Dashboard</span>
+    <div class="dash-card">
+        <h2 class="dash-card__title" style="margin-bottom:1rem">Menu Cepat</h2>
+        <div class="dash-grid--4">
+            <a href="/dashboard" class="quick-link" style="display:flex;flex-direction:column;align-items:center;padding:1rem;border-radius:0.75rem;background:var(--dash-bg-card-alt);text-decoration:none;transition:opacity 0.15s">
+                <svg style="width:2rem;height:2rem;color:var(--dash-text-secondary);margin-bottom:0.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                <span style="font-size:0.875rem;font-weight:500;color:var(--dash-text-primary)">Dashboard</span>
             </a>
-            <a href="/dashboard/pokja" class="flex flex-col items-center p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
-                <svg class="w-8 h-8 text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                <span class="text-sm font-medium text-blue-800 dark:text-blue-300">Pokja</span>
+            <a href="/dashboard/pokja" class="quick-link" style="display:flex;flex-direction:column;align-items:center;padding:1rem;border-radius:0.75rem;background:var(--dash-bg-card-alt);text-decoration:none;transition:opacity 0.15s">
+                <svg style="width:2rem;height:2rem;color:#2563eb;margin-bottom:0.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <span style="font-size:0.875rem;font-weight:500;color:#2563eb">Pokja</span>
             </a>
-            <a href="/dashboard/pelaporan" class="flex flex-col items-center p-4 rounded-xl bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors">
-                <svg class="w-8 h-8 text-orange-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                <span class="text-sm font-medium text-orange-800 dark:text-orange-300">Pelaporan</span>
+            <a href="/dashboard/pelaporan" class="quick-link" style="display:flex;flex-direction:column;align-items:center;padding:1rem;border-radius:0.75rem;background:var(--dash-bg-card-alt);text-decoration:none;transition:opacity 0.15s">
+                <svg style="width:2rem;height:2rem;color:#ea580c;margin-bottom:0.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <span style="font-size:0.875rem;font-weight:500;color:#ea580c">Pelaporan</span>
             </a>
-            <a href="/dashboard/sumber-rujukan" class="flex flex-col items-center p-4 rounded-xl bg-teal-50 dark:bg-teal-900/20 hover:bg-teal-100 dark:hover:bg-teal-900/30 transition-colors">
-                <svg class="w-8 h-8 text-teal-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-                <span class="text-sm font-medium text-teal-800 dark:text-teal-300">Sumber Rujukan</span>
+            <a href="/dashboard/sumber-rujukan" class="quick-link" style="display:flex;flex-direction:column;align-items:center;padding:1rem;border-radius:0.75rem;background:var(--dash-bg-card-alt);text-decoration:none;transition:opacity 0.15s">
+                <svg style="width:2rem;height:2rem;color:#0d9488;margin-bottom:0.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                <span style="font-size:0.875rem;font-weight:500;color:#0d9488">Sumber Rujukan</span>
             </a>
         </div>
     </div>
 </div>
 
 <!-- Kementerian: Detail Modal -->
-<div id="detail-approval-modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="closeApprovalModal()"></div>
-    <div class="relative flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-white dark:bg-[#0F0A0A] px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center justify-between">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail Pengajuan Pokja</h3>
-                <button onclick="closeApprovalModal()" class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739]">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+<div id="detail-approval-modal" class="modal" style="display:none">
+    <div class="modal__backdrop" onclick="closeApprovalModal()"></div>
+    <div class="modal__container" style="max-width:42rem">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 class="modal__title">Detail Pengajuan Pokja</h3>
+                <button onclick="closeApprovalModal()" class="modal__close">
+                    <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
             <div id="approval-detail-content" class="p-6 space-y-4"></div>
@@ -340,16 +341,16 @@
                     <div id="action-history-list" class="space-y-2 text-sm"></div>
                 </div>
             </div>
-            <div id="approval-actions" class="px-6 pb-6 flex gap-3">
-                <button onclick="showDeclineForm()" class="flex-1 px-4 py-2.5 border border-red-300 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors font-medium">Tolak</button>
-                <button onclick="approvePokja()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Setujui</button>
+            <div id="approval-actions" style="padding:0 1.5rem 1.5rem;display:flex;gap:0.75rem">
+                <button onclick="showDeclineForm()" class="btn-dash btn-dash--outline" style="flex:1;border-color:#dc2626;color:#dc2626">Tolak</button>
+                <button onclick="approvePokja()" class="btn-dash btn-dash--success" style="flex:1">Setujui</button>
             </div>
-            <div id="decline-form" class="hidden px-6 pb-6 space-y-3">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Alasan Penolakan</label>
-                <textarea id="decline-reason-input" rows="3" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none resize-none" placeholder="Jelaskan alasan penolakan..."></textarea>
-                <div class="flex gap-3">
-                    <button onclick="cancelDecline()" class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1414] transition-colors font-medium">Batal</button>
-                    <button onclick="declinePokja()" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Tolak Pengajuan</button>
+            <div id="decline-form" style="display:none;padding:0 1.5rem 1.5rem" class="space-y-3">
+                <label class="form-label">Alasan Penolakan</label>
+                <textarea id="decline-reason-input" rows="3" class="form-input" style="resize:none" placeholder="Jelaskan alasan penolakan..."></textarea>
+                <div style="display:flex;gap:0.75rem">
+                    <button onclick="cancelDecline()" class="btn-dash btn-dash--outline" style="flex:1">Batal</button>
+                    <button onclick="declinePokja()" class="btn-dash btn-dash--danger" style="flex:1">Tolak Pengajuan</button>
                 </div>
             </div>
         </div>
@@ -388,10 +389,10 @@
     function initDashboard() {
         const role = localStorage.getItem('bsan_demo_role') || 'kementerian';
         if (role === 'kementerian') {
-            document.getElementById('view-kementerian').classList.remove('hidden');
+            document.getElementById('view-kementerian').style.display = '';
             renderKementerianDashboard();
         } else {
-            document.getElementById('view-dinas').classList.remove('hidden');
+            document.getElementById('view-dinas').style.display = '';
             renderDinasDashboard(role);
         }
     }
@@ -741,13 +742,13 @@
 
         if (filtered.length === 0) {
             tbody.innerHTML = '';
-            empty.classList.remove('hidden');
-            document.getElementById('log-pagination').classList.add('hidden');
+            empty.style.display = '';
+            document.getElementById('log-pagination').style.display = 'none';
             document.getElementById('log-count').textContent = '0 data';
             return;
         }
-        empty.classList.add('hidden');
-        document.getElementById('log-pagination').classList.remove('hidden');
+        empty.style.display = 'none';
+        document.getElementById('log-pagination').style.display = '';
 
         // Pagination
         const totalPages = Math.ceil(filtered.length / _logPerPage);
@@ -878,11 +879,11 @@
         }
         declineFormEl.classList.add('hidden');
 
-        document.getElementById('detail-approval-modal').classList.remove('hidden');
+        document.getElementById('detail-approval-modal').style.display = '';
     }
 
     function closeApprovalModal() {
-        document.getElementById('detail-approval-modal').classList.add('hidden');
+        document.getElementById('detail-approval-modal').style.display = 'none';
         currentApprovalIdx = -1;
     }
 
@@ -899,13 +900,13 @@
     }
 
     function showDeclineForm() {
-        document.getElementById('approval-actions').classList.add('hidden');
-        document.getElementById('decline-form').classList.remove('hidden');
+        document.getElementById('approval-actions').style.display = 'none';
+        document.getElementById('decline-form').style.display = '';
     }
 
     function cancelDecline() {
-        document.getElementById('decline-form').classList.add('hidden');
-        document.getElementById('approval-actions').classList.remove('hidden');
+        document.getElementById('decline-form').style.display = 'none';
+        document.getElementById('approval-actions').style.display = '';
     }
 
     function declinePokja() {
@@ -971,13 +972,13 @@
 
             // Show appropriate banner
             if (mySub.status === 'pending') {
-                document.getElementById('pending-banner').classList.remove('hidden');
+                document.getElementById('pending-banner').style.display = '';
             } else if (mySub.status === 'declined') {
-                document.getElementById('decline-banner').classList.remove('hidden');
+                document.getElementById('decline-banner').style.display = '';
                 document.getElementById('decline-reason').textContent = mySub.declineReason || 'Tidak ada alasan.';
             } else if (mySub.status === 'approved') {
-                document.getElementById('approved-banner').classList.remove('hidden');
-                document.getElementById('bentuk-pokja-section').classList.add('hidden');
+                document.getElementById('approved-banner').style.display = '';
+                document.getElementById('bentuk-pokja-section').style.display = 'none';
             }
 
             // Change button text if already exists

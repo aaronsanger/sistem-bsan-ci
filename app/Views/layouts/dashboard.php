@@ -6,131 +6,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Dashboard' ?> - Sistem BSAN</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: ['class', '[data-theme="dark"]'],
-        }
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/datatables.net-dt@2.3.6/css/dataTables.dataTables.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/datatables.net@2.3.6/js/dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <link href="/assets/css/app.css" rel="stylesheet">
+    <link href="/assets/css/dashboard.css" rel="stylesheet">
     <script src="/assets/js/utils/statusConfig.js"></script>
     <script src="/assets/js/wilayah-data.js"></script>
-    <style>
-        .dropdown-menu { display: none; }
-        .dropdown-menu.show { display: block; }
-    </style>
     <?= $extra_head ?? '' ?>
 </head>
 
-<body class="min-h-screen bg-gray-50 dark:bg-[#0F0A0A]">
-    <div class="flex h-screen overflow-hidden">
+<body class="dashboard">
+    <div class="dashboard__wrapper">
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-[#0F0A0A] border-r border-gray-200 dark:border-[#3f4739] transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-200">
-            <div class="p-6 border-b border-gray-200 dark:border-[#3f4739]">
-                <div class="flex flex-col items-center text-center">
-                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Hitam.png" alt="Logo" id="logo-light" class="h-12 w-auto mb-3">
-                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Putih.png" alt="Logo" id="logo-dark" class="h-12 w-auto mb-3" style="display:none">
-                    <h2 class="font-bold text-gray-900 dark:text-white text-sm">Sistem BSAN</h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5" id="sidebar-role-label">Dashboard</p>
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar__brand">
+                <div class="sidebar__brand-inner">
+                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Hitam.png" alt="Logo" id="logo-light" class="sidebar__logo">
+                    <img src="/assets/icon/0 Logo Kemendikdasmen Puspeka Putih.png" alt="Logo" id="logo-dark" class="sidebar__logo" style="display:none">
+                    <h2 class="sidebar__title">Sistem BSAN</h2>
+                    <p class="sidebar__subtitle" id="sidebar-role-label">Dashboard</p>
                 </div>
             </div>
 
-            <nav class="p-4 space-y-1" id="sidebar-nav">
+            <nav class="sidebar__nav" id="sidebar-nav">
                 <!-- Populated by JS based on role -->
             </nav>
         </aside>
 
         <!-- Sidebar Overlay (mobile) -->
-        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 hidden lg:hidden" onclick="toggleSidebar()"></div>
+        <div id="sidebar-overlay" class="sidebar__overlay" onclick="toggleSidebar()"></div>
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
+        <div class="dashboard__main">
             <!-- Top Bar -->
-            <header class="bg-white dark:bg-[#0F0A0A] border-b border-gray-200 dark:border-[#3f4739] px-6 py-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739]">
-                            <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <header class="topbar">
+                <div class="topbar__inner">
+                    <div class="topbar__left">
+                        <button onclick="toggleSidebar()" class="topbar__toggle">
+                            <svg class="icon-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
-                        <h1 class="text-lg font-semibold text-gray-900 dark:text-white"><?= $pageTitle ?? 'Dashboard' ?></h1>
+                        <h1 class="topbar__title"><?= $pageTitle ?? 'Dashboard' ?></h1>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739] text-gray-600 dark:text-gray-300">
+                    <div class="topbar__right">
+                        <button id="theme-toggle" class="topbar__icon-btn">
                             <!-- Sun icon (shown in dark mode → click to go light) -->
-                            <svg id="theme-icon-sun" class="w-5 h-5" style="display:none" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/></svg>
+                            <svg id="theme-icon-sun" class="icon-md" style="display:none" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/></svg>
                             <!-- Moon icon (shown in light mode → click to go dark) -->
-                            <svg id="theme-icon-moon" class="w-5 h-5" style="display:none" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                            <svg id="theme-icon-moon" class="icon-md" style="display:none" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
                         </button>
                         <!-- Profile Dropdown -->
-                        <div class="relative">
-                            <button onclick="toggleProfileDropdown()" class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739] transition-colors" id="profile-btn">
-                                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold" id="user-avatar">A</div>
-                                <div class="hidden sm:block text-left">
-                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300" id="user-name">Admin Demo</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400" id="user-role-label">Admin Kementerian</p>
+                        <div class="profile-dropdown">
+                            <button onclick="toggleProfileDropdown()" class="profile-dropdown__trigger" id="profile-btn">
+                                <div class="profile-dropdown__avatar" id="user-avatar">A</div>
+                                <div class="profile-dropdown__info">
+                                    <p class="profile-dropdown__name" id="user-name">Admin Demo</p>
+                                    <p class="profile-dropdown__role" id="user-role-label">Admin Kementerian</p>
                                 </div>
-                                <svg class="w-4 h-4 text-gray-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <svg class="profile-dropdown__chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
-                            <div id="profile-dropdown" class="dropdown-menu absolute right-0 mt-2 w-72 bg-white dark:bg-[#1a1414] rounded-xl border border-gray-200 dark:border-[#3f4739] shadow-xl z-50">
+                            <div id="profile-dropdown" class="profile-dropdown__menu">
                                 <?php $sessionRole = session()->get('user_role') ?? 'admin'; ?>
                                 <?php if (in_array($sessionRole, ['admin', 'koordinator'])): ?>
                                 <!-- Admin/Koordinator: show role switcher -->
-                                <div class="p-3 border-b border-gray-100 dark:border-[#3f4739]">
-                                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Ganti Peran Demo</p>
-                                    <button onclick="switchRole('kementerian')" class="role-btn w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-3 mb-1" data-role="kementerian">
-                                        <span class="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 text-xs font-bold">K</span>
+                                <div class="profile-dropdown__section">
+                                    <p class="profile-dropdown__section-title">Ganti Peran Demo</p>
+                                    <button onclick="switchRole('kementerian')" class="role-btn" data-role="kementerian">
+                                        <span class="role-btn__avatar role-btn__avatar--red">K</span>
                                         <div>
-                                            <p class="font-medium text-gray-900 dark:text-white">Admin Kementerian Pusat</p>
-                                            <p class="text-xs text-gray-500 dark:text-gray-400">Approval & monitoring</p>
+                                            <p class="role-btn__title">Admin Kementerian Pusat</p>
+                                            <p class="role-btn__desc">Approval & monitoring</p>
                                         </div>
                                     </button>
-                                    <button onclick="switchRole('dinas_prov')" class="role-btn w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-3 mb-1" data-role="dinas_prov">
-                                        <span class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 text-xs font-bold">P</span>
+                                    <button onclick="switchRole('dinas_prov')" class="role-btn" data-role="dinas_prov">
+                                        <span class="role-btn__avatar role-btn__avatar--blue">P</span>
                                         <div>
-                                            <p class="font-medium text-gray-900 dark:text-white">Admin Dinas Provinsi</p>
-                                            <p class="text-xs text-gray-500 dark:text-gray-400">Kelola Pokja provinsi</p>
+                                            <p class="role-btn__title">Admin Dinas Provinsi</p>
+                                            <p class="role-btn__desc">Kelola Pokja provinsi</p>
                                         </div>
                                     </button>
-                                    <button onclick="switchRole('dinas_kab')" class="role-btn w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-3" data-role="dinas_kab">
-                                        <span class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 text-xs font-bold">D</span>
+                                    <button onclick="switchRole('dinas_kab')" class="role-btn" data-role="dinas_kab">
+                                        <span class="role-btn__avatar role-btn__avatar--green">D</span>
                                         <div>
-                                            <p class="font-medium text-gray-900 dark:text-white">Admin Dinas Kab/Kota</p>
-                                            <p class="text-xs text-gray-500 dark:text-gray-400">Kelola Pokja kabupaten/kota</p>
+                                            <p class="role-btn__title">Admin Dinas Kab/Kota</p>
+                                            <p class="role-btn__desc">Kelola Pokja kabupaten/kota</p>
                                         </div>
                                     </button>
                                 </div>
                                 <?php else: ?>
                                 <!-- Dinas roles: show locked role info -->
-                                <div class="p-3 border-b border-gray-100 dark:border-[#3f4739]">
-                                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Peran Anda</p>
-                                    <div class="flex items-center gap-3 px-3 py-2">
-                                        <span class="w-8 h-8 rounded-full <?= $sessionRole === 'dinas_prov' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'bg-green-100 dark:bg-green-900/30 text-green-600' ?> flex items-center justify-center text-xs font-bold"><?= $sessionRole === 'dinas_prov' ? 'P' : 'D' ?></span>
+                                <div class="profile-dropdown__section">
+                                    <p class="profile-dropdown__section-title">Peran Anda</p>
+                                    <div class="d-flex d-flex--gap-3" style="padding: 0.5rem 0.75rem;">
+                                        <span class="role-btn__avatar <?= $sessionRole === 'dinas_prov' ? 'role-btn__avatar--blue' : 'role-btn__avatar--green' ?>"><?= $sessionRole === 'dinas_prov' ? 'P' : 'D' ?></span>
                                         <div>
-                                            <p class="font-medium text-gray-900 dark:text-white text-sm"><?= session()->get('user_name') ?></p>
-                                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            <p class="role-btn__title" style="font-size:0.875rem"><?= session()->get('user_name') ?></p>
+                                            <p class="role-btn__desc">
                                                 <?= session()->get('wilayah_kabupaten') ?? session()->get('wilayah_provinsi') ?? '' ?>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                                 <?php endif; ?>
-                                <div class="p-2">
+                                <div class="profile-dropdown__section">
                                     <?php if (in_array($sessionRole, ['admin', 'koordinator'])): ?>
-                                    <button onclick="resetDemoData()" class="w-full text-left px-3 py-2 rounded-lg text-sm text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors flex items-center gap-2">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                    <button onclick="resetDemoData()" class="dropdown-action dropdown-action--warning">
+                                        <svg class="dropdown-action__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                         Reset Data Demo
                                     </button>
                                     <?php endif; ?>
-                                    <a href="/auth/logout" class="w-full text-left px-3 py-2 rounded-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-2">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                    <a href="/auth/logout" class="dropdown-action dropdown-action--danger">
+                                        <svg class="dropdown-action__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                         Keluar
                                     </a>
                                 </div>
@@ -141,49 +132,47 @@
             </header>
 
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="dashboard__content">
                 <?= $this->renderSection('content') ?>
             </main>
         </div>
     </div>
 
     <!-- Wilayah Selection Modal -->
-    <div id="wilayah-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/50" onclick="closeWilayahModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="bg-white dark:bg-[#1a1414] rounded-2xl border border-gray-200 dark:border-[#3f4739] shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden">
-                <div class="p-5 border-b border-gray-200 dark:border-[#3f4739]">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white" id="wilayah-modal-title">Pilih Wilayah</h3>
-                        <button onclick="closeWilayahModal()" class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739] text-gray-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                        </button>
-                    </div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="wilayah-modal-desc">Pilih provinsi untuk melanjutkan</p>
+    <div id="wilayah-modal" class="modal">
+        <div class="modal__overlay" onclick="closeWilayahModal()"></div>
+        <div class="modal__container">
+            <div class="modal__header">
+                <div>
+                    <h3 class="modal__title" id="wilayah-modal-title">Pilih Wilayah</h3>
+                    <p class="modal__desc" id="wilayah-modal-desc">Pilih provinsi untuk melanjutkan</p>
                 </div>
-                <div class="p-5 space-y-4 overflow-y-auto" style="max-height: 60vh;">
-                    <!-- Search -->
-                    <div>
-                        <input type="text" id="wilayah-search" placeholder="Cari wilayah..." class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#0F0A0A] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" oninput="filterWilayahList()">
+                <button onclick="closeWilayahModal()" class="modal__close">
+                    <svg class="icon-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="modal__body">
+                <!-- Search -->
+                <div style="margin-bottom: 1rem;">
+                    <input type="text" id="wilayah-search" placeholder="Cari wilayah..." class="form-input" oninput="filterWilayahList()">
+                </div>
+                <!-- Provinsi Step -->
+                <div id="wilayah-step-prov">
+                    <label class="form-label">Provinsi <span class="form-label__required">*</span></label>
+                    <div id="wilayah-prov-list" class="space-y-1"></div>
+                </div>
+                <!-- Kabupaten Step (hidden initially) -->
+                <div id="wilayah-step-kab" style="display:none">
+                    <button onclick="backToProvStep()" class="link-primary d-flex d-flex--gap-1" style="margin-bottom:0.75rem">
+                        <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        Kembali ke Provinsi
+                    </button>
+                    <div style="margin-bottom:0.5rem">
+                        <span style="font-size:0.75rem;font-weight:500;color:var(--dash-text-muted)">Provinsi:</span>
+                        <span id="selected-prov-label" style="font-size:0.875rem;font-weight:600;color:var(--dash-text);margin-left:0.25rem"></span>
                     </div>
-                    <!-- Provinsi Step -->
-                    <div id="wilayah-step-prov">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Provinsi <span class="text-red-500">*</span></label>
-                        <div id="wilayah-prov-list" class="space-y-1"></div>
-                    </div>
-                    <!-- Kabupaten Step (hidden initially) -->
-                    <div id="wilayah-step-kab" class="hidden">
-                        <button onclick="backToProvStep()" class="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline mb-3">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                            Kembali ke Provinsi
-                        </button>
-                        <div class="mb-2">
-                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Provinsi:</span>
-                            <span id="selected-prov-label" class="text-sm font-semibold text-gray-900 dark:text-white ml-1"></span>
-                        </div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Kabupaten/Kota <span class="text-red-500">*</span></label>
-                        <div id="wilayah-kab-list" class="space-y-1"></div>
-                    </div>
+                    <label class="form-label">Kabupaten/Kota <span class="form-label__required">*</span></label>
+                    <div id="wilayah-kab-list" class="space-y-1"></div>
                 </div>
             </div>
         </div>
@@ -241,19 +230,19 @@
             kementerian: {
                 label: 'Admin Kementerian Pusat',
                 avatar: 'K',
-                color: 'bg-red-600',
+                colorClass: 'role-btn__avatar--red',
                 sidebarLabel: 'Kementerian Pusat'
             },
             dinas_prov: {
                 get label() { const w = localStorage.getItem(WILAYAH_PROV_KEY); return w ? `Admin Dinas Prov. ${w}` : 'Admin Dinas Provinsi'; },
                 avatar: 'P',
-                color: 'bg-blue-600',
+                colorClass: 'role-btn__avatar--blue',
                 get sidebarLabel() { const w = localStorage.getItem(WILAYAH_PROV_KEY); return w ? `Dinas Prov. ${w}` : 'Dinas Provinsi'; }
             },
             dinas_kab: {
                 get label() { const w = localStorage.getItem(WILAYAH_KAB_KEY); return w ? `Admin Dinas ${w}` : 'Admin Dinas Kab/Kota'; },
                 avatar: 'D',
-                color: 'bg-green-600',
+                colorClass: 'role-btn__avatar--green',
                 get sidebarLabel() { const w = localStorage.getItem(WILAYAH_KAB_KEY); return w ? `Dinas ${w}` : 'Dinas Kab/Kota'; }
             }
         };
@@ -300,16 +289,16 @@
                 desc.textContent = 'Pilih provinsi terlebih dahulu, lalu pilih kabupaten/kota';
             }
 
-            stepProv.classList.remove('hidden');
-            stepKab.classList.add('hidden');
+            stepProv.style.display = '';
+            stepKab.style.display = 'none';
 
             renderProvList();
-            modal.classList.remove('hidden');
+            modal.classList.add('modal--open');
             search.focus();
         }
 
         function closeWilayahModal() {
-            document.getElementById('wilayah-modal').classList.add('hidden');
+            document.getElementById('wilayah-modal').classList.remove('modal--open');
             pendingRole = null;
         }
 
@@ -319,15 +308,15 @@
             const filtered = filter ? provinces.filter(p => p.toLowerCase().includes(filter.toLowerCase())) : provinces;
 
             if (filtered.length === 0) {
-                list.innerHTML = '<p class="text-sm text-gray-400 py-3 text-center">Tidak ditemukan</p>';
+                list.innerHTML = '<p style="font-size:0.875rem;color:var(--dash-text-muted);padding:0.75rem;text-align:center">Tidak ditemukan</p>';
                 return;
             }
 
             list.innerHTML = filtered.map(p => `
                 <button onclick="selectProvinsi('${p.replace(/'/g, "\\'")}')"
-                    class="w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-between group border border-transparent hover:border-blue-200 dark:hover:border-blue-800">
-                    <span class="text-gray-700 dark:text-gray-300 group-hover:text-blue-700 dark:group-hover:text-blue-400">${p}</span>
-                    <svg class="w-4 h-4 text-gray-300 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    class="sidebar__link" style="justify-content:space-between">
+                    <span>${p}</span>
+                    <svg class="icon-sm" style="color:var(--dash-text-light)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </button>
             `).join('');
         }
@@ -347,8 +336,8 @@
                 // Dinas Kab/Kota - show kabupaten list
                 localStorage.setItem(WILAYAH_PROV_KEY, prov);
                 document.getElementById('selected-prov-label').textContent = prov;
-                document.getElementById('wilayah-step-prov').classList.add('hidden');
-                document.getElementById('wilayah-step-kab').classList.remove('hidden');
+                document.getElementById('wilayah-step-prov').style.display = 'none';
+                document.getElementById('wilayah-step-kab').style.display = '';
                 document.getElementById('wilayah-search').value = '';
                 document.getElementById('wilayah-modal-title').textContent = 'Pilih Kabupaten/Kota';
                 renderKabList(prov);
@@ -361,15 +350,15 @@
             const filtered = filter ? kabList.filter(k => k.toLowerCase().includes(filter.toLowerCase())) : kabList;
 
             if (filtered.length === 0) {
-                list.innerHTML = '<p class="text-sm text-gray-400 py-3 text-center">Tidak ditemukan</p>';
+                list.innerHTML = '<p style="font-size:0.875rem;color:var(--dash-text-muted);padding:0.75rem;text-align:center">Tidak ditemukan</p>';
                 return;
             }
 
             list.innerHTML = filtered.map(k => `
                 <button onclick="selectKabupaten('${k.replace(/'/g, "\\'")}')"
-                    class="w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors flex items-center justify-between group border border-transparent hover:border-green-200 dark:hover:border-green-800">
-                    <span class="text-gray-700 dark:text-gray-300 group-hover:text-green-700 dark:group-hover:text-green-400">${k}</span>
-                    <svg class="w-4 h-4 text-gray-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    class="sidebar__link" style="justify-content:space-between">
+                    <span>${k}</span>
+                    <svg class="icon-sm" style="color:var(--dash-text-light)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 </button>
             `).join('');
         }
@@ -388,18 +377,15 @@
             results.sort((a, b) => a.kab.localeCompare(b.kab));
 
             if (results.length === 0) {
-                list.innerHTML = '<p class="text-sm text-gray-400 py-3 text-center">Tidak ditemukan</p>';
+                list.innerHTML = '<p style="font-size:0.875rem;color:var(--dash-text-muted);padding:0.75rem;text-align:center">Tidak ditemukan</p>';
                 return;
             }
 
             list.innerHTML = results.slice(0, 50).map(r => `
-                <button onclick="selectKabFromSearch('${r.prov.replace(/'/g, "\\\'")}', '${r.kab.replace(/'/g, "\\\'")}')" 
-                    class="w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors group border border-transparent hover:border-green-200 dark:hover:border-green-800">
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-700 dark:text-gray-300 group-hover:text-green-700 dark:group-hover:text-green-400">${r.kab}</span>
-                        <svg class="w-4 h-4 text-gray-300 group-hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    </div>
-                    <span class="text-xs text-gray-400">${r.prov}</span>
+                <button onclick="selectKabFromSearch('${r.prov.replace(/'/g, "\\'")}', '${r.kab.replace(/'/g, "\\'")}')" 
+                    class="sidebar__link" style="flex-direction:column;align-items:flex-start">
+                    <span>${r.kab}</span>
+                    <span style="font-size:0.75rem;color:var(--dash-text-muted)">${r.prov}</span>
                 </button>
             `).join('');
         }
@@ -420,8 +406,8 @@
         }
 
         function backToProvStep() {
-            document.getElementById('wilayah-step-prov').classList.remove('hidden');
-            document.getElementById('wilayah-step-kab').classList.add('hidden');
+            document.getElementById('wilayah-step-prov').style.display = '';
+            document.getElementById('wilayah-step-kab').style.display = 'none';
             document.getElementById('wilayah-search').value = '';
             document.getElementById('wilayah-modal-title').textContent = 'Pilih Wilayah';
             renderProvList();
@@ -434,29 +420,24 @@
             const stepKab = document.getElementById('wilayah-step-kab');
             const stepProv = document.getElementById('wilayah-step-prov');
 
-            if (mode === 'kab' && stepProv.classList.contains('hidden') === false && search.length >= 2) {
-                // In kab mode, still on prov step but user is typing — search kabupaten across all provinces
-                stepProv.classList.add('hidden');
-                stepKab.classList.remove('hidden');
+            if (mode === 'kab' && stepProv.style.display !== 'none' && search.length >= 2) {
+                stepProv.style.display = 'none';
+                stepKab.style.display = '';
                 document.getElementById('wilayah-modal-title').textContent = 'Hasil Pencarian';
                 document.getElementById('selected-prov-label').textContent = 'Semua Provinsi';
                 searchKabAcrossProvinces(search);
-            } else if (stepKab.classList.contains('hidden')) {
-                // Filtering provinces
+            } else if (stepKab.style.display === 'none') {
                 renderProvList(search);
             } else if (mode === 'kab' && document.getElementById('selected-prov-label').textContent === 'Semua Provinsi') {
-                // We were searching across all provinces
                 if (search.length < 2) {
-                    // Go back to prov list
-                    stepProv.classList.remove('hidden');
-                    stepKab.classList.add('hidden');
+                    stepProv.style.display = '';
+                    stepKab.style.display = 'none';
                     document.getElementById('wilayah-modal-title').textContent = 'Pilih Wilayah';
                     renderProvList(search);
                 } else {
                     searchKabAcrossProvinces(search);
                 }
             } else {
-                // Filtering kabupaten within selected province
                 const prov = localStorage.getItem(WILAYAH_PROV_KEY);
                 renderKabList(prov, search);
             }
@@ -485,8 +466,8 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
+            sidebar.classList.toggle('sidebar--open');
+            overlay.style.display = sidebar.classList.contains('sidebar--open') ? 'block' : 'none';
         }
 
         // ---- Sidebar Builder ----
@@ -497,7 +478,10 @@
 
             // Update header
             document.getElementById('user-avatar').textContent = cfg.avatar;
-            document.getElementById('user-avatar').className = `w-8 h-8 rounded-full ${cfg.color} flex items-center justify-center text-white text-sm font-bold`;
+            document.getElementById('user-avatar').className = `profile-dropdown__avatar ${cfg.colorClass}`.replace('role-btn__avatar', 'profile-dropdown__avatar');
+            // Apply avatar color via inline style based on role
+            const avatarColors = { 'role-btn__avatar--red': '#dc2626', 'role-btn__avatar--blue': '#2563eb', 'role-btn__avatar--green': '#16a34a' };
+            document.getElementById('user-avatar').style.background = avatarColors[cfg.colorClass] || '#2563eb';
             document.getElementById('user-role-label').textContent = cfg.label;
             document.getElementById('sidebar-role-label').textContent = cfg.sidebarLabel;
 
@@ -505,7 +489,9 @@
             document.querySelectorAll('.role-btn').forEach(btn => {
                 const r = btn.getAttribute('data-role');
                 if (r === role) {
-                    btn.classList.add('bg-blue-50', 'dark:bg-blue-900/20', 'ring-1', 'ring-blue-300', 'dark:ring-blue-700');
+                    btn.style.background = 'var(--dash-primary-light)';
+                    btn.style.outline = '1px solid var(--dash-primary-text)';
+                    btn.style.outlineOffset = '-1px';
                 }
             });
 
@@ -531,19 +517,17 @@
                 const isActive = (item.url === '/dashboard')
                     ? (currentPath === '/dashboard' || currentPath === '/dashboard/')
                     : currentPath.startsWith(item.url);
-                const cls = isActive
-                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#3f4739]';
-                html += `<a href="${item.url}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${cls}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${item.icon}" /></svg>
+                const cls = isActive ? 'sidebar__link sidebar__link--active' : 'sidebar__link';
+                html += `<a href="${item.url}" class="${cls}">
+                    <svg class="sidebar__link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${item.icon}" /></svg>
                     ${item.label}
                 </a>`;
             });
 
             // Logout
-            html += `<div class="pt-4 border-t border-gray-200 dark:border-[#3f4739]">
-                <a href="/auth/logout" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+            html += `<div style="padding-top:1rem;margin-top:1rem;border-top:1px solid var(--dash-border)">
+                <a href="/auth/logout" class="sidebar__link dropdown-action--danger">
+                    <svg class="sidebar__link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                     Keluar
                 </a>
             </div>`;

@@ -4,62 +4,62 @@
 
 <div class="space-y-6">
     <!-- Pokja Not Approved Banner (injected by JS) -->
-    <div id="pokja-gate-banner" class="hidden bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-5">
-        <div class="flex items-start gap-3">
-            <svg class="w-6 h-6 text-yellow-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+    <div id="pokja-gate-banner" style="display:none" class="dash-alert dash-alert--warning">
+        <div style="display:flex;align-items:flex-start;gap:0.75rem">
+            <svg style="width:1.5rem;height:1.5rem;color:#d97706;flex-shrink:0;margin-top:2px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
             <div>
-                <p class="font-semibold text-yellow-800 dark:text-yellow-300 text-base">Pokja Belum Disetujui</p>
-                <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Fitur Pelaporan hanya aktif setelah data Pokja disetujui oleh Admin Pusat. Silakan lengkapi dan ajukan data Pokja terlebih dahulu.</p>
-                <a href="/dashboard/pokja" class="inline-flex items-center gap-2 mt-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <p style="font-weight:600;font-size:1rem">Pokja Belum Disetujui</p>
+                <p style="font-size:0.875rem;margin-top:0.25rem">Fitur Pelaporan hanya aktif setelah data Pokja disetujui oleh Admin Pusat. Silakan lengkapi dan ajukan data Pokja terlebih dahulu.</p>
+                <a href="/dashboard/pokja" class="btn-dash btn-dash--warning" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:0.75rem;font-size:0.875rem">
+                    <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     Isi Data Pokja
                 </a>
             </div>
         </div>
     </div>
 
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="d-flex d-flex--between d-flex--wrap d-flex--gap-4" style="align-items:center">
         <div>
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Pelaporan Insidental</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Buat dan kelola laporan kejadian insidental</p>
+            <h2 class="dash-card__title" style="font-size:1.25rem">Pelaporan Insidental</h2>
+            <p class="dash-card__subtitle">Buat dan kelola laporan kejadian insidental</p>
         </div>
-        <button id="btn-buat-laporan" onclick="openForm()" class="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+        <button id="btn-buat-laporan" onclick="openForm()" class="btn-dash btn-dash--primary" style="display:inline-flex;align-items:center;gap:0.5rem">
+            <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Buat Laporan
         </button>
     </div>
 
     <!-- Records Table -->
-    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm" id="records-table">
+    <div class="dash-card">
+        <div class="dash-table__wrapper">
+            <table class="dash-table" id="records-table">
                 <thead>
-                    <tr class="bg-gray-50 dark:bg-[#1a1414]">
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Nama Sekolah</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Kategori</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Tanggal Kejadian</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Status</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Aksi</th>
+                    <tr>
+                        <th>Nama Sekolah</th>
+                        <th>Kategori</th>
+                        <th>Tanggal Kejadian</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="records-tbody"></tbody>
             </table>
         </div>
-        <div id="records-empty" class="text-center py-8 text-gray-500 dark:text-gray-400 hidden">
+        <div id="records-empty" style="display:none" class="dash-table__empty">
             Belum ada laporan insidental.
         </div>
     </div>
 </div>
 
 <!-- Form Modal -->
-<div id="form-modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="closeForm()"></div>
-    <div class="relative flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-white dark:bg-[#0F0A0A] px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center justify-between z-10">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white" id="form-title">Buat Laporan Insidental</h3>
-                <button onclick="closeForm()" class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739]">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+<div id="form-modal" class="modal" style="display:none">
+    <div class="modal__backdrop" onclick="closeForm()"></div>
+    <div class="modal__container" style="max-width:42rem">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 class="modal__title" id="form-title">Buat Laporan Insidental</h3>
+                <button onclick="closeForm()" class="modal__close">
+                    <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
             <div class="p-6 space-y-5">
@@ -67,43 +67,43 @@
 
                 <!-- 1. Nama Sekolah -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Sekolah <span class="text-red-500">*</span></label>
-                    <input type="text" id="field-sekolah" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama sekolah">
+                    <label class="form-label">Nama Sekolah <span style="color:#ef4444">*</span></label>
+                    <input type="text" id="field-sekolah" class="form-input" placeholder="Nama sekolah">
                 </div>
 
                 <!-- 2. Unsur yang Terlibat (Matriks L/P) -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Unsur yang Terlibat <span class="text-red-500">*</span></label>
-                    <p class="text-xs text-gray-400 mb-2">Isi jumlah Laki-laki (L) dan Perempuan (P) per unsur</p>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm border border-gray-200 dark:border-[#3f4739] rounded-lg overflow-hidden">
+                    <label class="form-label">Unsur yang Terlibat <span style="color:#ef4444">*</span></label>
+                    <p style="font-size:0.75rem;color:var(--dash-text-muted);margin-bottom:0.5rem">Isi jumlah Laki-laki (L) dan Perempuan (P) per unsur</p>
+                    <div class="dash-table__wrapper">
+                        <table class="dash-table" style="border:1px solid var(--dash-border);border-radius:0.5rem;overflow:hidden">
                             <thead>
-                                <tr class="bg-gray-50 dark:bg-[#1a1414]">
-                                    <th class="px-3 py-2 text-left text-gray-600 dark:text-gray-400">Unsur</th>
-                                    <th class="px-3 py-2 text-center text-blue-600 w-20">L</th>
-                                    <th class="px-3 py-2 text-center text-pink-600 w-20">P</th>
+                                <tr>
+                                    <th>Unsur</th>
+                                    <th style="text-align:center;color:#2563eb;width:5rem">L</th>
+                                    <th style="text-align:center;color:#db2777;width:5rem">P</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-t dark:border-[#3f4739]">
-                                    <td class="px-3 py-2 text-gray-700 dark:text-gray-300">Peserta Didik</td>
-                                    <td class="px-3 py-1"><input type="number" min="0" value="0" class="unsur-l w-full text-center px-2 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm" data-unsur="peserta_didik"></td>
-                                    <td class="px-3 py-1"><input type="number" min="0" value="0" class="unsur-p w-full text-center px-2 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm" data-unsur="peserta_didik"></td>
+                                <tr>
+                                    <td>Peserta Didik</td>
+                                    <td style="padding:0.25rem 0.75rem"><input type="number" min="0" value="0" class="unsur-l form-input" style="text-align:center;padding:0.375rem 0.5rem" data-unsur="peserta_didik"></td>
+                                    <td style="padding:0.25rem 0.75rem"><input type="number" min="0" value="0" class="unsur-p form-input" style="text-align:center;padding:0.375rem 0.5rem" data-unsur="peserta_didik"></td>
                                 </tr>
-                                <tr class="border-t dark:border-[#3f4739]">
-                                    <td class="px-3 py-2 text-gray-700 dark:text-gray-300">Tenaga Pendidik</td>
-                                    <td class="px-3 py-1"><input type="number" min="0" value="0" class="unsur-l w-full text-center px-2 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm" data-unsur="tenaga_pendidik"></td>
-                                    <td class="px-3 py-1"><input type="number" min="0" value="0" class="unsur-p w-full text-center px-2 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm" data-unsur="tenaga_pendidik"></td>
+                                <tr>
+                                    <td>Tenaga Pendidik</td>
+                                    <td style="padding:0.25rem 0.75rem"><input type="number" min="0" value="0" class="unsur-l form-input" style="text-align:center;padding:0.375rem 0.5rem" data-unsur="tenaga_pendidik"></td>
+                                    <td style="padding:0.25rem 0.75rem"><input type="number" min="0" value="0" class="unsur-p form-input" style="text-align:center;padding:0.375rem 0.5rem" data-unsur="tenaga_pendidik"></td>
                                 </tr>
-                                <tr class="border-t dark:border-[#3f4739]">
-                                    <td class="px-3 py-2 text-gray-700 dark:text-gray-300">Tenaga Kependidikan</td>
-                                    <td class="px-3 py-1"><input type="number" min="0" value="0" class="unsur-l w-full text-center px-2 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm" data-unsur="tenaga_kependidikan"></td>
-                                    <td class="px-3 py-1"><input type="number" min="0" value="0" class="unsur-p w-full text-center px-2 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm" data-unsur="tenaga_kependidikan"></td>
+                                <tr>
+                                    <td>Tenaga Kependidikan</td>
+                                    <td style="padding:0.25rem 0.75rem"><input type="number" min="0" value="0" class="unsur-l form-input" style="text-align:center;padding:0.375rem 0.5rem" data-unsur="tenaga_kependidikan"></td>
+                                    <td style="padding:0.25rem 0.75rem"><input type="number" min="0" value="0" class="unsur-p form-input" style="text-align:center;padding:0.375rem 0.5rem" data-unsur="tenaga_kependidikan"></td>
                                 </tr>
-                                <tr class="border-t dark:border-[#3f4739]">
-                                    <td class="px-3 py-2 text-gray-700 dark:text-gray-300">Pihak Luar</td>
-                                    <td class="px-3 py-1"><input type="number" min="0" value="0" class="unsur-l w-full text-center px-2 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm" data-unsur="pihak_luar"></td>
-                                    <td class="px-3 py-1"><input type="number" min="0" value="0" class="unsur-p w-full text-center px-2 py-1.5 border border-gray-300 dark:border-[#3f4739] rounded bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm" data-unsur="pihak_luar"></td>
+                                <tr>
+                                    <td>Pihak Luar</td>
+                                    <td style="padding:0.25rem 0.75rem"><input type="number" min="0" value="0" class="unsur-l form-input" style="text-align:center;padding:0.375rem 0.5rem" data-unsur="pihak_luar"></td>
+                                    <td style="padding:0.25rem 0.75rem"><input type="number" min="0" value="0" class="unsur-p form-input" style="text-align:center;padding:0.375rem 0.5rem" data-unsur="pihak_luar"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -112,14 +112,14 @@
 
                 <!-- 3. Kapan Terjadi -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kapan Terjadi <span class="text-red-500">*</span></label>
-                    <input type="date" id="field-tanggal" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="form-label">Kapan Terjadi <span style="color:#ef4444">*</span></label>
+                    <input type="date" id="field-tanggal" class="form-input">
                 </div>
 
                 <!-- 4. Kategori Pelanggaran -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kategori Pelanggaran <span class="text-red-500">*</span></label>
-                    <select id="field-kategori" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="form-label">Kategori Pelanggaran <span style="color:#ef4444">*</span></label>
+                    <select id="field-kategori" class="form-select">
                         <option value="">Pilih kategori</option>
                         <option value="Kekerasan Fisik">Kekerasan Fisik</option>
                         <option value="Kekerasan Psikis">Kekerasan Psikis</option>
@@ -136,21 +136,21 @@
 
                 <!-- 5. Dokumentasi (opsional) -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dokumentasi <span class="text-gray-400">(opsional)</span></label>
-                    <input type="file" id="field-dokumentasi" accept="image/*,.pdf" class="w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900/30 dark:file:text-blue-300 hover:file:bg-blue-100">
-                    <p class="text-xs text-gray-400 mt-1">Foto atau PDF, maksimal 5MB</p>
+                    <label class="form-label">Dokumentasi <span style="color:var(--dash-text-muted)">(opsional)</span></label>
+                    <input type="file" id="field-dokumentasi" accept="image/*,.pdf" class="form-input" style="padding:0.5rem">
+                    <p style="font-size:0.75rem;color:var(--dash-text-muted);margin-top:0.25rem">Foto atau PDF, maksimal 5MB</p>
                 </div>
 
                 <!-- 6. Rekomendasi -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rekomendasi <span class="text-red-500">*</span></label>
-                    <textarea id="field-rekomendasi" rows="3" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder="Rekomendasi tindak lanjut..."></textarea>
+                    <label class="form-label">Rekomendasi <span style="color:#ef4444">*</span></label>
+                    <textarea id="field-rekomendasi" rows="3" class="form-input" style="resize:none" placeholder="Rekomendasi tindak lanjut..."></textarea>
                 </div>
 
                 <!-- 7. Status -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status <span class="text-red-500">*</span></label>
-                    <select id="field-status" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="form-label">Status <span style="color:#ef4444">*</span></label>
+                    <select id="field-status" class="form-select">
                         <option value="">Pilih status</option>
                         <option value="Selesai">Selesai</option>
                         <option value="Dihentikan">Dihentikan</option>
@@ -159,22 +159,22 @@
                 </div>
             </div>
 
-            <div class="px-6 pb-6 flex gap-3">
-                <button onclick="closeForm()" class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1414] transition-colors font-medium">Batal</button>
-                <button onclick="saveRecord()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Simpan</button>
+            <div style="padding:0 1.5rem 1.5rem;display:flex;gap:0.75rem">
+                <button onclick="closeForm()" class="btn-dash btn-dash--outline" style="flex:1">Batal</button>
+                <button onclick="saveRecord()" class="btn-dash btn-dash--primary" style="flex:1">Simpan</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Detail Modal -->
-<div id="detail-modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="closeDetail()"></div>
-    <div class="relative flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-white dark:bg-[#0F0A0A] px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center justify-between">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail Laporan</h3>
-                <button onclick="closeDetail()" class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739]"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+<div id="detail-modal" class="modal" style="display:none">
+    <div class="modal__backdrop" onclick="closeDetail()"></div>
+    <div class="modal__container" style="max-width:32rem">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 class="modal__title">Detail Laporan</h3>
+                <button onclick="closeDetail()" class="modal__close"><svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div id="detail-content" class="p-6 space-y-4"></div>
         </div>
@@ -210,8 +210,8 @@ function saveRecords(d) { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); 
 // Apply feature gating on page load
 function applyFeatureGate() {
     if (!pokjaApproved) {
-        document.getElementById('pokja-gate-banner').classList.remove('hidden');
-        document.getElementById('btn-buat-laporan').classList.add('hidden');
+        document.getElementById('pokja-gate-banner').style.display = '';
+        document.getElementById('btn-buat-laporan').style.display = 'none';
     }
 }
 
@@ -245,10 +245,10 @@ function openForm(editIdx) {
         document.querySelectorAll('.unsur-l, .unsur-p').forEach(el => el.value = 0);
     }
 
-    document.getElementById('form-modal').classList.remove('hidden');
+    document.getElementById('form-modal').style.display = '';
 }
 
-function closeForm() { document.getElementById('form-modal').classList.add('hidden'); }
+function closeForm() { document.getElementById('form-modal').style.display = 'none'; }
 
 function gatherUnsur() {
     const unsurs = ['peserta_didik', 'tenaga_pendidik', 'tenaga_kependidikan', 'pihak_luar'];
@@ -308,10 +308,10 @@ function renderRecords() {
 
     if (records.length === 0) {
         tbody.innerHTML = '';
-        empty.classList.remove('hidden');
+        empty.style.display = '';
         return;
     }
-    empty.classList.add('hidden');
+    empty.style.display = 'none';
 
     const statusColors = {
         'Selesai': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
@@ -354,10 +354,10 @@ function showDetail(idx) {
         <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Rekomendasi</span><p class="text-gray-900 dark:text-white">${r.rekomendasi}</p></div>
         <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</span><p class="text-gray-900 dark:text-white font-semibold">${r.status}</p></div>
     `;
-    document.getElementById('detail-modal').classList.remove('hidden');
+    document.getElementById('detail-modal').style.display = '';
 }
 
-function closeDetail() { document.getElementById('detail-modal').classList.add('hidden'); }
+function closeDetail() { document.getElementById('detail-modal').style.display = 'none'; }
 
 function deleteRecord(idx) {
     if (!confirm('Hapus laporan ini?')) return;

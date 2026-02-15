@@ -7,21 +7,21 @@
 </div>
 
 <!-- Add/Edit Entry Modal -->
-<div id="entry-modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="closeEntryModal()"></div>
-    <div class="relative flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-white dark:bg-[#0F0A0A] px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center justify-between z-10">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white" id="entry-modal-title">Tambah Sumber Rujukan</h3>
-                <button onclick="closeEntryModal()" class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739]"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+<div id="entry-modal" class="modal" style="display:none">
+    <div class="modal__backdrop" onclick="closeEntryModal()"></div>
+    <div class="modal__container" style="max-width:42rem">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 class="modal__title" id="entry-modal-title">Tambah Sumber Rujukan</h3>
+                <button onclick="closeEntryModal()" class="modal__close"><svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="p-6 space-y-5">
                 <input type="hidden" id="entry-edit-idx" value="-1">
 
                 <!-- Kategori Bentuk Dukungan -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kategori Bentuk Dukungan <span class="text-red-500">*</span></label>
-                    <select id="entry-kategori" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="form-label">Kategori Bentuk Dukungan <span style="color:#ef4444">*</span></label>
+                    <select id="entry-kategori" class="form-select">
                         <option value="">Pilih kategori</option>
                         <option value="Layanan Kesehatan">Layanan Kesehatan</option>
                         <option value="Layanan Konseling/Psikologi">Layanan Konseling/Psikologi</option>
@@ -38,22 +38,22 @@
 
                 <!-- Asal K/L atau Perangkat Daerah -->
                 <div id="asal-group">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Asal Kementerian/Lembaga <span class="text-red-500">*</span></label>
-                    <select id="entry-asal" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="form-label">Asal Kementerian/Lembaga <span style="color:#ef4444">*</span></label>
+                    <select id="entry-asal" class="form-select">
                         <option value="">Pilih</option>
                     </select>
                 </div>
 
                 <!-- Nama Instansi -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Instansi <span class="text-red-500">*</span></label>
-                    <input type="text" id="entry-nama" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama instansi/lembaga">
+                    <label class="form-label">Nama Instansi <span style="color:#ef4444">*</span></label>
+                    <input type="text" id="entry-nama" class="form-input" placeholder="Nama instansi/lembaga">
                 </div>
 
                 <!-- Penyedia Layanan -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Penyedia Layanan <span class="text-red-500">*</span></label>
-                    <select id="entry-penyedia" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="form-label">Penyedia Layanan <span style="color:#ef4444">*</span></label>
+                    <select id="entry-penyedia" class="form-select">
                         <option value="">Pilih</option>
                         <option value="Pemerintah Pusat">Pemerintah Pusat</option>
                         <option value="Pemerintah Daerah">Pemerintah Daerah</option>
@@ -62,72 +62,72 @@
                     </select>
                 </div>
 
-                <hr class="dark:border-[#3f4739]">
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Alamat</h4>
+                <hr style="border-color:var(--dash-border)">
+                <h4 class="form-label" style="font-weight:600">Alamat</h4>
 
                 <!-- Alamat Lengkap -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div class="sm:col-span-2">
-                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Nama Jalan & Nomor</label>
-                        <input type="text" id="entry-jalan" class="w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Jl. Contoh No. 1">
+                <div class="dash-grid--2" style="gap:0.75rem">
+                    <div style="grid-column:span 2">
+                        <label class="form-label" style="font-size:0.75rem">Nama Jalan & Nomor</label>
+                        <input type="text" id="entry-jalan" class="form-input" placeholder="Jl. Contoh No. 1">
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Kelurahan</label>
-                        <input type="text" id="entry-kelurahan" class="w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Kelurahan">
+                        <label class="form-label" style="font-size:0.75rem">Kelurahan</label>
+                        <input type="text" id="entry-kelurahan" class="form-input" placeholder="Kelurahan">
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Kecamatan</label>
-                        <input type="text" id="entry-kecamatan" class="w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Kecamatan">
+                        <label class="form-label" style="font-size:0.75rem">Kecamatan</label>
+                        <input type="text" id="entry-kecamatan" class="form-input" placeholder="Kecamatan">
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Kode Pos</label>
-                        <input type="text" id="entry-kodepos" class="w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Kode pos">
+                        <label class="form-label" style="font-size:0.75rem">Kode Pos</label>
+                        <input type="text" id="entry-kodepos" class="form-input" placeholder="Kode pos">
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Tautan Google Maps <span class="text-gray-400">(opsional)</span></label>
-                        <input type="url" id="entry-gmaps" class="w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="https://maps.google.com/...">
+                        <label class="form-label" style="font-size:0.75rem">Tautan Google Maps <span style="color:var(--dash-text-muted)">(opsional)</span></label>
+                        <input type="url" id="entry-gmaps" class="form-input" placeholder="https://maps.google.com/...">
                     </div>
                 </div>
 
-                <hr class="dark:border-[#3f4739]">
-                <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Kontak</h4>
+                <hr style="border-color:var(--dash-border)">
+                <h4 class="form-label" style="font-weight:600">Kontak</h4>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="dash-grid--2" style="gap:0.75rem">
                     <div>
-                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Call Center (Publik)</label>
-                        <input type="tel" id="entry-callcenter" class="w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Diakses publik">
+                        <label class="form-label" style="font-size:0.75rem">No. Call Center (Publik)</label>
+                        <input type="tel" id="entry-callcenter" class="form-input" placeholder="Diakses publik">
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Pribadi</label>
-                        <input type="tel" id="entry-nopribadi" class="w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="No. HP pribadi">
+                        <label class="form-label" style="font-size:0.75rem">No. Pribadi</label>
+                        <input type="tel" id="entry-nopribadi" class="form-input" placeholder="No. HP pribadi">
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">No. Call Center Pokja</label>
-                        <input type="tel" id="entry-callcenterpokja" class="w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nomor khusus Pokja">
+                        <label class="form-label" style="font-size:0.75rem">No. Call Center Pokja</label>
+                        <input type="tel" id="entry-callcenterpokja" class="form-input" placeholder="Nomor khusus Pokja">
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Website <span class="text-gray-400">(opsional)</span></label>
-                        <input type="url" id="entry-website" class="w-full px-3 py-2 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="https://...">
+                        <label class="form-label" style="font-size:0.75rem">Website <span style="color:var(--dash-text-muted)">(opsional)</span></label>
+                        <input type="url" id="entry-website" class="form-input" placeholder="https://...">
                     </div>
                 </div>
             </div>
 
-            <div class="px-6 pb-6 flex gap-3">
-                <button onclick="closeEntryModal()" class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1a1414] transition-colors font-medium">Batal</button>
-                <button onclick="saveEntry()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors">Simpan</button>
+            <div style="padding:0 1.5rem 1.5rem;display:flex;gap:0.75rem">
+                <button onclick="closeEntryModal()" class="btn-dash btn-dash--outline" style="flex:1">Batal</button>
+                <button onclick="saveEntry()" class="btn-dash btn-dash--primary" style="flex:1">Simpan</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Detail Modal -->
-<div id="sd-detail-modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="closeDetailModal()"></div>
-    <div class="relative flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-2xl border border-gray-200 dark:border-[#3f4739] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-white dark:bg-[#0F0A0A] px-6 py-4 border-b border-gray-200 dark:border-[#3f4739] flex items-center justify-between">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Detail Sumber Rujukan</h3>
-                <button onclick="closeDetailModal()" class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3f4739]"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+<div id="sd-detail-modal" class="modal" style="display:none">
+    <div class="modal__backdrop" onclick="closeDetailModal()"></div>
+    <div class="modal__container" style="max-width:32rem">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 class="modal__title">Detail Sumber Rujukan</h3>
+                <button onclick="closeDetailModal()" class="modal__close"><svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div id="sd-detail-content" class="p-6 space-y-3"></div>
         </div>
@@ -204,14 +204,14 @@ function renderPage() {
 
     // Pokja gate banner for dinas who are not approved
     if (isPokja && !pokjaApproved) {
-        html += `<div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-5">
-            <div class="flex items-start gap-3">
-                <svg class="w-6 h-6 text-yellow-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        html += `<div class="dash-alert dash-alert--warning">
+            <div style="display:flex;align-items:flex-start;gap:0.75rem">
+                <svg style="width:1.5rem;height:1.5rem;color:#d97706;flex-shrink:0;margin-top:2px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 <div>
-                    <p class="font-semibold text-yellow-800 dark:text-yellow-300 text-base">Pokja Belum Disetujui</p>
-                    <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Fitur Sumber Rujukan hanya aktif setelah data Pokja disetujui oleh Admin Pusat. Silakan lengkapi dan ajukan data Pokja terlebih dahulu.</p>
-                    <a href="/dashboard/pokja" class="inline-flex items-center gap-2 mt-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors text-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <p style="font-weight:600;font-size:1rem">Pokja Belum Disetujui</p>
+                    <p style="font-size:0.875rem;margin-top:0.25rem">Fitur Sumber Rujukan hanya aktif setelah data Pokja disetujui oleh Admin Pusat. Silakan lengkapi dan ajukan data Pokja terlebih dahulu.</p>
+                    <a href="/dashboard/pokja" class="btn-dash btn-dash--warning" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:0.75rem;font-size:0.875rem">
+                        <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         Isi Data Pokja
                     </a>
                 </div>
@@ -220,35 +220,35 @@ function renderPage() {
     }
 
     html += `
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="d-flex d-flex--between d-flex--wrap d-flex--gap-4" style="align-items:center">
         <div>
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Sumber Rujukan BSAN</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Informasi penyedia sumber rujukan BSAN sesuai Permendikdasmen 6/2026</p>
+            <h2 class="dash-card__title" style="font-size:1.25rem">Sumber Rujukan BSAN</h2>
+            <p class="dash-card__subtitle">Informasi penyedia sumber rujukan BSAN sesuai Permendikdasmen 6/2026</p>
         </div>
-        ${canInput ? `<button onclick="openEntryModal()" class="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-lg transition-colors shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+        ${canInput ? `<button onclick="openEntryModal()" class="btn-dash btn-dash--primary" style="display:inline-flex;align-items:center;gap:0.5rem;flex-shrink:0">
+            <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Tambah Data
         </button>` : ''}
     </div>`;
 
     // Info banner for Kementerian
     if (isKementerian) {
-        html += `<div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
-            <h4 class="font-semibold text-blue-800 dark:text-blue-300 text-sm mb-2">📋 Proses Input — Kementerian/Lembaga</h4>
-            <p class="text-sm text-blue-700 dark:text-blue-400">Menghimpun data sumber rujukan dari ${KL_SOURCES.length} K/L terkait.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-                ${KL_SOURCES.map(s => `<span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded text-xs">${s.label}</span>`).join('')}
+        html += `<div class="dash-alert dash-alert--info">
+            <h4 style="font-weight:600;font-size:0.875rem;margin-bottom:0.5rem">📋 Proses Input — Kementerian/Lembaga</h4>
+            <p style="font-size:0.875rem">Menghimpun data sumber rujukan dari ${KL_SOURCES.length} K/L terkait.</p>
+            <div style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem">
+                ${KL_SOURCES.map(s => `<span class="badge badge--info">${s.label}</span>`).join('')}
             </div>
         </div>`;
     }
 
     // Info banner for Pokja
     if (isPokja) {
-        html += `<div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4">
-            <h4 class="font-semibold text-green-800 dark:text-green-300 text-sm mb-2">📋 Proses Input — Pokja (Perangkat Daerah)</h4>
-            <p class="text-sm text-green-700 dark:text-green-400">Menghimpun data sumber rujukan dari perangkat daerah.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-                ${POKJA_SOURCES.map(s => `<span class="px-2 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded text-xs">${s.label}</span>`).join('')}
+        html += `<div class="dash-alert dash-alert--success">
+            <h4 style="font-weight:600;font-size:0.875rem;margin-bottom:0.5rem">📋 Proses Input — Pokja (Perangkat Daerah)</h4>
+            <p style="font-size:0.875rem">Menghimpun data sumber rujukan dari perangkat daerah.</p>
+            <div style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem">
+                ${POKJA_SOURCES.map(s => `<span class="badge badge--success">${s.label}</span>`).join('')}
             </div>
         </div>`;
     }
@@ -258,20 +258,20 @@ function renderPage() {
     entries.forEach(e => { categories[e.kategori] = (categories[e.kategori] || 0) + 1; });
     const uniqueCategories = Object.keys(categories).length;
     html += `
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5"><p class="text-sm text-gray-500 dark:text-gray-400">Total Data</p><p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">${entries.length}</p></div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5"><p class="text-sm text-gray-500 dark:text-gray-400">Kategori Terisi</p><p class="text-2xl font-bold text-blue-600 mt-1">${uniqueCategories}</p></div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5"><p class="text-sm text-gray-500 dark:text-gray-400">Pem. Pusat</p><p class="text-2xl font-bold text-green-600 mt-1">${entries.filter(e => e.penyedia === 'Pemerintah Pusat').length}</p></div>
-        <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-5"><p class="text-sm text-gray-500 dark:text-gray-400">Pem. Daerah</p><p class="text-2xl font-bold text-purple-600 mt-1">${entries.filter(e => e.penyedia === 'Pemerintah Daerah').length}</p></div>
+    <div class="dash-grid--4">
+        <div class="stat-card"><p class="stat-card__label">Total Data</p><p class="stat-card__value">${entries.length}</p></div>
+        <div class="stat-card"><p class="stat-card__label">Kategori Terisi</p><p class="stat-card__value" style="color:#2563eb">${uniqueCategories}</p></div>
+        <div class="stat-card"><p class="stat-card__label">Pem. Pusat</p><p class="stat-card__value" style="color:#16a34a">${entries.filter(e => e.penyedia === 'Pemerintah Pusat').length}</p></div>
+        <div class="stat-card"><p class="stat-card__label">Pem. Daerah</p><p class="stat-card__value" style="color:#9333ea">${entries.filter(e => e.penyedia === 'Pemerintah Daerah').length}</p></div>
     </div>`;
 
     // Filter bar
     html += `
-    <div class="flex flex-col sm:flex-row gap-3">
-        <div class="flex-1">
-            <input type="text" id="search-input" oninput="renderTable()" class="w-full px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="🔍 Cari instansi...">
+    <div class="d-flex d-flex--wrap d-flex--gap-3">
+        <div style="flex:1">
+            <input type="text" id="search-input" oninput="renderTable()" class="form-input" placeholder="🔍 Cari instansi...">
         </div>
-        <select id="filter-kategori" onchange="renderTable()" class="px-4 py-2.5 border border-gray-300 dark:border-[#3f4739] rounded-lg bg-white dark:bg-[#1a1414] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+        <select id="filter-kategori" onchange="renderTable()" class="form-select" style="width:auto">
             <option value="">Semua Kategori</option>
             <option value="Layanan Kesehatan">Layanan Kesehatan</option>
             <option value="Layanan Konseling/Psikologi">Layanan Konseling/Psikologi</option>
@@ -288,22 +288,22 @@ function renderPage() {
 
     // Data table
     html += `
-    <div class="bg-white dark:bg-[#0F0A0A] rounded-xl border border-gray-200 dark:border-[#3f4739] p-6">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+    <div class="dash-card">
+        <div class="dash-table__wrapper">
+            <table class="dash-table">
                 <thead>
-                    <tr class="bg-gray-50 dark:bg-[#1a1414]">
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Nama Instansi</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Kategori</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Penyedia</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Call Center</th>
-                        <th class="px-4 py-3 text-left text-gray-600 dark:text-gray-400">Aksi</th>
+                    <tr>
+                        <th>Nama Instansi</th>
+                        <th>Kategori</th>
+                        <th>Penyedia</th>
+                        <th>Call Center</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="sd-tbody"></tbody>
             </table>
         </div>
-        <div id="sd-empty" class="text-center py-8 text-gray-500 dark:text-gray-400 hidden">Belum ada data sumber rujukan.</div>
+        <div id="sd-empty" style="display:none" class="dash-table__empty">Belum ada data sumber rujukan.</div>
     </div>`;
 
     app.innerHTML = html;
@@ -326,10 +326,10 @@ function renderTable() {
 
     if (!filtered.length) {
         tbody.innerHTML = '';
-        empty.classList.remove('hidden');
+        empty.style.display = '';
         return;
     }
-    empty.classList.add('hidden');
+    empty.style.display = 'none';
 
     const penyediaColors = {
         'Pemerintah Pusat': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
@@ -360,7 +360,7 @@ function updateAsalOptions() {
     const label = isPokja ? 'Asal Perangkat Daerah' : 'Asal Kementerian/Lembaga';
 
     const group = document.getElementById('asal-group');
-    group.querySelector('label').innerHTML = `${label} <span class="text-red-500">*</span>`;
+    group.querySelector('label').innerHTML = `${label} <span style="color:#ef4444">*</span>`;
     const sel = document.getElementById('entry-asal');
     sel.innerHTML = '<option value="">Pilih</option>' + sources.map(s => `<option value="${s.label}">${s.label} — ${s.items}</option>`).join('');
 }
@@ -389,10 +389,10 @@ function openEntryModal(editIdx) {
         ['entry-kategori', 'entry-asal', 'entry-nama', 'entry-penyedia', 'entry-jalan', 'entry-kelurahan', 'entry-kecamatan', 'entry-kodepos', 'entry-gmaps', 'entry-callcenter', 'entry-nopribadi', 'entry-callcenterpokja', 'entry-website'].forEach(id => document.getElementById(id).value = '');
     }
 
-    document.getElementById('entry-modal').classList.remove('hidden');
+    document.getElementById('entry-modal').style.display = '';
 }
 
-function closeEntryModal() { document.getElementById('entry-modal').classList.add('hidden'); }
+function closeEntryModal() { document.getElementById('entry-modal').style.display = 'none'; }
 
 function saveEntry() {
     const kategori = document.getElementById('entry-kategori').value;
@@ -456,10 +456,10 @@ function showDetail(idx) {
             <div><span class="text-xs font-medium text-gray-500 dark:text-gray-400">Website</span><p>${e.website ? `<a href="${e.website}" target="_blank" class="text-blue-600 hover:underline text-sm">${e.website}</a>` : '-'}</p></div>
         </div>
     `;
-    document.getElementById('sd-detail-modal').classList.remove('hidden');
+    document.getElementById('sd-detail-modal').style.display = '';
 }
 
-function closeDetailModal() { document.getElementById('sd-detail-modal').classList.add('hidden'); }
+function closeDetailModal() { document.getElementById('sd-detail-modal').style.display = 'none'; }
 
 function deleteEntry(idx) {
     if (!confirm('Hapus data sumber rujukan ini?')) return;
