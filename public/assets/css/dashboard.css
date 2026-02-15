@@ -585,7 +585,7 @@
     }
 
     .dash-grid--4 {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -1125,6 +1125,8 @@
     background: var(--dash-bg-card);
     color: var(--dash-text);
     cursor: pointer;
+    width: auto;
+    flex-shrink: 0;
 }
 
 .log-toolbar__search {
@@ -1134,7 +1136,9 @@
     border-radius: 0.375rem;
     background: var(--dash-bg-card);
     color: var(--dash-text);
-    width: clamp(8rem, 12vw + 3rem, 14rem);
+    flex: 1;
+    min-width: 8rem;
+    max-width: 14rem;
 }
 
 .log-count {
@@ -1168,14 +1172,19 @@
 
 /* Mobile table as cards */
 @media (max-width: 640px) {
-    .log-toolbar__search {
-        width: 100%;
-        order: 10;
+    .log-toolbar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.375rem;
     }
 
-    .log-toolbar__select {
-        flex: 1;
-        min-width: 0;
+    .log-toolbar__entries {
+        grid-column: 1 / -1;
+    }
+
+    .log-toolbar__search {
+        grid-column: 1 / -1;
+        max-width: none;
     }
 
     .dash-table thead {
@@ -1615,7 +1624,7 @@
     grid-template-columns: repeat(2, 1fr);
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1440px) {
     .dash-grid--4 {
         grid-template-columns: repeat(4, 1fr);
     }
