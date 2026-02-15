@@ -3,11 +3,11 @@
 <?= $this->section('content') ?>
 
 <!-- Admin Kementerian Dashboard -->
-<div id="view-kementerian" style="display:none" class="space-y-6">
+<div id="view-kementerian" style="display:none;display:flex;flex-direction:column;gap:clamp(1rem, 2vw, 1.5rem)" class="dash-view-admin">
     <!-- Header with Toggle -->
     <div class="d-flex d-flex--between" style="flex-wrap:wrap;gap:0.75rem">
         <div>
-            <h2 class="dash-card__title" style="font-size:1.25rem">Dashboard Admin Kementerian Pusat</h2>
+            <h2 class="dash-card__title" style="font-size:clamp(1rem, 0.75rem + 1vw, 1.25rem)">Dashboard Admin Kementerian Pusat</h2>
             <p class="dash-card__subtitle">Monitoring dan approval Pokja seluruh wilayah</p>
         </div>
         <div class="d-flex d-flex--gap-3" style="align-items:center">
@@ -21,7 +21,10 @@
 
     <!-- Stats Cards -->
     <div class="stat-cards" style="grid-template-columns:repeat(2,1fr)">
-        <style>@media(min-width:640px){.stat-cards--6{grid-template-columns:repeat(3,1fr)!important}}@media(min-width:1024px){.stat-cards--6{grid-template-columns:repeat(6,1fr)!important}}.toggle-track{width:2.75rem;height:1.5rem;background:var(--dash-border);border-radius:9999px;position:relative;transition:background 200ms}.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:1.25rem;height:1.25rem;background:#fff;border-radius:9999px;transition:transform 200ms}input:checked+.toggle-track{background:#2563eb}input:checked+.toggle-track::after{transform:translateX(1.25rem)}</style>
+        <style>@media(min-width:640px){.stat-cards--6{grid-template-columns:repeat(3,1fr)!important}}@media(min-width:1024px){.stat-cards--6{grid-template-columns:repeat(6,1fr)!important}}.toggle-track{width:2.75rem;height:1.5rem;background:var(--dash-border);border-radius:9999px;position:relative;transition:background 200ms}.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:1.25rem;height:1.25rem;background:#fff;border-radius:9999px;transition:transform 200ms}input:checked+.toggle-track{background:#2563eb}input:checked+.toggle-track::after{transform:translateX(1.25rem)}
+        /* --- Donut chart icon fix: constrain all h3 SVGs --- */
+        .admin-donut-card h3 svg, .dash-card__title svg { width:clamp(0.875rem,0.5vw + 0.625rem,1.125rem); height:clamp(0.875rem,0.5vw + 0.625rem,1.125rem); flex-shrink:0; }
+        </style>
         <div class="stat-cards--6 stat-card">
             <div class="stat-card__icon stat-card__icon--blue" style="width:2rem;height:2rem"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
             <p class="stat-card__label">Wilayah</p>
@@ -60,26 +63,27 @@
     <!-- Donut Charts Row -->
     <style>
         .admin-donut-card { text-align: center; }
-        .admin-donut-card h3 { font-size: 0.875rem; font-weight: 600; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .admin-donut-card h3 { font-size: clamp(0.75rem, 0.5vw + 0.5rem, 0.875rem); font-weight: 600; margin-bottom: clamp(0.5rem, 1vw, 0.75rem); display: flex; align-items: center; gap: 0.5rem; color: var(--dash-text); }
         .admin-donut-wrap { display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        .admin-donut-container { position: relative; width: 200px; height: 200px; margin: 0 auto; }
+        .admin-donut-container { position: relative; width: clamp(120px, 18vw + 40px, 200px); height: clamp(120px, 18vw + 40px, 200px); margin: 0 auto; }
+        .admin-donut-container svg { width: 100%; height: 100%; }
         .admin-donut-container svg circle[id] { cursor: pointer; transition: opacity 0.15s; }
         .admin-donut-container svg circle[id]:hover { opacity: 0.8; }
         .admin-donut-center { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
-        .admin-donut-center__label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6; }
-        .admin-donut-center__value { font-size: 26px; font-weight: 700; line-height: 1.2; }
-        .admin-donut-center__pct { font-size: 13px; font-weight: 600; }
-        .admin-donut-legend { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 12px; font-size: 12px; }
-        .admin-donut-legend span { display: flex; align-items: center; gap: 5px; }
-        .admin-donut-legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .admin-donut-center__label { font-size: clamp(9px, 0.5vw + 7px, 11px); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6; color: var(--dash-text-muted); }
+        .admin-donut-center__value { font-size: clamp(18px, 2vw + 8px, 26px); font-weight: 700; line-height: 1.2; color: var(--dash-text); }
+        .admin-donut-center__pct { font-size: clamp(10px, 0.5vw + 8px, 13px); font-weight: 600; color: #10b981; }
+        .admin-donut-legend { display: flex; flex-wrap: wrap; gap: clamp(6px, 1vw, 10px); justify-content: center; margin-top: clamp(8px, 1vw, 12px); font-size: clamp(10px, 0.5vw + 7px, 12px); color: var(--dash-text-secondary); }
+        .admin-donut-legend span { display: flex; align-items: center; gap: clamp(3px, 0.5vw, 5px); }
+        .admin-donut-legend i { width: clamp(7px, 0.75vw + 4px, 10px); height: clamp(7px, 0.75vw + 4px, 10px); border-radius: 50%; display: inline-block; }
     </style>
     <div class="dash-grid--3">
         <!-- Donut 1: Status Pengajuan -->
         <div class="dash-card admin-donut-card">
-            <h3 class="text-gray-900 dark:text-white justify-center"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>Status Pengajuan Pokja</h3>
+            <h3 style="justify-content:center"><svg style="color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>Status Pengajuan Pokja</h3>
             <div class="admin-donut-wrap">
                 <div class="admin-donut-container">
-                    <svg width="200" height="200" viewBox="0 0 200 200">
+                    <svg viewBox="0 0 200 200">
                         <circle cx="100" cy="100" r="78" fill="none" stroke="#e5e7eb" stroke-width="22"></circle>
                         <circle id="donut-st-approved" cx="100" cy="100" r="78" fill="none" stroke="#10b981" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
                         <circle id="donut-st-pending" cx="100" cy="100" r="78" fill="none" stroke="#f59e0b" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
@@ -87,12 +91,12 @@
                         <circle id="donut-st-declined" cx="100" cy="100" r="78" fill="none" stroke="#ef4444" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
                     </svg>
                     <div class="admin-donut-center">
-                        <span class="admin-donut-center__label text-gray-500 dark:text-gray-400">TOTAL</span>
-                        <span class="admin-donut-center__value text-gray-900 dark:text-white" id="donut-st-value">0</span>
-                        <span class="admin-donut-center__pct text-emerald-600" id="donut-st-pct">0%</span>
+                        <span class="admin-donut-center__label">TOTAL</span>
+                        <span class="admin-donut-center__value" id="donut-st-value">0</span>
+                        <span class="admin-donut-center__pct" id="donut-st-pct">0%</span>
                     </div>
                 </div>
-                <div class="admin-donut-legend text-gray-600 dark:text-gray-400">
+                <div class="admin-donut-legend">
                     <span><i style="background:#10b981"></i>Disetujui (<b id="donut-st-a">0</b>)</span>
                     <span><i style="background:#f59e0b"></i>Pending (<b id="donut-st-p">0</b>)</span>
                     <span><i style="background:#6b7280"></i>Draft (<b id="donut-st-d">0</b>)</span>
@@ -102,21 +106,21 @@
         </div>
         <!-- Donut 2: Persentase Pokja Provinsi -->
         <div class="dash-card admin-donut-card">
-            <h3 class="text-gray-900 dark:text-white justify-center"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Persentase Pokja Provinsi</h3>
+            <h3 style="justify-content:center"><svg style="color:#22c55e" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Persentase Pokja Provinsi</h3>
             <div class="admin-donut-wrap">
                 <div class="admin-donut-container">
-                    <svg width="200" height="200" viewBox="0 0 200 200">
+                    <svg viewBox="0 0 200 200">
                         <circle cx="100" cy="100" r="78" fill="none" stroke="#e5e7eb" stroke-width="22"></circle>
                         <circle id="donut-prov-red" cx="100" cy="100" r="78" fill="none" stroke="#ef4444" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
                         <circle id="donut-prov-green" cx="100" cy="100" r="78" fill="none" stroke="#22c55e" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
                     </svg>
                     <div class="admin-donut-center">
-                        <span class="admin-donut-center__label text-gray-500 dark:text-gray-400">PROVINSI</span>
-                        <span class="admin-donut-center__value text-gray-900 dark:text-white" id="donut-prov-value">0/38</span>
-                        <span class="admin-donut-center__pct text-emerald-600" id="donut-prov-pct">0%</span>
+                        <span class="admin-donut-center__label">PROVINSI</span>
+                        <span class="admin-donut-center__value" id="donut-prov-value">0/38</span>
+                        <span class="admin-donut-center__pct" id="donut-prov-pct">0%</span>
                     </div>
                 </div>
-                <div class="admin-donut-legend text-gray-600 dark:text-gray-400">
+                <div class="admin-donut-legend">
                     <span><i style="background:#22c55e"></i>Terbentuk (<b id="donut-prov-yes">0</b>)</span>
                     <span><i style="background:#ef4444"></i>Belum (<b id="donut-prov-no">0</b>)</span>
                 </div>
@@ -124,21 +128,21 @@
         </div>
         <!-- Donut 3: Persentase Pokja Kab/Kota -->
         <div class="dash-card admin-donut-card">
-            <h3 class="text-gray-900 dark:text-white justify-center"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Persentase Pokja Kab/Kota</h3>
+            <h3 style="justify-content:center"><svg style="color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Persentase Pokja Kab/Kota</h3>
             <div class="admin-donut-wrap">
                 <div class="admin-donut-container">
-                    <svg width="200" height="200" viewBox="0 0 200 200">
+                    <svg viewBox="0 0 200 200">
                         <circle cx="100" cy="100" r="78" fill="none" stroke="#e5e7eb" stroke-width="22"></circle>
                         <circle id="donut-kab-red" cx="100" cy="100" r="78" fill="none" stroke="#ef4444" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
                         <circle id="donut-kab-green" cx="100" cy="100" r="78" fill="none" stroke="#22c55e" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
                     </svg>
                     <div class="admin-donut-center">
-                        <span class="admin-donut-center__label text-gray-500 dark:text-gray-400">KAB/KOTA</span>
-                        <span class="admin-donut-center__value text-gray-900 dark:text-white" id="donut-kab-value">0/514</span>
-                        <span class="admin-donut-center__pct text-emerald-600" id="donut-kab-pct">0%</span>
+                        <span class="admin-donut-center__label">KAB/KOTA</span>
+                        <span class="admin-donut-center__value" id="donut-kab-value">0/514</span>
+                        <span class="admin-donut-center__pct" id="donut-kab-pct">0%</span>
                     </div>
                 </div>
-                <div class="admin-donut-legend text-gray-600 dark:text-gray-400">
+                <div class="admin-donut-legend">
                     <span><i style="background:#22c55e"></i>Terbentuk (<b id="donut-kab-yes">0</b>)</span>
                     <span><i style="background:#ef4444"></i>Belum (<b id="donut-kab-no">0</b>)</span>
                 </div>
@@ -149,7 +153,7 @@
     <!-- Gender Chart -->
     <div class="dash-card">
         <h3 class="dash-card__title" style="font-size:0.875rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem"><svg class="icon-sm" style="color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Komposisi Gender per Jabatan</h3>
-        <div style="position:relative;height:260px;"><canvas id="chart-gender"></canvas></div>
+        <div style="position:relative;height:clamp(180px, 20vw + 100px, 260px);"><canvas id="chart-gender"></canvas></div>
     </div>
 
     <!-- Admin Map -->
@@ -158,7 +162,7 @@
             <svg class="icon-sm" style="color:#16a34a" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
             Peta Sebaran Pokja
         </h3>
-        <div id="admin-map-container" style="min-height:420px;"></div>
+        <div id="admin-map-container" style="min-height:clamp(250px, 30vw + 100px, 420px);"></div>
     </div>
 
     <div class="dash-card">
@@ -205,9 +209,9 @@
 </div>
 
 <!-- Admin Dinas Dashboard -->
-<div id="view-dinas" style="display:none" class="space-y-6">
+<div id="view-dinas" style="display:none;display:flex;flex-direction:column;gap:clamp(1rem, 2vw, 1.5rem)" class="dash-view-dinas">
     <div>
-        <h2 class="dash-card__title" style="font-size:1.25rem" id="dinas-title">Dashboard</h2>
+        <h2 class="dash-card__title" style="font-size:clamp(1rem, 0.75rem + 1vw, 1.25rem)" id="dinas-title">Dashboard</h2>
         <p class="dash-card__subtitle" id="dinas-subtitle">Kelola Pokja daerah Anda</p>
     </div>
 
@@ -245,9 +249,9 @@
     </div>
 
     <!-- SK Card Spotlight -->
-    <div style="background:linear-gradient(to right,#2563eb,#1e40af);border-radius:0.75rem;padding:1.5rem;color:#fff">
-        <p style="font-size:0.875rem;opacity:0.8;margin-bottom:0.25rem">Nomor SK Pokja</p>
-        <p style="font-size:1.5rem;font-weight:700" id="sk-nomor-display">-</p>
+    <div style="background:linear-gradient(to right,#2563eb,#1e40af);border-radius:0.75rem;padding:clamp(1rem, 2vw, 1.5rem);color:#fff">
+        <p style="font-size:clamp(0.75rem, 0.5vw + 0.5rem, 0.875rem);opacity:0.8;margin-bottom:0.25rem">Nomor SK Pokja</p>
+        <p style="font-size:clamp(1.125rem, 1vw + 0.75rem, 1.5rem);font-weight:700" id="sk-nomor-display">-</p>
     </div>
 
     <!-- Status Cards -->
