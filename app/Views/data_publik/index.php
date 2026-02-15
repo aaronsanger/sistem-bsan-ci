@@ -427,6 +427,22 @@
                 <p><strong>⚠️ Disclaimer:</strong> Data dibawah adalah dummy untuk keperluan pengembangan dan demonstrasi sistem.</p>
             </div>
 
+            <!-- Data Source Toggle (matches /dashboard style) -->
+            <div style="display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-bottom:16px;">
+                <label style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
+                    <input type="checkbox" id="dp-data-toggle" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;" onchange="dpToggleDataMode(this.checked)">
+                    <div id="dp-toggle-track" style="width:44px;height:24px;background:#d1d5db;border-radius:9999px;position:relative;transition:background 0.3s;">
+                        <div id="dp-toggle-knob" style="position:absolute;top:2px;left:2px;width:20px;height:20px;background:white;border-radius:9999px;transition:transform 0.3s;box-shadow:0 1px 3px rgba(0,0,0,0.15);"></div>
+                    </div>
+                </label>
+                <span id="dp-data-mode-label" style="font-size:0.875rem;font-weight:500;color:#374151;">Demo Data</span>
+            </div>
+
+            <!-- No sync data notice (shown when entry mode has no sync) -->
+            <div id="dp-no-sync-notice" style="display:none;padding:12px 16px;background:#fef3c7;border:1px solid #f59e0b;border-radius:8px;margin-bottom:16px;font-size:0.85rem;color:#92400e;">
+                ⚠️ Belum ada data entry dari Dashboard. Silakan login ke <a href="/dashboard" style="color:#1d4ed8;text-decoration:underline;">Dashboard</a> terlebih dahulu untuk memasukkan data.
+            </div>
+
             <!-- Stats Cards -->
             <div class="stats-grid">
                 <div class="stat-card stat-card--green">
@@ -696,18 +712,130 @@
     // ========================================
     // INITIALIZE
     // ========================================
-    document.addEventListener('DOMContentLoaded', () => {
-        provinsiData = generateProvinceData();
+    // Data mode: 'demo' or 'entry'
+    let dpDataMode = 'demo';
+
+    function dpToggleDataMode(isEntry) {
+        dpDataMode = isEntry ? 'entry' : 'demo';
+        const toggle = document.getElementById('dp-data-toggle');
+        const track = document.getElementById('dp-toggle-track');
+        const knob = document.getElementById('dp-toggle-knob');
+        const label = document.getElementById('dp-data-mode-label');
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (toggle) toggle.checked = isEntry;
+        if (track) track.style.background = isEntry ? '#2563eb' : (isDark ? '#4b5563' : '#d1d5db');
+        if (knob) knob.style.transform = isEntry ? 'translateX(20px)' : 'translateX(0)';
+        if (label) {
+            label.textContent = isEntry ? 'Entry Data (dari Dashboard)' : 'Demo Data';
+            label.style.color = isDark ? '#d1d5db' : '#374151';
+        }
+        dpLoadData();
+    }
+
+    function dpLoadData() {
+        let syncRaw = null;
+        try { syncRaw = JSON.parse(localStorage.getItem('bsan_pokja_sync')); } catch(e) {}
+        const hasSyncData = syncRaw && syncRaw.submissions && syncRaw.submissions.length > 0;
+
+        // Show/hide no-sync notice
+        const notice = document.getElementById('dp-no-sync-notice');
+        if (notice) notice.style.display = (dpDataMode === 'entry' && !hasSyncData) ? 'block' : 'none';
+
+        if (dpDataMode === 'entry' && hasSyncData) {
+            // Entry mode with dashboard sync data
+            provinsiData = dpBuildFromSync();
+        } else if (dpDataMode === 'entry' && !hasSyncData) {
+            // Entry mode but no sync — reset all to "Belum Ada"
+            provinsiData = generateProvinceData();
+            provinsiData.forEach(prov => {
+                prov.statusPokja = 'Belum Ada';
+                prov.pokjaProvinsi = 0;
+                prov.kotaKab.forEach(kab => {
+                    kab.statusPokja = 'Belum Ada';
+                    kab.pokjaKotaKab = false;
+                    kab.jumlahAnggota = 0;
+                });
+                prov.jumlahPokjaKotaKab = 0;
+                prov.persentase = 0;
+            });
+        } else {
+            // Demo mode — generate standalone demo data
+            provinsiData = generateProvinceData();
+        }
+
         pokjaTotals = calculateTotals(provinsiData);
         updateDate();
         updateStats();
         updateDonutCharts();
         renderTable();
-        setupEventListeners();
-
         if (typeof renderMap === 'function') {
             setTimeout(renderMap, 200);
         }
+    }
+
+    function dpBuildFromSync() {
+        // Read from localStorage
+        let syncRaw = null;
+        try { syncRaw = JSON.parse(localStorage.getItem('bsan_pokja_sync')); } catch(e) {}
+        if (!syncRaw || !syncRaw.submissions) return generateProvinceData(); // fallback
+
+        // Normalize wilayah names to match base data
+        const normalizeName = (name) => {
+            if (!name) return '';
+            return name.replace('Prov. ', '')
+                       .replace('Kota Adm. ', 'Kota ')
+                       .replace('Kota Pangkal Pinang', 'Kota Pangkalpinang');
+        };
+
+        const statusMap = { approved: 'Disetujui', pending: 'Pending', draft: 'Draft', declined: 'Ditolak' };
+        const provStatusMap = {};
+        const kabStatusMap = {};
+        syncRaw.submissions.forEach(s => {
+            const w = normalizeName(s.wilayah);
+            const mapped = statusMap[s.status] || 'Belum Ada';
+            if (s.roleType === 'dinas_prov') provStatusMap[w] = mapped;
+            else kabStatusMap[w] = mapped;
+        });
+
+        // Generate base data then RESET all statuses first, then overlay sync
+        const base = generateProvinceData();
+        base.forEach(prov => {
+            // Reset province status to default
+            prov.statusPokja = 'Belum Ada';
+            prov.pokjaProvinsi = 0;
+
+            // Reset all kab/kota statuses
+            prov.kotaKab.forEach(kab => {
+                kab.statusPokja = 'Belum Ada';
+                kab.pokjaKotaKab = false;
+                kab.jumlahAnggota = 0;
+            });
+
+            // Now overlay sync data for this province
+            if (provStatusMap[prov.nama]) {
+                prov.statusPokja = provStatusMap[prov.nama];
+                prov.pokjaProvinsi = prov.statusPokja === 'Disetujui' ? 1 : 0;
+            }
+            prov.kotaKab.forEach(kab => {
+                if (kabStatusMap[kab.nama]) {
+                    kab.statusPokja = kabStatusMap[kab.nama];
+                    // Count as formed if status is 'Disetujui'
+                    kab.pokjaKotaKab = kab.statusPokja === 'Disetujui';
+                    kab.jumlahAnggota = kab.pokjaKotaKab ? 9 : 0;
+                }
+            });
+
+            // Recalculate totals
+            const jumlahPokja = prov.kotaKab.filter(k => k.pokjaKotaKab).length;
+            prov.jumlahPokjaKotaKab = jumlahPokja;
+            prov.persentase = prov.kotaKab.length > 0 ? (jumlahPokja / prov.kotaKab.length) * 100 : 0;
+        });
+        return base;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        dpLoadData();
+        setupEventListeners();
     });
 
     function updateDate() {
@@ -883,8 +1011,8 @@
 
     function createStatusBadge(status) {
         let cls = 'status-badge--muted';
-        if (status === 'Terbentuk') cls = 'status-badge--success';
-        else if (status === 'Dalam Proses') cls = 'status-badge--warning';
+        if (status === 'Disetujui') cls = 'status-badge--success';
+        else if (status === 'Pending') cls = 'status-badge--warning';
         return `<span class="status-badge ${cls}">${status}</span>`;
     }
 
@@ -943,7 +1071,7 @@
         document.getElementById('kotakab-table-footer').innerHTML = `
             <tr class="table-footer-row">
                 <td colspan="2">TOTAL (${kotaKab.length} hasil)</td>
-                <td style="text-align:center">${createStatusBadge(totalPokja > 0 ? 'Terbentuk' : 'Belum Terbentuk')}</td>
+                <td style="text-align:center">${createStatusBadge(totalPokja > 0 ? 'Disetujui' : 'Belum Ada')}</td>
                 <td style="text-align:center">${totalAnggota}</td>
                 <td></td>
             </tr>
@@ -1001,7 +1129,7 @@
             <p><span>Nomor SK</span>: ${data.nomorSK}</p>
             <p><span>Tanggal SK</span>: ${data.tanggalSK}</p>
             <p><span>Tanggal Berakhir SK</span>: ${data.tanggalBerakhirSK}</p>
-            <p><span>Status SK</span>: ${createStatusBadge(data.statusSK === 'Valid' ? 'Terbentuk' : 'Belum Terbentuk')}</p>
+            <p><span>Status SK</span>: ${createStatusBadge(data.statusSK === 'Valid' ? 'Disetujui' : 'Belum Ada')}</p>
         `;
         document.getElementById(opId).innerHTML = `
             <p><strong>Operator Dinas:</strong> ${data.operatorDinas}</p>

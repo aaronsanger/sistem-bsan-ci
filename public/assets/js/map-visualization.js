@@ -35,6 +35,48 @@ let mapModalOpen = false;
 let searchDebounceTimer = null;
 let kabSearchDebounceTimer = null;
 
+// Map context mode: 'data-publik' or 'admin'
+let mapContextMode = 'data-publik';
+
+function getMapFilterOptions() {
+    if (mapContextMode === 'admin') {
+        return [
+            { value: 'all', label: 'Semua' },
+            { value: 'Disetujui', label: '✓ Disetujui' },
+            { value: 'Pending', label: '⏳ Pending' },
+            { value: 'Draft', label: '📝 Draft' },
+            { value: 'Ditolak', label: '✗ Ditolak' },
+            { value: 'Belum Ada', label: '○ Belum Ada' }
+        ];
+    }
+    // Use centralized config if available
+    if (typeof getStatusFilterOptions === 'function') {
+        return getStatusFilterOptions();
+    }
+    return [
+        { value: 'all', label: 'Semua' },
+        { value: 'Disetujui', label: '✓ Disetujui' },
+        { value: 'Pending', label: '⏳ Pending' },
+        { value: 'Draft', label: '📝 Draft' },
+        { value: 'Ditolak', label: '✗ Ditolak' },
+        { value: 'Belum Ada', label: '○ Belum Ada' }
+    ];
+}
+
+function getMapLegendItemsDynamic() {
+    // Use centralized config if available
+    if (typeof getStatusLegendItems === 'function') {
+        return getStatusLegendItems();
+    }
+    return [
+        { color: '#10b981', label: 'Disetujui' },
+        { color: '#f59e0b', label: 'Pending' },
+        { color: '#3b82f6', label: 'Draft' },
+        { color: '#ef4444', label: 'Ditolak' },
+        { color: '#9ca3af', label: 'Belum Ada' }
+    ];
+}
+
 // ========================================
 // GEOMETRY UTILITIES
 // ========================================
@@ -228,7 +270,7 @@ async function initializeMap() {
         } else if (window.indonesiaAllLevelsData) {
             geoData = window.indonesiaAllLevelsData;
         } else {
-            const response = await fetch('./indonesia_3level_v4.json');
+            const response = await fetch('/indonesia_3level_v4.json');
             if (!response.ok) throw new Error('Failed to fetch');
             geoData = await response.json();
         }
@@ -295,12 +337,7 @@ function renderProvinceMap() {
     }).join('');
 
     // Build filter options
-    const filterOptions = [
-        { value: 'all', label: 'Semua Status' },
-        { value: 'Terbentuk', label: '✓ Terbentuk' },
-        { value: 'Dalam Proses', label: '⏳ Dalam Proses' },
-        { value: 'Belum Terbentuk', label: '✗ Belum' }
-    ];
+    const filterOptions = getMapFilterOptions();
 
     const colorOptions = [
         { value: 'status', label: '🎨 Warna Status' },
@@ -341,7 +378,7 @@ function renderProvinceMap() {
             </div>
             
             <!-- Legend -->
-            ${window.BSAN_Templates.createMapLegend(theme, mapColorMode)}
+            ${createDynamicMapLegend(theme, mapColorMode)}
         </div>
     `;
 }
@@ -358,12 +395,7 @@ function renderDrillDownMap() {
     const { KAB_STROKE, VIEW_BOX_PADDING, MINI_MAP } = window.BSAN_MapConfig.MAP_CONFIG;
 
     // Build filter options (same as province level)
-    const filterOptions = [
-        { value: 'all', label: 'Semua Status' },
-        { value: 'Terbentuk', label: '✓ Terbentuk' },
-        { value: 'Dalam Proses', label: '⏳ Dalam Proses' },
-        { value: 'Belum Terbentuk', label: '✗ Belum' }
-    ];
+    const filterOptions = getMapFilterOptions();
 
     const colorOptions = [
         { value: 'status', label: '🎨 Warna Status' },
@@ -491,7 +523,7 @@ function renderDrillDownMap() {
             </div>
             
             <!-- Legend -->
-            ${window.BSAN_Templates.createMapLegend(theme, mapColorMode)}
+            ${createDynamicMapLegend(theme, mapColorMode)}
         </div>
         
         <!-- Modal Container -->
@@ -632,6 +664,32 @@ function closeKabModal(event) {
 // ========================================
 // EVENT HANDLERS
 // ========================================
+
+
+function createDynamicMapLegend(theme, colorMode) {
+    const { border, mutedColor } = theme;
+
+    const percentageItems = [
+        { color: '#22c55e', label: '≥80%' },
+        { color: '#84cc16', label: '60-79%' },
+        { color: '#eab308', label: '40-59%' },
+        { color: '#f97316', label: '20-39%' },
+        { color: '#ef4444', label: '<20%' }
+    ];
+
+    const items = colorMode === 'percentage' ? percentageItems : getMapLegendItemsDynamic();
+
+    return `
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid ${border};">
+            ${items.map(item => `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 16px; height: 16px; border-radius: 4px; background: ${item.color};"></div>
+                    <span style="font-size: 0.75rem; color: ${mutedColor};">${item.label}</span>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
 
 function handleMapHover(element, event, name, isProvince) {
     mapHoveredFeature = name;

@@ -50,17 +50,21 @@ const MAP_CONFIG = {
 
 // ========================================
 // STATUS COLORS (for map fills)
+// Uses centralized statusConfig.js when available
 // ========================================
 
-const STATUS_COLORS = {
-    terbentuk: '#22c55e',      // Green
-    aktif: '#22c55e',          // Green
-    perpanjangan: '#eab308',   // Yellow
-    dalamProses: '#3b82f6',    // Blue
-    belumTerbentuk: '#9ca3af', // Gray
-    tidakAktif: '#ef4444',     // Red
-    default: '#d1d5db'         // Light gray (no data)
-};
+const STATUS_COLORS = typeof STATUS_COLORS_MAP !== 'undefined'
+    ? { ...STATUS_COLORS_MAP, default: '#d1d5db' }
+    : {
+        disetujui: '#10b981',
+        approved: '#10b981',
+        pending: '#f59e0b',
+        draft: '#3b82f6',
+        ditolak: '#ef4444',
+        declined: '#ef4444',
+        belumAda: '#9ca3af',
+        default: '#d1d5db'
+    };
 
 // ========================================
 // PERCENTAGE COLOR THRESHOLDS
@@ -79,29 +83,33 @@ const PERCENTAGE_THRESHOLDS = [
 // ========================================
 
 /**
- * Get color based on Pokja status string
- * @param {string} status - Status string
- * @returns {string} Hex color code
+ * Get color based on Pokja status string.
+ * Delegates to centralized getStatusColorFromConfig() when available.
  */
 function getStatusColor(status) {
-    if (!status) return STATUS_COLORS.default;
+    // Use centralized config if available
+    if (typeof getStatusColorFromConfig === 'function') {
+        return getStatusColorFromConfig(status);
+    }
 
+    // Fallback to local logic
+    if (!status) return STATUS_COLORS.default;
     const statusLower = status.toLowerCase();
 
-    if (statusLower === 'terbentuk' || statusLower === 'aktif') {
-        return STATUS_COLORS.terbentuk;
+    if (statusLower === 'disetujui' || statusLower === 'approved' || statusLower === 'terbentuk' || statusLower === 'aktif') {
+        return STATUS_COLORS.disetujui || '#10b981';
     }
-    if (statusLower === 'perlu perpanjangan') {
-        return STATUS_COLORS.perpanjangan;
+    if (statusLower === 'pending' || statusLower === 'dalam proses' || statusLower === 'menunggu persetujuan' || statusLower === 'perlu perpanjangan') {
+        return STATUS_COLORS.pending || '#f59e0b';
     }
-    if (statusLower === 'dalam proses' || statusLower === 'menunggu persetujuan') {
-        return STATUS_COLORS.dalamProses;
+    if (statusLower === 'draft') {
+        return STATUS_COLORS.draft || '#3b82f6';
     }
-    if (statusLower === 'belum terbentuk') {
-        return STATUS_COLORS.belumTerbentuk;
+    if (statusLower === 'ditolak' || statusLower === 'declined' || statusLower === 'tidak aktif') {
+        return STATUS_COLORS.ditolak || '#ef4444';
     }
-    if (statusLower === 'tidak aktif') {
-        return STATUS_COLORS.tidakAktif;
+    if (statusLower === 'belum ada' || statusLower === 'belum terbentuk' || statusLower === 'belum') {
+        return STATUS_COLORS.belumAda || '#9ca3af';
     }
 
     return STATUS_COLORS.default;
@@ -141,11 +149,16 @@ function getContrastingTextColor(backgroundColor) {
  * @returns {Array} Legend items with label and color
  */
 function getMapLegendItems() {
+    // Use centralized config if available
+    if (typeof getStatusLegendItems === 'function') {
+        return getStatusLegendItems();
+    }
     return [
-        { label: 'Terbentuk', color: STATUS_COLORS.terbentuk },
-        { label: 'Perpanjangan', color: STATUS_COLORS.perpanjangan },
-        { label: 'Dalam Proses', color: STATUS_COLORS.dalamProses },
-        { label: 'Belum', color: STATUS_COLORS.belumTerbentuk }
+        { label: 'Disetujui', color: STATUS_COLORS.disetujui || '#10b981' },
+        { label: 'Pending', color: STATUS_COLORS.pending || '#f59e0b' },
+        { label: 'Draft', color: STATUS_COLORS.draft || '#3b82f6' },
+        { label: 'Ditolak', color: STATUS_COLORS.ditolak || '#ef4444' },
+        { label: 'Belum Ada', color: STATUS_COLORS.belumAda || '#9ca3af' }
     ];
 }
 

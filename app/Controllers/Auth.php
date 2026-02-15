@@ -28,12 +28,21 @@ class Auth extends Controller
         $password = $this->request->getPost('password');
 
         // Demo accounts — bypass Supabase auth
+        // Roles: admin (Puspeka/super admin), kementerian (Inspektorat Jenderal), dinas_prov, dinas_kab
         $demoAccounts = [
             'admin@bsan.id' => [
                 'password' => 'admin123',
                 'user_id' => 'demo-admin',
-                'user_name' => 'Admin Demo',
+                'user_name' => 'Admin Puspeka',
                 'user_role' => 'admin',
+                'unit_kerja' => 'Puspeka',
+            ],
+            'irjen@bsan.id' => [
+                'password' => 'irjen123',
+                'user_id' => 'demo-irjen',
+                'user_name' => 'Admin Inspektorat Jenderal',
+                'user_role' => 'kementerian',
+                'unit_kerja' => 'Inspektorat Jenderal',
             ],
             'jateng@bsan.id' => [
                 'password' => 'jateng123',
@@ -84,6 +93,10 @@ class Auth extends Controller
                 }
                 if (isset($demo['wilayah_kabupaten'])) {
                     $sessionData['wilayah_kabupaten'] = $demo['wilayah_kabupaten'];
+                }
+                // Store unit_kerja for kementerian-level roles
+                if (isset($demo['unit_kerja'])) {
+                    $sessionData['unit_kerja'] = $demo['unit_kerja'];
                 }
                 session()->set($sessionData);
                 return redirect()->to('/dashboard');

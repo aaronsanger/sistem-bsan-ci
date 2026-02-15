@@ -118,7 +118,7 @@ function generateKotaKab(provinsiNama, provIdx) {
         const hasPokja = random() > 0.15;
         const tanggalSK = generateTanggalSK();
         const tanggalBerakhirSK = hasPokja ? generateTanggalBerakhirSK(tanggalSK) : "-";
-        const statusPokja = hasPokja ? (random() > 0.2 ? "Terbentuk" : "Dalam Proses") : "Belum Terbentuk";
+        const statusPokja = hasPokja ? (random() > 0.2 ? "Disetujui" : "Pending") : "Belum Ada";
         const statusSK = hasPokja ? "Valid" : "-";
 
         return {
@@ -189,12 +189,12 @@ function generateProvinceData() {
         const random = seededRandom(idx * 500);
         const tanggalSK = generateTanggalSK();
         const tanggalBerakhirSK = generateTanggalBerakhirSK(tanggalSK);
-        const statusPokja = random() > 0.3 ? "Terbentuk" : "Dalam Proses";
+        const statusPokja = random() > 0.3 ? "Disetujui" : "Pending";
 
         return {
             no: parseInt(prov.kode, 10),
             nama: prov.nama,
-            pokjaProvinsi: statusPokja === "Terbentuk" ? 1 : 0,
+            pokjaProvinsi: statusPokja === "Disetujui" ? 1 : 0,
             jumlahKotaKab: kotaKab.length,
             jumlahPokjaKotaKab: jumlahPokja,
             persentase: kotaKab.length > 0 ? (jumlahPokja / kotaKab.length) * 100 : 0,
@@ -215,7 +215,7 @@ function generateProvinceData() {
 // CALCULATE TOTALS
 // ========================================
 function calculateTotals(provinsiData) {
-    const pokjaProvinsi = provinsiData.filter(p => p.statusPokja === "Terbentuk").length;
+    const pokjaProvinsi = provinsiData.filter(p => p.statusPokja === "Disetujui").length;
     const jumlahKotaKab = provinsiData.reduce((sum, p) => sum + p.jumlahKotaKab, 0);
     const jumlahPokjaKotaKab = provinsiData.reduce((sum, p) => sum + p.jumlahPokjaKotaKab, 0);
     const persentase = jumlahKotaKab > 0 ? (jumlahPokjaKotaKab / jumlahKotaKab) * 100 : 0;

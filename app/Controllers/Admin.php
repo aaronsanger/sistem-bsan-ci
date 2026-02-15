@@ -16,9 +16,9 @@ class Admin extends Controller
 
     public function index()
     {
-        // Check if user is admin
+        // Check if user is admin (Puspeka = super admin, Inspektorat Jenderal = kementerian)
         $role = session()->get('user_role');
-        if ($role !== 'kementerian') {
+        if (!in_array($role, ['admin', 'kementerian'])) {
             return redirect()->to('/dashboard')->with('error', 'Akses ditolak.');
         }
 

@@ -167,6 +167,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="/assets/js/utils/statusConfig.js"></script>
     <script src="/assets/js/app.js"></script>
     <?= $this->renderSection('scripts') ?>
 </body>

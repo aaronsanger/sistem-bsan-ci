@@ -18,6 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <link href="/assets/css/app.css" rel="stylesheet">
+    <script src="/assets/js/utils/statusConfig.js"></script>
     <script src="/assets/js/wilayah-data.js"></script>
     <style>
         .dropdown-menu { display: none; }
@@ -604,6 +605,9 @@
         buildSidebar();
     </script>
     <?= $this->renderSection('scripts') ?>
+
+    <!-- Admin Map Component -->
+    <script src="/assets/js/admin-map.js"></script>
 </body>
 
 </html>
