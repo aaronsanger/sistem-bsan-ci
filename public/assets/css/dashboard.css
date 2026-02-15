@@ -525,6 +525,63 @@
 }
 
 /* ============================================
+   RESPONSIVE GRID SYSTEM
+   Mobile: 1 column (stacked)
+   Tablet (640px+): 2 columns
+   Desktop (1024px+): target columns (2/3/4)
+   ============================================ */
+
+.dash-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+.dash-grid--2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+.dash-grid--3 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+.dash-grid--4 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+/* Tablet: 2 columns for all grids */
+@media (min-width: 640px) {
+
+    .dash-grid,
+    .dash-grid--2,
+    .dash-grid--3,
+    .dash-grid--4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop: target column count */
+@media (min-width: 1024px) {
+    .dash-grid--2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dash-grid--3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .dash-grid--4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ============================================
    STAT CARDS
    ============================================ */
 
