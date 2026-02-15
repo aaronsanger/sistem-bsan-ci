@@ -168,7 +168,10 @@
 
     <!-- Scripts -->
     <script src="/assets/js/utils/statusConfig.js"></script>
+    <script src="/assets/js/utils/mapConfig.js"></script>
+    <script src="/assets/js/utils/themeColors.js"></script>
     <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/map-visualization.js"></script>
     <?= $this->renderSection('scripts') ?>
 </body>
 

@@ -1294,3 +1294,278 @@
 [data-theme="dark"] table.dataTable tbody tr:hover {
     background: var(--dash-hover) !important;
 }
+
+/* ============================================
+   RESPONSIVE: MOBILE (≤639px)
+   ============================================ */
+
+@media (max-width: 639px) {
+
+    /* Content area: tighter padding on small screens */
+    .dashboard__content {
+        padding: 0.75rem;
+    }
+
+    /* Topbar compact */
+    .topbar {
+        padding: 0.75rem 1rem;
+    }
+
+    .topbar__title {
+        font-size: 1rem;
+    }
+
+    /* Cards: less padding */
+    .dash-card {
+        padding: 1rem;
+    }
+
+    .dash-card__title {
+        font-size: 1rem;
+    }
+
+    /* Stat cards: smaller values */
+    .stat-card {
+        padding: 1rem;
+    }
+
+    .stat-card__value {
+        font-size: 1.25rem;
+    }
+
+    .stat-card__label {
+        font-size: 0.75rem;
+    }
+
+    .stat-card__icon {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .stat-card__icon svg,
+    .stat-card__icon-svg {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    /* Table: scroll horizontal, smaller text */
+    .dash-table {
+        font-size: 0.75rem;
+    }
+
+    .dash-table th,
+    .dash-table td {
+        padding: 0.5rem 0.75rem;
+    }
+
+    /* Buttons: full-width stacking */
+    .btn-dash {
+        padding: 0.5rem 1rem;
+        font-size: 0.8125rem;
+    }
+
+    /* Modals: near full-width */
+    .modal__container {
+        max-width: calc(100vw - 1rem);
+        margin: 0.5rem;
+        border-radius: 0.75rem;
+    }
+
+    .modal__header {
+        padding: 1rem;
+    }
+
+    .modal__body {
+        padding: 1rem;
+    }
+
+    .modal__footer {
+        padding: 1rem;
+        flex-direction: column;
+    }
+
+    .modal__footer .btn-dash {
+        width: 100%;
+    }
+
+    /* Forms: full width inputs */
+    .form-input,
+    .form-select,
+    .form-textarea {
+        font-size: 1rem;
+        /* 16px prevents iOS zoom */
+    }
+
+    /* Map container: shorter on mobile */
+    #map-container,
+    #admin-map-container {
+        min-height: 280px !important;
+    }
+
+    /* Tabs: scroll horizontally */
+    .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tabs__item {
+        white-space: nowrap;
+        padding: 0.625rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    /* Chart containers: shorter */
+    .chart-container--sm {
+        height: 12rem;
+    }
+
+    .chart-container--md {
+        height: 14rem;
+    }
+
+    .chart-container--lg {
+        height: 16rem;
+    }
+
+    /* Badges: slightly smaller */
+    .badge {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.6875rem;
+    }
+
+    /* Alert: tighter */
+    .dash-alert {
+        padding: 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    /* Grids: single column */
+    .dash-grid--2,
+    .dash-grid--3,
+    .dash-grid--4 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Profile dropdown */
+    .profile-dropdown__menu {
+        width: calc(100vw - 2rem);
+        right: -0.5rem;
+    }
+
+    /* Space utilities: tighter */
+    .space-y-6>*+* {
+        margin-top: 1rem;
+    }
+
+    .space-y-8>*+* {
+        margin-top: 1.25rem;
+    }
+}
+
+/* ============================================
+   RESPONSIVE: TABLET (640px–1023px)
+   ============================================ */
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    .dashboard__content {
+        padding: 1.25rem;
+    }
+
+    /* Stat cards: 2 col already via stat-cards, ensure consistent sizing */
+    .stat-card__value {
+        font-size: 1.375rem;
+    }
+
+    /* Map container: medium height */
+    #map-container,
+    #admin-map-container {
+        min-height: 350px !important;
+    }
+
+    /* Chart containers: medium */
+    .chart-container--md {
+        height: 18rem;
+    }
+
+    .chart-container--lg {
+        height: 20rem;
+    }
+
+    /* Grids: 2 columns */
+    .dash-grid--3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dash-grid--4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ============================================
+   RESPONSIVE: DESKTOP (≥1024px)
+   ============================================ */
+
+@media (min-width: 1024px) {
+    .dashboard__content {
+        padding: 1.5rem 2rem;
+    }
+
+    /* Map container: generous height */
+    #map-container,
+    #admin-map-container {
+        min-height: 420px;
+    }
+
+    /* Modal: larger on desktop */
+    .modal__container {
+        max-width: 32rem;
+    }
+
+    /* Chart containers full */
+    .chart-container--lg {
+        height: 24rem;
+    }
+}
+
+/* ============================================
+   RESPONSIVE: WIDE DESKTOP (≥1280px)
+   ============================================ */
+
+@media (min-width: 1280px) {
+    .dashboard__content {
+        padding: 2rem 2.5rem;
+    }
+
+    /* Wider modals for large screens */
+    .modal__container {
+        max-width: 36rem;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+
+    .sidebar,
+    .sidebar__overlay,
+    .topbar,
+    .profile-dropdown {
+        display: none !important;
+    }
+
+    .dashboard__main {
+        width: 100% !important;
+    }
+
+    .dashboard__content {
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    .dash-card {
+        break-inside: avoid;
+        border: 1px solid #ddd;
+    }
+}

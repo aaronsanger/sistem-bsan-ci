@@ -590,7 +590,9 @@
     </script>
     <?= $this->renderSection('scripts') ?>
 
-    <!-- Admin Map Component -->
+    <!-- Map Dependencies & Admin Map Component -->
+    <script src="/assets/js/utils/mapConfig.js"></script>
+    <script src="/assets/js/utils/themeColors.js"></script>
     <script src="/assets/js/admin-map.js"></script>
 </body>
 
