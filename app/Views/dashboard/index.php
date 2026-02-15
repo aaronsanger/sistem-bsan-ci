@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 
 <!-- Admin Kementerian Dashboard -->
-<div id="view-kementerian" style="display:none;display:flex;flex-direction:column;gap:clamp(1rem, 2vw, 1.5rem)" class="dash-view-admin">
+<div id="view-kementerian" style="display:none" class="dash-view-admin">
     <!-- Header with Toggle -->
     <div class="d-flex d-flex--between" style="flex-wrap:wrap;gap:0.75rem">
         <div>
@@ -77,7 +77,7 @@
         .admin-donut-legend span { display: flex; align-items: center; gap: clamp(3px, 0.5vw, 5px); }
         .admin-donut-legend i { width: clamp(7px, 0.75vw + 4px, 10px); height: clamp(7px, 0.75vw + 4px, 10px); border-radius: 50%; display: inline-block; }
     </style>
-    <div class="dash-grid--3">
+    <div class="dash-grid--3" style="display:grid">
         <!-- Donut 1: Status Pengajuan -->
         <div class="dash-card admin-donut-card">
             <h3 style="justify-content:center"><svg style="color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>Status Pengajuan Pokja</h3>
@@ -209,7 +209,7 @@
 </div>
 
 <!-- Admin Dinas Dashboard -->
-<div id="view-dinas" style="display:none;display:flex;flex-direction:column;gap:clamp(1rem, 2vw, 1.5rem)" class="dash-view-dinas">
+<div id="view-dinas" style="display:none" class="dash-view-dinas">
     <div>
         <h2 class="dash-card__title" style="font-size:clamp(1rem, 0.75rem + 1vw, 1.25rem)" id="dinas-title">Dashboard</h2>
         <p class="dash-card__subtitle" id="dinas-subtitle">Kelola Pokja daerah Anda</p>
@@ -255,7 +255,7 @@
     </div>
 
     <!-- Status Cards -->
-    <div class="dash-grid--3">
+    <div class="dash-grid--3" style="display:grid">
         <div class="stat-card">
             <p class="stat-card__label">Status Pokja</p>
             <p class="stat-card__value" id="status-pokja">Belum Ada</p>
@@ -281,7 +281,7 @@
     <!-- Quick Links (Dinas only) -->
     <div class="dash-card">
         <h2 class="dash-card__title" style="margin-bottom:1rem">Menu Cepat</h2>
-        <div class="dash-grid--4">
+        <div class="dash-grid--4" style="display:grid">
             <a href="/dashboard" class="quick-link" style="display:flex;flex-direction:column;align-items:center;padding:1rem;border-radius:0.75rem;background:var(--dash-bg-card-alt);text-decoration:none;transition:opacity 0.15s">
                 <svg style="width:2rem;height:2rem;color:var(--dash-text-secondary);margin-bottom:0.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                 <span style="font-size:0.875rem;font-weight:500;color:var(--dash-text-primary)">Dashboard</span>
