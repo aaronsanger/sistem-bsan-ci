@@ -20,40 +20,52 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="stat-cards" style="grid-template-columns:repeat(2,1fr)">
-        <style>@media(min-width:640px){.stat-cards--6{grid-template-columns:repeat(3,1fr)!important}}@media(min-width:1024px){.stat-cards--6{grid-template-columns:repeat(6,1fr)!important}}.toggle-track{width:2.75rem;height:1.5rem;background:var(--dash-border);border-radius:9999px;position:relative;transition:background 200ms}.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:1.25rem;height:1.25rem;background:#fff;border-radius:9999px;transition:transform 200ms}input:checked+.toggle-track{background:#2563eb}input:checked+.toggle-track::after{transform:translateX(1.25rem)}
-        /* --- Donut chart icon fix: constrain all h3 SVGs --- */
+    <style>
+        .toggle-track{width:2.75rem;height:1.5rem;background:var(--dash-border);border-radius:9999px;position:relative;transition:background 200ms}.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:1.25rem;height:1.25rem;background:#fff;border-radius:9999px;transition:transform 200ms}input:checked+.toggle-track{background:#2563eb}input:checked+.toggle-track::after{transform:translateX(1.25rem)}
         .admin-donut-card h3 svg, .dash-card__title svg { width:clamp(0.875rem,0.5vw + 0.625rem,1.125rem); height:clamp(0.875rem,0.5vw + 0.625rem,1.125rem); flex-shrink:0; }
-        </style>
-        <div class="stat-cards--6 stat-card">
-            <div class="stat-card__icon stat-card__icon--blue" style="width:2rem;height:2rem"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-            <p class="stat-card__label">Wilayah</p>
-            <p class="stat-card__value" id="stat-total">552</p>
+    </style>
+    <div class="stat-strip">
+        <div class="stat-strip__card stat-strip__card--blue">
+            <div class="stat-strip__icon" style="background:#dbeafe;color:#2563eb"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <div class="stat-strip__info">
+                <span class="stat-strip__value" id="stat-total">552</span>
+                <span class="stat-strip__label">Wilayah</span>
+            </div>
         </div>
-        <div class="stat-card">
-            <div class="stat-card__icon stat-card__icon--blue" style="width:2rem;height:2rem"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
-            <p class="stat-card__label" style="color:#2563eb">Total Anggota</p>
-            <p class="stat-card__value" style="color:#1d4ed8" id="stat-members">0</p>
+        <div class="stat-strip__card stat-strip__card--indigo">
+            <div class="stat-strip__icon" style="background:#e0e7ff;color:#4f46e5"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+            <div class="stat-strip__info">
+                <span class="stat-strip__value" id="stat-members">0</span>
+                <span class="stat-strip__label">Total Anggota</span>
+            </div>
         </div>
-        <div class="stat-card">
-            <div class="stat-card__icon" style="width:2rem;height:2rem;background:#cffafe;color:#0891b2"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
-            <p class="stat-card__label" style="color:#0891b2">Laki-laki</p>
-            <p class="stat-card__value" style="color:#0e7490" id="stat-male">0</p>
+        <div class="stat-strip__card stat-strip__card--cyan">
+            <div class="stat-strip__icon" style="background:#cffafe;color:#0891b2"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+            <div class="stat-strip__info">
+                <span class="stat-strip__value" id="stat-male">0</span>
+                <span class="stat-strip__label">Laki-laki</span>
+            </div>
         </div>
-        <div class="stat-card">
-            <div class="stat-card__icon" style="width:2rem;height:2rem;background:#fce7f3;color:#db2777"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
-            <p class="stat-card__label" style="color:#db2777">Perempuan</p>
-            <p class="stat-card__value" style="color:#be185d" id="stat-female">0</p>
+        <div class="stat-strip__card stat-strip__card--pink">
+            <div class="stat-strip__icon" style="background:#fce7f3;color:#db2777"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+            <div class="stat-strip__info">
+                <span class="stat-strip__value" id="stat-female">0</span>
+                <span class="stat-strip__label">Perempuan</span>
+            </div>
         </div>
-        <div class="stat-card">
-            <div class="stat-card__icon stat-card__icon--amber" style="width:2rem;height:2rem"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-            <p class="stat-card__label" style="color:#d97706">Pending</p>
-            <p class="stat-card__value" style="color:#b45309" id="stat-pending">0</p>
+        <div class="stat-strip__card stat-strip__card--amber">
+            <div class="stat-strip__icon" style="background:#fef3c7;color:#d97706"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <div class="stat-strip__info">
+                <span class="stat-strip__value" id="stat-pending">0</span>
+                <span class="stat-strip__label">Pending</span>
+            </div>
         </div>
-        <div class="stat-card">
-            <div class="stat-card__icon stat-card__icon--green" style="width:2rem;height:2rem"><svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-            <p class="stat-card__label" style="color:#16a34a">Disetujui</p>
-            <p class="stat-card__value" style="color:#15803d" id="stat-approved">0</p>
+        <div class="stat-strip__card stat-strip__card--green">
+            <div class="stat-strip__icon" style="background:#dcfce7;color:#16a34a"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <div class="stat-strip__info">
+                <span class="stat-strip__value" id="stat-approved">0</span>
+                <span class="stat-strip__label">Disetujui</span>
+            </div>
         </div>
     </div>
 

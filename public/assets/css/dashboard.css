@@ -590,7 +590,111 @@
 }
 
 /* ============================================
-   STAT CARDS
+   STAT STRIP (compact 6-card overview)
+   ============================================ */
+
+.stat-strip {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(0.5rem, 1vw, 0.75rem);
+}
+
+@media (min-width: 640px) {
+    .stat-strip {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .stat-strip {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.stat-strip__card {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.5rem, 0.75vw, 0.75rem);
+    background: var(--dash-bg-card);
+    border: 1px solid var(--dash-border);
+    border-radius: 0.625rem;
+    padding: clamp(0.5rem, 1vw, 0.75rem);
+    border-left: 3px solid transparent;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.stat-strip__card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.stat-strip__card--blue {
+    border-left-color: #2563eb;
+}
+
+.stat-strip__card--indigo {
+    border-left-color: #4f46e5;
+}
+
+.stat-strip__card--cyan {
+    border-left-color: #0891b2;
+}
+
+.stat-strip__card--pink {
+    border-left-color: #db2777;
+}
+
+.stat-strip__card--amber {
+    border-left-color: #d97706;
+}
+
+.stat-strip__card--green {
+    border-left-color: #16a34a;
+}
+
+.stat-strip__icon {
+    width: clamp(1.75rem, 1.5vw + 0.75rem, 2.25rem);
+    height: clamp(1.75rem, 1.5vw + 0.75rem, 2.25rem);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stat-strip__icon svg {
+    width: clamp(0.875rem, 0.75vw + 0.5rem, 1.125rem);
+    height: clamp(0.875rem, 0.75vw + 0.5rem, 1.125rem);
+}
+
+.stat-strip__info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.stat-strip__value {
+    font-size: clamp(1rem, 0.75vw + 0.5rem, 1.25rem);
+    font-weight: 700;
+    color: var(--dash-text);
+    line-height: 1.2;
+}
+
+.stat-strip__label {
+    font-size: clamp(0.625rem, 0.5vw + 0.375rem, 0.75rem);
+    color: var(--dash-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .stat-strip__card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   STAT CARDS (legacy, used in Dinas view)
    ============================================ */
 
 .stat-cards {
