@@ -9,22 +9,40 @@
     <div class="modal__backdrop" onclick="closeDemoInfo()"></div>
     <div class="modal__container" style="max-width:32rem">
         <div class="modal__content">
-            <div class="modal__header">
-                <span style="font-size:1.5rem">⚠️</span>
-                <h3 class="modal__title">Informasi Penting — Mode Demo Pokja</h3>
+            <div class="modal__header" style="background:var(--dash-primary);color:#ffffff;border-top-left-radius:1rem;border-top-right-radius:1rem;border-bottom:none">
+                <span style="font-size:1.5rem;margin-right:0.5rem">⚠️</span>
+                <h3 class="modal__title" style="color:inherit">Informasi Penting — Mode Demo Pokja</h3>
             </div>
-            <div class="p-6 space-y-4">
+            <div class="p-6" style="display:flex;flex-direction:column;gap:1rem">
                 <p style="font-size:0.875rem;color:var(--dash-text-muted)">Mohon diperhatikan sebelum mengisi struktur Pokja:</p>
-                <div class="dash-alert dash-alert--info">
-                    <h4 style="font-weight:600;font-size:0.875rem;margin-bottom:0.25rem">📧 Email Ketua Pokja</h4>
-                    <p style="font-size:0.875rem">Khusus Ketua Pokja diisi memakai <strong>email asli</strong> sebagai contoh simulasi pengiriman link verifikasi.</p>
-                    <p style="font-size:0.875rem;margin-top:0.25rem">Password dapat dibuat sendiri setelah pemilik email klik link verifikasi dan proses verifikasi berhasil.</p>
+                
+                <!-- Alert 1 -->
+                <div class="dash-alert dash-alert--info" style="flex-direction:column;align-items:stretch">
+                    <div style="font-weight:600;font-size:0.875rem;display:flex;align-items:center;gap:0.5rem">
+                        <span>📧</span> Email Ketua Pokja
+                    </div>
+                    <div style="font-size:0.875rem;margin-top:0.5rem">
+                        Khusus Ketua Pokja diisi memakai <strong>email asli</strong> sebagai contoh simulasi pengiriman link verifikasi.
+                    </div>
+                    <div style="font-size:0.875rem;margin-top:0.5rem">
+                        Password dapat dibuat sendiri setelah pemilik email klik link verifikasi dan proses verifikasi berhasil.
+                    </div>
                 </div>
-                <div class="dash-alert dash-alert--warning">
-                    <h4 style="font-weight:600;font-size:0.875rem;margin-bottom:0.25rem">📧 Email selain Ketua Pokja</h4>
-                    <p style="font-size:0.875rem">Selain Ketua Pokja <strong>jangan menggunakan</strong> alamat email asli.</p>
-                    <p style="font-size:0.875rem;margin-top:0.25rem">Email selain Ketua akan langsung aktif dan bisa digunakan login Masuk Anggota Pokja.</p>
-                    <p style="font-size:0.875rem;margin-top:0.25rem">Password masuk: <code style="background:var(--dash-bg-secondary);padding:0.125rem 0.5rem;border-radius:0.25rem;font-family:monospace;font-weight:700">pokja12345</code></p>
+
+                <!-- Alert 2 -->
+                <div class="dash-alert dash-alert--warning" style="flex-direction:column;align-items:stretch">
+                    <div style="font-weight:600;font-size:0.875rem;display:flex;align-items:center;gap:0.5rem">
+                        <span>📧</span> Email selain Ketua Pokja
+                    </div>
+                    <div style="font-size:0.875rem;margin-top:0.5rem">
+                        Selain Ketua Pokja <strong>jangan menggunakan</strong> alamat email asli.
+                    </div>
+                    <div style="font-size:0.875rem;margin-top:0.5rem">
+                        Email selain Ketua akan langsung aktif dan bisa digunakan login Masuk Anggota Pokja.
+                    </div>
+                    <div style="font-size:0.875rem;margin-top:0.5rem">
+                        Password masuk: <code style="background:rgba(255,255,255,0.5);padding:0.125rem 0.5rem;border-radius:0.25rem;font-family:monospace;font-weight:700">pokja12345</code>
+                    </div>
                 </div>
             </div>
             <div style="padding:0 1.5rem 1.5rem">
