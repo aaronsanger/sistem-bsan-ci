@@ -1325,6 +1325,15 @@
     inset: 0;
     z-index: 9999;
     display: none;
+    /* Override components.css .modal styles that break fixed positioning */
+    transform: none;
+    opacity: 1;
+    max-height: none;
+    overflow: visible;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+    margin: 0;
 }
 
 .modal--open {
