@@ -88,14 +88,14 @@ function amTheme() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
     return {
         dark,
-        bg: dark ? '#1a1414' : '#ffffff',
-        card: dark ? '#0F0A0A' : '#ffffff',
-        border: dark ? '#3f4739' : '#e5e7eb',
-        text: dark ? '#e5e7eb' : '#1f2937',
-        muted: dark ? '#9ca3af' : '#6b7280',
-        input: dark ? '#1a1414' : '#ffffff',
-        svgBg: dark ? '#1a1414' : '#f0f4ff',
-        hover: dark ? 'rgba(59,130,246,0.1)' : 'rgba(59,130,246,0.05)',
+        bg: 'var(--dash-bg-card)',
+        card: 'var(--dash-bg-card)',
+        border: 'var(--dash-border)',
+        text: 'var(--dash-text)',
+        muted: 'var(--dash-text-muted)',
+        input: 'var(--dash-bg-input)',
+        svgBg: 'var(--dash-bg-card)',
+        hover: 'var(--dash-hover)',
     };
 }
 

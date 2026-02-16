@@ -10,15 +10,15 @@
     <div class="modal__container" style="max-width:32rem">
         <div class="modal__content">
             <div class="modal__header" style="background:var(--dash-primary);color:#ffffff;border-top-left-radius:1rem;border-top-right-radius:1rem;border-bottom:none">
-                <span style="font-size:1.5rem;margin-right:0.5rem">⚠️</span>
-                <h3 class="modal__title" style="color:inherit">Informasi Penting — Mode Demo Pokja</h3>
+                <span style="font-size:1.5rem;margin-right:0.25rem">⚠️</span>
+                <h3 class="modal__title" style="color:inherit">Informasi Penting</h3>
             </div>
             <div class="p-6" style="display:flex;flex-direction:column;gap:1rem">
                 <p style="font-size:0.875rem;color:var(--dash-text-muted)">Mohon diperhatikan sebelum mengisi struktur Pokja:</p>
                 
                 <!-- Alert 1 -->
                 <div class="dash-alert dash-alert--info" style="flex-direction:column;align-items:stretch">
-                    <div style="font-weight:600;font-size:0.875rem;display:flex;align-items:center;gap:0.5rem">
+                    <div style="font-weight:600;font-size:0.875rem;display:flex;align-items:center;gap:0.25rem">
                         <span>📧</span> Email Ketua Pokja
                     </div>
                     <div style="font-size:0.875rem;margin-top:0.5rem">
@@ -31,7 +31,7 @@
 
                 <!-- Alert 2 -->
                 <div class="dash-alert dash-alert--warning" style="flex-direction:column;align-items:stretch">
-                    <div style="font-weight:600;font-size:0.875rem;display:flex;align-items:center;gap:0.5rem">
+                    <div style="font-weight:600;font-size:0.875rem;display:flex;align-items:center;gap:0.25rem">
                         <span>📧</span> Email selain Ketua Pokja
                     </div>
                     <div style="font-size:0.875rem;margin-top:0.5rem">
@@ -75,9 +75,9 @@
     <div class="modal__backdrop" onclick="closeImportModal()"></div>
     <div class="modal__container" style="max-width:32rem">
         <div class="modal__content">
-            <div class="modal__header">
-                <h3 class="modal__title">Import Data dari Excel</h3>
-                <button onclick="closeImportModal()" class="modal__close">
+            <div class="modal__header" style="background:var(--dash-primary);color:#ffffff;border-bottom:none;border-radius:0.75rem 0.75rem 0 0">
+                <h3 class="modal__title" style="color:inherit">Import Data dari Excel</h3>
+                <button onclick="closeImportModal()" class="modal__close" style="color:inherit">
                     <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
@@ -766,7 +766,7 @@ function renderDraftView(app, sub, wilayah) {
             <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Update SK
         </button>
-        ${canSubmit ? `<button onclick="confirmSubmit()" class="btn-dash btn-dash--success" style="margin-left:auto;font-size:0.875rem">
+        ${canSubmit ? `<button onclick="confirmSubmit()" class="btn-dash btn-dash--success btn-spotlight" style="margin-left:auto;font-size:0.875rem">
             <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Ajukan ke Admin Pusat
         </button>` : ''}
     </div>
@@ -776,10 +776,15 @@ function renderDraftView(app, sub, wilayah) {
 function renderPendingView(app, sub, wilayah) {
     app.innerHTML = `
     <div><h2 class="dash-section__title">Data Pokja ${wilayah}</h2></div>
-    <div class="dash-alert dash-alert--warning" style="padding:1.5rem;text-align:center">
-        <div style="width:4rem;height:4rem;border-radius:50%;background:rgba(234,179,8,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><svg style="width:2rem;height:2rem;color:#ca8a04" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-        <h3 style="font-size:1.125rem;font-weight:700">⏳ Menunggu Approval</h3>
-        <p style="font-size:0.875rem;margin-top:0.5rem">Pengajuan Pokja sedang diproses oleh Admin Pusat.</p>
+    <div class="dash-alert dash-alert--warning dash-alert--pending-dark" style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem">
+        <div style="flex-shrink:0;display:flex;align-items:center;gap:0.5rem">
+            <svg style="width:1.5rem;height:1.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <svg style="width:1.5rem;height:1.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div>
+            <h3 style="font-weight:700;font-size:0.875rem;margin-bottom:0.125rem">Menunggu Approval</h3>
+            <p style="font-size:0.875rem">Pengajuan Pokja sedang diproses oleh Admin Pusat.</p>
+        </div>
     </div>
     ${renderReadonlySummary(sub)}`;
 }

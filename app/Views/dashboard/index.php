@@ -7,12 +7,12 @@
     <!-- Header with Toggle -->
     <div class="d-flex d-flex--between" style="flex-wrap:wrap;gap:0.75rem">
         <div>
-            <h2 class="dash-card__title" style="font-size:clamp(1rem, 0.75rem + 1vw, 1.25rem)">Dashboard Admin Kementerian Pusat</h2>
+            <h2 class="dash-card__title" style="font-size:var(--text-xl)">Dashboard Admin Kementerian Pusat</h2>
             <p class="dash-card__subtitle">Monitoring dan approval Pokja seluruh wilayah</p>
         </div>
         <div class="d-flex d-flex--gap-3" style="align-items:center">
             <label style="position:relative;display:inline-flex;align-items:center;cursor:pointer">
-                <input type="checkbox" id="demo-data-toggle" style="position:absolute;opacity:0;width:0;height:0" onchange="toggleDataMode(this.checked)">
+                <input type="checkbox" id="demo-data-toggle" class="focus-visible" style="position:absolute;opacity:0;width:0;height:0" onchange="toggleDataMode(this.checked)">
                 <span class="toggle-track"></span>
             </label>
             <span style="font-size:0.875rem;font-weight:500;color:var(--dash-text-secondary)" id="data-mode-label">Entry Data</span>
@@ -22,6 +22,8 @@
     <!-- Stats Cards -->
     <style>
         .toggle-track{width:2.75rem;height:1.5rem;background:var(--dash-border);border-radius:9999px;position:relative;transition:background 200ms}.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:1.25rem;height:1.25rem;background:#fff;border-radius:9999px;transition:transform 200ms}input:checked+.toggle-track{background:#2563eb}input:checked+.toggle-track::after{transform:translateX(1.25rem)}
+        /* Accessibility Focus Ring */
+        input:focus-visible + .toggle-track { outline: 2px solid var(--dash-primary); outline-offset: 2px; }
         .admin-donut-card h3 svg, .dash-card__title svg { width:clamp(0.875rem,0.5vw + 0.625rem,1.125rem); height:clamp(0.875rem,0.5vw + 0.625rem,1.125rem); flex-shrink:0; }
     </style>
     <div class="stat-strip">
@@ -92,10 +94,12 @@
     <div class="dash-grid--4" style="display:grid">
         <!-- Donut 1: Status Pengajuan -->
         <div class="dash-card admin-donut-card">
-            <h3 style="justify-content:center"><svg style="color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>Status Pengajuan Pokja</h3>
+            <h3 style="justify-content:center"><svg aria-hidden="true" class="icon-md" style="color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>Status Pengajuan Pokja</h3>
             <div class="admin-donut-wrap">
                 <div class="admin-donut-container">
-                    <svg viewBox="0 0 200 200">
+                    <svg viewBox="0 0 200 200" role="img" aria-labelledby="chart-title-1 chart-desc-1">
+                        <title id="chart-title-1">Donut Chart Status Pengajuan</title>
+                        <desc id="chart-desc-1">Menampilkan proporsi status pengajuan: Disetujui, Pending, Draft, dan Ditolak.</desc>
                         <circle cx="100" cy="100" r="78" fill="none" stroke="#e5e7eb" stroke-width="22"></circle>
                         <circle id="donut-st-approved" cx="100" cy="100" r="78" fill="none" stroke="#10b981" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
                         <circle id="donut-st-pending" cx="100" cy="100" r="78" fill="none" stroke="#f59e0b" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
@@ -118,10 +122,12 @@
         </div>
         <!-- Donut 2: Persentase Pokja Provinsi -->
         <div class="dash-card admin-donut-card">
-            <h3 style="justify-content:center"><svg style="color:#22c55e" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Persentase Pokja Provinsi</h3>
+            <h3 style="justify-content:center"><svg aria-hidden="true" class="icon-md" style="color:#22c55e" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Persentase Pokja Provinsi</h3>
             <div class="admin-donut-wrap">
                 <div class="admin-donut-container">
-                    <svg viewBox="0 0 200 200">
+                    <svg viewBox="0 0 200 200" role="img" aria-labelledby="chart-title-2 chart-desc-2">
+                        <title id="chart-title-2">Donut Chart Persentase Provinsi</title>
+                        <desc id="chart-desc-2">Menampilkan persentase provinsi yang sudah memiliki Pokja.</desc>
                         <circle cx="100" cy="100" r="78" fill="none" stroke="#e5e7eb" stroke-width="22"></circle>
                         <circle id="donut-prov-red" cx="100" cy="100" r="78" fill="none" stroke="#ef4444" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
                         <circle id="donut-prov-green" cx="100" cy="100" r="78" fill="none" stroke="#22c55e" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
@@ -140,10 +146,12 @@
         </div>
         <!-- Donut 3: Persentase Pokja Kab/Kota -->
         <div class="dash-card admin-donut-card">
-            <h3 style="justify-content:center"><svg style="color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Persentase Pokja Kab/Kota</h3>
+            <h3 style="justify-content:center"><svg aria-hidden="true" class="icon-md" style="color:#3b82f6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Persentase Pokja Kab/Kota</h3>
             <div class="admin-donut-wrap">
                 <div class="admin-donut-container">
-                    <svg viewBox="0 0 200 200">
+                    <svg viewBox="0 0 200 200" role="img" aria-labelledby="chart-title-3 chart-desc-3">
+                        <title id="chart-title-3">Donut Chart Persentase Kab/Kota</title>
+                        <desc id="chart-desc-3">Menampilkan persentase kabupaten/kota yang sudah memiliki Pokja.</desc>
                         <circle cx="100" cy="100" r="78" fill="none" stroke="#e5e7eb" stroke-width="22"></circle>
                         <circle id="donut-kab-red" cx="100" cy="100" r="78" fill="none" stroke="#ef4444" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
                         <circle id="donut-kab-green" cx="100" cy="100" r="78" fill="none" stroke="#22c55e" stroke-width="22" stroke-linecap="round" stroke-dasharray="0 490" transform="rotate(-90 100 100)"></circle>
@@ -162,7 +170,7 @@
         </div>
         <!-- Chart 4: Komposisi Gender per Jabatan -->
         <div class="dash-card">
-            <h3 class="dash-card__title" style="font-size:clamp(0.75rem,0.5vw+0.5rem,0.875rem);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.375rem;justify-content:center"><svg class="icon-sm" style="color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Gender per Jabatan</h3>
+            <h3 class="dash-card__title" style="font-size:var(--text-sm);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.375rem;justify-content:center"><svg class="icon-sm" style="color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Gender per Jabatan</h3>
             <div style="position:relative;height:clamp(140px, 16vw + 60px, 220px);"><canvas id="chart-gender"></canvas></div>
         </div>
     </div>
@@ -251,31 +259,43 @@
     <div class="dash-card">
         <h3 class="dash-card__title" style="font-size:0.875rem;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem"><svg class="icon-sm" style="color:#ea580c" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Log Pengajuan Pokja</h3>
         <!-- Filters Row -->
+        <!-- Filters Row -->
         <div class="log-toolbar">
+            <!-- Left Group: Entries -->
             <div class="log-toolbar__entries">
                 <label>Tampilkan</label>
-                <select id="log-per-page" onchange="logPerPageChanged()" class="form-select log-toolbar__select">
+                <select id="log-per-page" onchange="logPerPageChanged()" class="form-select" style="width:auto;padding-right:2rem">
                     <option value="10" selected>10</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
                     <option value="-1">Semua</option>
                 </select>
-                <label>data</label>
             </div>
-            <input id="log-search" type="text" placeholder="Cari wilayah..." oninput="logFilterChanged()" class="form-input log-toolbar__search" />
-            <div class="log-toolbar__right">
-                <select id="log-status-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
-                    <option value="">Semua Status</option>
-                    <option value="approved">Disetujui</option>
-                    <option value="pending">Pending</option>
-                    <option value="draft">Draft</option>
-                    <option value="declined">Ditolak</option>
-                </select>
-                <select id="log-jenis-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
-                    <option value="">Semua Jenis</option>
-                    <option value="dinas_prov">Provinsi</option>
-                    <option value="dinas_kab">Kab/Kota</option>
-                </select>
+            
+            <!-- Right Group: Search & Filters -->
+            <div class="log-toolbar__filters">
+                <div class="input-group">
+                    <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input id="log-search" type="text" placeholder="Cari wilayah..." oninput="logFilterChanged()" class="form-input form-input-Icon" />
+                </div>
+
+                <div>
+                    <select id="log-status-filter" onchange="logFilterChanged()" class="form-select">
+                        <option value="">Semua Status</option>
+                        <option value="approved">Disetujui</option>
+                        <option value="pending">Pending</option>
+                        <option value="draft">Draft</option>
+                        <option value="declined">Ditolak</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <select id="log-jenis-filter" onchange="logFilterChanged()" class="form-select">
+                        <option value="">Semua Jenis</option>
+                        <option value="dinas_prov">Provinsi</option>
+                        <option value="dinas_kab">Kab/Kota</option>
+                    </select>
+                </div>
             </div>
         </div>
         <span id="log-count" class="log-count"></span>
@@ -320,11 +340,14 @@
     </div>
 
     <!-- Pending Banner -->
-    <div id="pending-banner" style="display:none" class="dash-alert dash-alert--warning">
+    <div id="pending-banner" style="display:none" class="dash-alert dash-alert--warning dash-alert--pending-dark">
         <div style="display:flex;align-items:flex-start;gap:0.75rem">
-            <svg style="width:1.25rem;height:1.25rem;color:#d97706;flex-shrink:0;margin-top:2px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div style="flex-shrink:0;display:flex;align-items:center;gap:0.25rem">
+                <svg style="width:1.25rem;height:1.25rem;color:#d97706" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> 
+                <svg style="width:1.25rem;height:1.25rem;color:#b45309" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
             <div>
-                <p style="font-weight:600">⏳ Menunggu Approval</p>
+                <p style="font-weight:600">Menunggu Approval</p>
                 <p style="font-size:0.875rem;margin-top:0.25rem">Pengajuan Pokja sedang diproses oleh Admin Pusat.</p>
             </div>
         </div>
@@ -749,7 +772,7 @@
         document.getElementById('stat-approved').textContent = approved;
 
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const textColor = isDark ? '#e5e7eb' : '#374151';
+        const textColor = isDark ? '#ffffff' : '#374151';
 
         // Update SVG donut - Status Pengajuan (4 segments)
         updateStatusDonut(draft, pending, approved, declined);
@@ -1031,8 +1054,14 @@
     }
 
     function openApprovalDetail(idx) {
+        console.log('openApprovalDetail called with idx:', idx);
+        console.log('Current _activeSubs length:', _activeSubs ? _activeSubs.length : 'null');
+        
         const s = _activeSubs[idx];
-        if (!s) return;
+        if (!s) {
+            console.error('Submission not found for idx:', idx);
+            return;
+        }
         currentApprovalIdx = idx;
 
         // Status badge colors
@@ -1325,5 +1354,21 @@
     }
 
     $(document).ready(function() { initDashboard(); });
+    // Theme Observer for Chart Colors
+    // Theme Observer for Chart Colors
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                const role = localStorage.getItem('bsan_demo_role') || 'kementerian';
+                if (role === 'kementerian') {
+                    // Re-render chart if active
+                     if (document.getElementById('chart-gender')) {
+                        renderKementerianDashboard();
+                    }
+                }
+            }
+        });
+    });
+    observer.observe(document.documentElement, { attributes: true });
 </script>
 <?= $this->endSection() ?>
