@@ -187,6 +187,11 @@ const GENDER_OPTIONS = '<option value="">Pilih</option><option value="L">Laki-la
 
 function init() {
     if (role === 'kementerian') { location.href = '/dashboard'; return; }
+    // Move modals to body so they escape dashboard__content overflow clipping
+    ['demo-info-modal', 'submit-confirm-modal', 'import-excel-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) document.body.appendChild(el);
+    });
     // Always show info modal for non-approved accounts
     const { sub } = getMySubmission();
     if (!sub || sub.status !== 'approved') {
