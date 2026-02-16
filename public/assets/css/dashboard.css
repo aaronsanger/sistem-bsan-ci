@@ -1323,7 +1323,7 @@
 .modal {
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: 9999;
     display: none;
 }
 
@@ -1342,6 +1342,7 @@
 
 .modal__container {
     position: relative;
+    z-index: 1;
     background: var(--dash-bg-card);
     border-radius: 1rem;
     border: 1px solid var(--dash-border);
