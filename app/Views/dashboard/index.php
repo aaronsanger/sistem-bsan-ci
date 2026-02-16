@@ -162,7 +162,7 @@
         </div>
         <!-- Chart 4: Komposisi Gender per Jabatan -->
         <div class="dash-card">
-            <h3 class="dash-card__title" style="font-size:clamp(0.7rem,0.4vw+0.45rem,0.8rem);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.375rem;justify-content:center"><svg class="icon-sm" style="color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Gender per Jabatan</h3>
+            <h3 class="dash-card__title" style="font-size:clamp(0.75rem,0.5vw+0.5rem,0.875rem);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.375rem;justify-content:center"><svg class="icon-sm" style="color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Gender per Jabatan</h3>
             <div style="position:relative;height:clamp(140px, 16vw + 60px, 220px);"><canvas id="chart-gender"></canvas></div>
         </div>
     </div>
@@ -776,7 +776,31 @@
         if (ctx2) {
             genderChart = new Chart(ctx2, {
                 type: 'bar', data: { labels: Object.keys(genderByRole), datasets: [{ label: 'Laki-laki', data: Object.values(genderByRole).map(v => v.L), backgroundColor: '#06b6d4', borderRadius: 6 }, { label: 'Perempuan', data: Object.values(genderByRole).map(v => v.P), backgroundColor: '#ec4899', borderRadius: 6 }] },
-                options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false }, ticks: { color: textColor } }, y: { beginAtZero: true, grid: { color: isDark ? '#3f4739' : '#e5e7eb' }, ticks: { color: textColor, stepSize: 1 } } }, plugins: { legend: { labels: { color: textColor, usePointStyle: true, pointStyle: 'circle' } } } }
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    onHover: (e, els) => { e.native.target.style.cursor = els.length ? 'pointer' : 'default'; },
+                    scales: { x: { grid: { display: false }, ticks: { color: textColor } }, y: { beginAtZero: true, grid: { color: isDark ? '#3f4739' : '#e5e7eb' }, ticks: { color: textColor, stepSize: 1 } } },
+                    plugins: {
+                        legend: { labels: { color: textColor, usePointStyle: true, pointStyle: 'circle' } },
+                        tooltip: {
+                            enabled: false,
+                            external: function(context) {
+                                const tt = document.getElementById('admin-tooltip');
+                                if (!tt) return;
+                                if (context.tooltip.opacity === 0) { tt.style.display = 'none'; return; }
+                                const item = context.tooltip.dataPoints?.[0];
+                                if (!item) return;
+                                const bg = item.dataset.backgroundColor || '#333';
+                                tt.textContent = `${item.dataset.label}: ${item.raw} (${item.label})`;
+                                tt.style.background = bg;
+                                tt.style.display = 'block';
+                                const pos = context.chart.canvas.getBoundingClientRect();
+                                tt.style.left = (pos.left + window.scrollX + context.tooltip.caretX + 15) + 'px';
+                                tt.style.top = (pos.top + window.scrollY + context.tooltip.caretY - 10) + 'px';
+                            }
+                        }
+                    }
+                }
             });
         }
 
