@@ -2323,3 +2323,138 @@
 [data-theme="dark"] .bg-white {
     background-color: var(--dash-bg-card);
 }
+
+/* ============================================
+   POKJA FORM STYLES
+   ============================================ */
+
+.form-dash__label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--dash-text-muted);
+    margin-bottom: 0.375rem;
+    letter-spacing: 0.02em;
+}
+
+.form-dash__input {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--dash-text);
+    background: var(--dash-bg-input);
+    border: 1px solid var(--dash-border);
+    border-radius: 0.5rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-dash__input::placeholder {
+    color: var(--dash-text-light);
+}
+
+.form-dash__input:hover:not(:disabled):not([readonly]) {
+    border-color: var(--dash-text-muted);
+}
+
+.form-dash__input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-dash__input:disabled,
+.form-dash__input[readonly] {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Select dropdown arrow */
+select.form-dash__input {
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.25rem;
+}
+
+[data-theme="dark"] select.form-dash__input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+}
+
+/* Also style form-input & form-select for other dashboard pages */
+.form-input,
+.form-select {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--dash-text);
+    background: var(--dash-bg-input);
+    border: 1px solid var(--dash-border);
+    border-radius: 0.5rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-input::placeholder {
+    color: var(--dash-text-light);
+}
+
+.form-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--dash-text-secondary);
+    margin-bottom: 0.375rem;
+}
+
+/* Pokja section grouping */
+.pokja-section {
+    background: var(--dash-bg-card);
+    border: 1px solid var(--dash-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.pokja-section__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--dash-text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Space-y utility (used across dashboard views) */
+.space-y-6>*+* {
+    margin-top: 1.5rem;
+}
+
+.space-y-4>*+* {
+    margin-top: 1rem;
+}
+
+.space-y-3>*+* {
+    margin-top: 0.75rem;
+}
+
+.space-y-2>*+* {
+    margin-top: 0.5rem;
+}
+
+.space-y-1>*+* {
+    margin-top: 0.25rem;
+}

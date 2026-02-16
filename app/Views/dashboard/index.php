@@ -396,56 +396,66 @@
 <!-- Kementerian: Detail Modal -->
 <div id="detail-approval-modal" class="modal" style="display:none">
     <div class="modal__backdrop" onclick="closeApprovalModal()"></div>
-    <div class="modal__container" style="max-width:42rem">
+    <div class="modal__container" style="max-width:48rem">
         <div class="modal__content">
             <div class="modal__header">
-                <h3 class="modal__title">Detail Pengajuan Pokja</h3>
+                <h3 class="modal__title" style="display:flex;align-items:center;gap:0.5rem">
+                    <svg style="width:1.25rem;height:1.25rem;color:#2563eb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Detail Pengajuan Pokja
+                </h3>
                 <button onclick="closeApprovalModal()" class="modal__close">
                     <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
-            <div id="approval-detail-content" class="p-6 space-y-4"></div>
+            <!-- Dynamic content injected by JS -->
+            <div id="approval-detail-content" style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem;max-height:60vh;overflow-y:auto"></div>
             <!-- PDF Preview Section -->
-            <div id="pdf-preview-section" class="hidden px-6 pb-4">
-                <div class="bg-gray-50 dark:bg-[#1a1414] border border-gray-200 dark:border-[#3f4739] rounded-xl p-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <div id="pdf-preview-section" style="display:none;padding:0 1.5rem 1rem">
+                <div style="background:var(--dash-bg);border:1px solid var(--dash-border);border-radius:0.75rem;padding:1rem">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+                        <h4 style="font-size:0.875rem;font-weight:600;color:var(--dash-text);display:flex;align-items:center;gap:0.5rem">
+                            <svg style="width:1rem;height:1rem;color:#ef4444" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                             Preview Dokumen SK
                         </h4>
-                        <button id="pdf-open-tab" onclick="openPdfInNewTab()" class="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        <button id="pdf-open-tab" onclick="openPdfInNewTab()" style="display:inline-flex;align-items:center;gap:0.375rem;font-size:0.8125rem;color:#2563eb;font-weight:500;background:none;border:none;cursor:pointer">
+                            <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             Buka di Tab Baru
                         </button>
                     </div>
-                    <div id="pdf-preview-frame" class="rounded-lg overflow-hidden bg-white dark:bg-gray-900 border border-gray-200 dark:border-[#3f4739]" style="height: 400px;">
-                        <div class="flex items-center justify-center h-full text-gray-400">
-                            <div class="text-center">
-                                <svg class="w-16 h-16 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                                <p class="text-sm font-medium" id="pdf-filename">dokumen.pdf</p>
-                                <p class="text-xs text-gray-400 mt-1">Preview PDF (mode demo)</p>
+                    <div id="pdf-preview-frame" style="height:300px;border-radius:0.5rem;overflow:hidden;background:var(--dash-bg-card);border:1px solid var(--dash-border)">
+                        <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--dash-text-muted)">
+                            <div style="text-align:center">
+                                <svg style="width:3rem;height:3rem;margin:0 auto 0.75rem;color:var(--dash-border)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                <p style="font-size:0.875rem;font-weight:500" id="pdf-filename">dokumen.pdf</p>
+                                <p style="font-size:0.75rem;color:var(--dash-text-muted);margin-top:0.25rem">Preview PDF (mode demo)</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Action History -->
-            <div id="action-history-section" class="hidden px-6 pb-4">
-                <div class="bg-gray-50 dark:bg-[#1a1414] border border-gray-200 dark:border-[#3f4739] rounded-xl p-4">
-                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Riwayat Aksi</h4>
-                    <div id="action-history-list" class="space-y-2 text-sm"></div>
+            <div id="action-history-section" style="display:none;padding:0 1.5rem 1rem">
+                <div style="background:var(--dash-bg);border:1px solid var(--dash-border);border-radius:0.75rem;padding:1rem">
+                    <h4 style="font-size:0.875rem;font-weight:600;color:var(--dash-text);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem">
+                        <svg style="width:1rem;height:1rem;color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Riwayat Aksi
+                    </h4>
+                    <div id="action-history-list" style="display:flex;flex-direction:column;gap:0.5rem"></div>
                 </div>
             </div>
+            <!-- Approve/Decline Buttons -->
             <div id="approval-actions" style="padding:0 1.5rem 1.5rem;display:flex;gap:0.75rem">
                 <button onclick="showDeclineForm()" class="btn-dash btn-dash--outline" style="flex:1;border-color:#dc2626;color:#dc2626">Tolak</button>
                 <button onclick="approvePokja()" class="btn-dash btn-dash--success" style="flex:1">Setujui</button>
             </div>
-            <div id="decline-form" style="display:none;padding:0 1.5rem 1.5rem" class="space-y-3">
-                <label class="form-label">Alasan Penolakan</label>
-                <textarea id="decline-reason-input" rows="3" class="form-input" style="resize:none" placeholder="Jelaskan alasan penolakan..."></textarea>
-                <div style="display:flex;gap:0.75rem">
-                    <button onclick="cancelDecline()" class="btn-dash btn-dash--outline" style="flex:1">Batal</button>
-                    <button onclick="declinePokja()" class="btn-dash btn-dash--danger" style="flex:1">Tolak Pengajuan</button>
+            <div id="decline-form" style="display:none;padding:0 1.5rem 1.5rem">
+                <div style="display:flex;flex-direction:column;gap:0.75rem">
+                    <label class="form-label">Alasan Penolakan</label>
+                    <textarea id="decline-reason-input" rows="3" class="form-input" style="resize:none" placeholder="Jelaskan alasan penolakan..."></textarea>
+                    <div style="display:flex;gap:0.75rem">
+                        <button onclick="cancelDecline()" class="btn-dash btn-dash--outline" style="flex:1">Batal</button>
+                        <button onclick="declinePokja()" class="btn-dash btn-dash--danger" style="flex:1">Tolak Pengajuan</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1023,47 +1033,138 @@
         if (!s) return;
         currentApprovalIdx = idx;
 
-        // Build structure display
+        // Status badge colors
+        const statusStyles = {
+            approved: { bg: '#dcfce7', color: '#166534', label: 'Disetujui' },
+            pending:  { bg: '#fef9c3', color: '#854d0e', label: 'Pending' },
+            draft:    { bg: '#f3f4f6', color: '#374151', label: 'Draft' },
+            declined: { bg: '#fee2e2', color: '#991b1b', label: 'Ditolak' },
+        };
+        const st = statusStyles[s.status] || statusStyles.draft;
+
+        // Role border colors
+        const roleColors = { ketua: '#2563eb', wakil: '#7c3aed', koordinator: '#0d9488' };
+
+        // Build member cards
         let membersHtml = '';
         if (s.struktur) {
             const roles = [
-                { key: 'ketua', label: 'Ketua — Sekretaris Daerah' },
-                { key: 'wakil', label: 'Wakil Ketua — Kepala Bappeda' },
-                { key: 'koordinator', label: 'Koordinator — Kepala Dinas Pendidikan' },
+                { key: 'ketua', label: 'Ketua', subtitle: 'Sekretaris Daerah', icon: 'K' },
+                { key: 'wakil', label: 'Wakil Ketua', subtitle: 'Kepala Bappeda', icon: 'W' },
+                { key: 'koordinator', label: 'Koordinator', subtitle: 'Kepala Dinas Pendidikan', icon: 'Ko' },
             ];
             roles.forEach(r => {
                 const m = s.struktur[r.key];
-                if (m) {
-                    membersHtml += `<div class="border-b dark:border-[#3f4739] pb-2"><p class="text-xs text-gray-500 dark:text-gray-400">${r.label}</p><p class="font-medium dark:text-white">${m.nama || '-'}</p><p class="text-sm text-gray-500">${m.email || '-'} · ${m.instansi || '-'}</p></div>`;
+                if (m && m.nama) {
+                    const bc = roleColors[r.key] || '#6b7280';
+                    membersHtml += `
+                    <div style="border:1px solid var(--dash-border);border-left:3px solid ${bc};border-radius:0.5rem;padding:0.75rem 1rem;display:flex;gap:0.75rem;align-items:flex-start">
+                        <div style="width:2rem;height:2rem;border-radius:50%;background:${bc}15;color:${bc};display:flex;align-items:center;justify-content:center;font-size:0.6875rem;font-weight:700;flex-shrink:0;margin-top:2px">${r.icon}</div>
+                        <div style="flex:1;min-width:0">
+                            <div style="font-size:0.8125rem;font-weight:600;color:var(--dash-text)">${m.nama}</div>
+                            <div style="font-size:0.6875rem;color:var(--dash-text-muted);margin-top:1px">${r.label} — ${r.subtitle}</div>
+                            <div style="display:flex;flex-wrap:wrap;gap:0.25rem 0.75rem;margin-top:0.375rem;font-size:0.75rem;color:var(--dash-text-secondary)">
+                                ${m.email ? `<span>📧 ${m.email}</span>` : ''}
+                                ${m.instansi ? `<span>🏢 ${m.instansi}</span>` : ''}
+                                ${m.whatsapp ? `<span>📱 ${m.whatsapp}</span>` : ''}
+                                ${m.noPribadi ? `<span>📞 ${m.noPribadi}</span>` : ''}
+                                ${m.gender ? `<span>👤 ${m.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
                 }
             });
+            // Anggota
             if (s.struktur.anggota && s.struktur.anggota.length) {
-                s.struktur.anggota.forEach(a => {
-                    membersHtml += `<div class="border-b dark:border-[#3f4739] pb-2"><p class="text-xs text-gray-500 dark:text-gray-400">${a.bidang || 'Anggota'}</p><p class="font-medium dark:text-white">${a.nama || '-'}</p><p class="text-sm text-gray-500">${a.email || '-'} · ${a.instansi || '-'}</p></div>`;
+                s.struktur.anggota.forEach((a, i) => {
+                    membersHtml += `
+                    <div style="border:1px solid var(--dash-border);border-left:3px solid #d97706;border-radius:0.5rem;padding:0.75rem 1rem;display:flex;gap:0.75rem;align-items:flex-start">
+                        <div style="width:2rem;height:2rem;border-radius:50%;background:#d9770615;color:#d97706;display:flex;align-items:center;justify-content:center;font-size:0.6875rem;font-weight:700;flex-shrink:0;margin-top:2px">A${i+1}</div>
+                        <div style="flex:1;min-width:0">
+                            <div style="font-size:0.8125rem;font-weight:600;color:var(--dash-text)">${a.nama || '-'}</div>
+                            <div style="font-size:0.6875rem;color:var(--dash-text-muted);margin-top:1px">${a.bidang || 'Anggota Pokja'}</div>
+                            <div style="display:flex;flex-wrap:wrap;gap:0.25rem 0.75rem;margin-top:0.375rem;font-size:0.75rem;color:var(--dash-text-secondary)">
+                                ${a.email ? `<span>📧 ${a.email}</span>` : ''}
+                                ${a.instansi ? `<span>🏢 ${a.instansi}</span>` : ''}
+                                ${a.whatsapp ? `<span>📱 ${a.whatsapp}</span>` : ''}
+                                ${a.gender ? `<span>👤 ${a.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
                 });
             }
         }
 
         document.getElementById('approval-detail-content').innerHTML = `
-            <div class="space-y-3">
-                <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Wilayah:</span><p class="text-gray-900 dark:text-white font-semibold">${s.wilayah || '-'}</p></div>
-                <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Nama Pokja:</span><p class="text-gray-900 dark:text-white">${s.namaPokja || '-'}</p></div>
-                <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Nomor SK:</span><p class="text-gray-900 dark:text-white">${s.nomorSK || '-'}</p></div>
-                <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Masa Berlaku:</span><p class="text-gray-900 dark:text-white">${s.periodeMulai || '-'} s/d ${s.periodeSelesai || '-'}</p></div>
-                <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Dokumen SK:</span><p class="text-gray-900 dark:text-white">${s.skFileName || 'Tidak ada'}</p></div>
-                <hr class="dark:border-[#3f4739]">
-                <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Struktur Pokja:</span></div>
-                <div class="space-y-2">${membersHtml || '<p class="text-gray-400">Tidak ada data struktur</p>'}</div>
+            <!-- Status Badge -->
+            <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:0.75rem;font-weight:600;padding:0.25rem 0.75rem;border-radius:9999px;background:${st.bg};color:${st.color}">${st.label}</span>
+                <span style="font-size:0.75rem;color:var(--dash-text-muted)">${s.tanggal ? new Date(s.tanggal).toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'}) : ''}</span>
+            </div>
+
+            <!-- Identitas Section -->
+            <div style="background:var(--dash-bg);border:1px solid var(--dash-border);border-radius:0.75rem;padding:1rem">
+                <h4 style="font-size:0.8125rem;font-weight:600;color:var(--dash-text);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.375rem">
+                    <svg style="width:0.875rem;height:0.875rem;color:#2563eb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    Identitas Pokja
+                </h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
+                    <div>
+                        <div style="font-size:0.6875rem;font-weight:500;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.04em">Wilayah</div>
+                        <div style="font-size:0.875rem;font-weight:600;color:var(--dash-text);margin-top:2px">${s.wilayah || '-'}</div>
+                    </div>
+                    <div>
+                        <div style="font-size:0.6875rem;font-weight:500;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.04em">Nama Pokja</div>
+                        <div style="font-size:0.875rem;color:var(--dash-text);margin-top:2px">${s.namaPokja || '-'}</div>
+                    </div>
+                    <div style="grid-column:1/-1">
+                        <div style="font-size:0.6875rem;font-weight:500;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.04em">No. Call Center Pokja</div>
+                        <div style="font-size:0.875rem;color:var(--dash-text);margin-top:2px">${s.callCenter || '-'}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data SK Section -->
+            <div style="background:var(--dash-bg);border:1px solid var(--dash-border);border-radius:0.75rem;padding:1rem">
+                <h4 style="font-size:0.8125rem;font-weight:600;color:var(--dash-text);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.375rem">
+                    <svg style="width:0.875rem;height:0.875rem;color:#ef4444" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Data SK
+                </h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
+                    <div>
+                        <div style="font-size:0.6875rem;font-weight:500;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.04em">Nomor SK</div>
+                        <div style="font-size:0.875rem;color:var(--dash-text);margin-top:2px">${s.nomorSK || '-'}</div>
+                    </div>
+                    <div>
+                        <div style="font-size:0.6875rem;font-weight:500;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.04em">Masa Berlaku</div>
+                        <div style="font-size:0.875rem;color:var(--dash-text);margin-top:2px">${s.periodeMulai || '-'} s/d ${s.periodeSelesai || '-'}</div>
+                    </div>
+                    <div style="grid-column:1/-1">
+                        <div style="font-size:0.6875rem;font-weight:500;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.04em">Dokumen SK</div>
+                        <div style="font-size:0.875rem;color:var(--dash-text);margin-top:2px">${s.skFileName || 'Belum diunggah'}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Struktur Pokja Section -->
+            <div>
+                <h4 style="font-size:0.8125rem;font-weight:600;color:var(--dash-text);margin-bottom:0.625rem;display:flex;align-items:center;gap:0.375rem">
+                    <svg style="width:0.875rem;height:0.875rem;color:#7c3aed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Struktur Pokja
+                </h4>
+                <div style="display:flex;flex-direction:column;gap:0.5rem">
+                    ${membersHtml || '<div style="text-align:center;padding:1.5rem;color:var(--dash-text-muted);font-size:0.875rem">Tidak ada data struktur</div>'}
+                </div>
             </div>
         `;
 
         // PDF Preview
         const pdfSection = document.getElementById('pdf-preview-section');
         if (s.skFileName) {
-            pdfSection.classList.remove('hidden');
+            pdfSection.style.display = '';
             document.getElementById('pdf-filename').textContent = s.skFileName;
         } else {
-            pdfSection.classList.add('hidden');
+            pdfSection.style.display = 'none';
         }
 
         // Action History
@@ -1071,32 +1172,33 @@
         const historyList = document.getElementById('action-history-list');
         const log = getActionLog().filter(l => l.wilayah === s.wilayah);
         if (log.length > 0) {
-            historySection.classList.remove('hidden');
+            historySection.style.display = '';
             historyList.innerHTML = log.map(l => {
                 const d = new Date(l.timestamp);
                 const dateStr = d.toLocaleDateString('id-ID', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-                const actionColor = l.action === 'approved' ? 'text-green-600' : 'text-red-600';
-                const actionLabel = l.action === 'approved' ? '✅ Disetujui' : '❌ Ditolak';
-                return `<div class="flex items-center gap-2 text-sm">
-                    <span class="${actionColor} font-medium">${actionLabel}</span>
-                    <span class="text-gray-500">oleh ${l.admin}</span>
-                    <span class="text-gray-400 ml-auto">${dateStr}</span>
-                    ${l.reason ? `<span class="text-xs text-red-500">(${l.reason})</span>` : ''}
+                const isApproved = l.action === 'approved';
+                const actionColor = isApproved ? '#166534' : '#991b1b';
+                const actionLabel = isApproved ? '✅ Disetujui' : '❌ Ditolak';
+                return `<div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;padding:0.375rem 0;border-bottom:1px solid var(--dash-border)">
+                    <span style="color:${actionColor};font-weight:600">${actionLabel}</span>
+                    <span style="color:var(--dash-text-muted)">oleh ${l.admin}</span>
+                    <span style="color:var(--dash-text-muted);margin-left:auto;font-size:0.75rem">${dateStr}</span>
+                    ${l.reason ? `<span style="font-size:0.6875rem;color:#dc2626">(${l.reason})</span>` : ''}
                 </div>`;
             }).join('');
         } else {
-            historySection.classList.add('hidden');
+            historySection.style.display = 'none';
         }
 
         // Show/hide actions based on status
         const actionsEl = document.getElementById('approval-actions');
         const declineFormEl = document.getElementById('decline-form');
         if (s.status === 'pending') {
-            actionsEl.classList.remove('hidden');
+            actionsEl.style.display = '';
         } else {
-            actionsEl.classList.add('hidden');
+            actionsEl.style.display = 'none';
         }
-        declineFormEl.classList.add('hidden');
+        declineFormEl.style.display = 'none';
 
         document.getElementById('detail-approval-modal').style.display = '';
     }

@@ -3,8 +3,23 @@
 <?= $this->section('content') ?>
 
 <div class="space-y-6">
+    <!-- Pokja Not Approved Banner (injected by JS) -->
+    <div id="pokja-gate-banner" style="display:none" class="dash-alert dash-alert--warning">
+        <div style="display:flex;align-items:flex-start;gap:0.75rem">
+            <svg style="width:1.5rem;height:1.5rem;color:#d97706;flex-shrink:0;margin-top:2px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <div>
+                <p style="font-weight:600;font-size:1rem">Pokja Belum Disetujui</p>
+                <p style="font-size:0.875rem;margin-top:0.25rem">Fitur Tambah Rujukan hanya aktif setelah data Pokja disetujui oleh Admin Pusat. Silakan lengkapi dan ajukan data Pokja terlebih dahulu.</p>
+                <a href="/dashboard/pokja" class="btn-dash btn-dash--warning" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:0.75rem;font-size:0.875rem">
+                    <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Isi Data Pokja
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Add Rujukan -->
-    <div class="dash-card">
+    <div id="rujukan-form-card" class="dash-card">
         <h2 class="dash-card__title" style="margin-bottom:1rem">Tambah Rujukan</h2>
         <form id="rujukan-form" class="dash-grid--2">
             <div class="form-group">
@@ -62,9 +77,35 @@
 
 <?= $this->section('scripts') ?>
 <script>
+    const POKJA_SUBMISSIONS_KEY = 'bsan_pokja_submissions';
     let rujukanDT;
 
+    // Check if Pokja is approved for current role (same pattern as pelaporan.php)
+    function isPokjaApproved() {
+        const role = localStorage.getItem('bsan_demo_role') || 'kementerian';
+        if (role === 'kementerian') return true; // Admin always has access
+        const subs = JSON.parse(localStorage.getItem(POKJA_SUBMISSIONS_KEY) || '[]');
+        const provName = localStorage.getItem('bsan_wilayah_prov') || '';
+        const kabName = localStorage.getItem('bsan_wilayah_kab') || '';
+        let wilayah;
+        if (role === 'dinas_prov') { wilayah = provName ? `Prov. ${provName}` : 'Provinsi'; }
+        else { wilayah = kabName || 'Kabupaten/Kota'; }
+        const mySub = subs.find(s => s.roleType === role && s.wilayah === wilayah);
+        return mySub && mySub.status === 'approved';
+    }
+
+    const pokjaApproved = isPokjaApproved();
+
+    // Apply feature gating on page load
+    function applyFeatureGate() {
+        if (!pokjaApproved) {
+            document.getElementById('pokja-gate-banner').style.display = '';
+            document.getElementById('rujukan-form-card').style.display = 'none';
+        }
+    }
+
     $(document).ready(function () {
+        applyFeatureGate();
         loadRujukan();
 
         $('#rujukan-form').on('submit', function (e) {
@@ -100,7 +141,7 @@
                         <td>${r.no_whatsapp}</td>
                         <td><span class="badge badge--info">${kategoriLabel[r.kategori] || r.kategori}</span></td>
                         <td>
-                            <button onclick="deleteRujukan('${r.id}')" style="color:#dc2626;font-size:0.75rem;cursor:pointer;background:none;border:none">Hapus</button>
+                            ${pokjaApproved ? `<button onclick="deleteRujukan('${r.id}')" style="color:#dc2626;font-size:0.75rem;cursor:pointer;background:none;border:none">Hapus</button>` : '<span style="font-size:0.75rem;color:var(--dash-text-muted)">—</span>'}
                         </td>
                     </tr>`;
                 });
@@ -130,3 +171,4 @@
     }
 </script>
 <?= $this->endSection() ?>
+
