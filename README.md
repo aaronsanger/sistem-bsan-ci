@@ -46,7 +46,7 @@ Sistem informasi untuk monitoring dan pengelolaan Pokja (Kelompok Kerja) Budaya 
 | Backend | CodeIgniter 4 (PHP 8.x) |
 | Database | Supabase (PostgreSQL + GoTrue Auth) |
 | Frontend | HTML, CSS, JavaScript (vanilla) |
-| Dashboard CSS | Tailwind CSS |
+| Dashboard CSS | Tailwind CSS + Custom CSS (`dashboard.css`) |
 | Public CSS | Vanilla CSS (app.css, components.css) |
 | Charts | Chart.js 4 |
 | Tables | DataTables.net |
@@ -303,3 +303,16 @@ php spark serve --port 8080
 ### Removed
 - `fix_dashboard.js` (stale debug script at project root)
 - `public/assets/js/wilayahData.js` (unused duplicate, not loaded by any PHP file)
+
+### UI/UX Polish (2026-02-16)
+
+- **Toolbar & Layout**:
+  - Refined "Log Pengajuan" filters with responsive Flexbox layout.
+  - Constrained search input width for better visual balance.
+- **Visual Enhancements**:
+  - Added high-contrast custom SVG icons for all dashboard dropdowns.
+  - Standardized font sizes using CSS variables (`--text-sm`, etc.) replacing `clamp()`.
+- **Theme Compatibility**:
+  - Fixed "Gender per Jabatan" chart text color invisibility in Light Mode.
+  - Implemented dynamic chart text coloring (`#374151` Light / `#ffffff` Dark).
+  - Enhanced Dark Mode contrast for form elements and tables.
