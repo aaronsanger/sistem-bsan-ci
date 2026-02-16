@@ -5,8 +5,8 @@
 <div class="space-y-6" id="pokja-app"></div>
 
 <!-- Demo Info Modal -->
-<div id="demo-info-modal" class="modal" style="display:none">
-    <div class="modal__backdrop"></div>
+<div id="demo-info-modal" class="modal">
+    <div class="modal__backdrop" onclick="closeDemoInfo()"></div>
     <div class="modal__container" style="max-width:32rem">
         <div class="modal__content">
             <div class="modal__header">
@@ -35,7 +35,7 @@
 </div>
 
 <!-- Submit Confirmation Modal -->
-<div id="submit-confirm-modal" class="modal" style="display:none">
+<div id="submit-confirm-modal" class="modal">
     <div class="modal__backdrop"></div>
     <div class="modal__container" style="max-width:28rem">
         <div class="modal__content" style="padding:2rem;text-align:center">
@@ -53,7 +53,7 @@
 </div>
 
 <!-- Import Excel Modal -->
-<div id="import-excel-modal" class="modal" style="display:none">
+<div id="import-excel-modal" class="modal">
     <div class="modal__backdrop" onclick="closeImportModal()"></div>
     <div class="modal__container" style="max-width:32rem">
         <div class="modal__content">
@@ -190,13 +190,13 @@ function init() {
     // Always show info modal for non-approved accounts
     const { sub } = getMySubmission();
     if (!sub || sub.status !== 'approved') {
-        document.getElementById('demo-info-modal').style.display = '';
+        document.getElementById('demo-info-modal').classList.add('modal--open');
     }
     renderPokjaPage();
 }
 
 function closeDemoInfo() {
-    document.getElementById('demo-info-modal').style.display = 'none';
+    document.getElementById('demo-info-modal').classList.remove('modal--open');
 }
 
 function renderPokjaPage() {
@@ -377,8 +377,8 @@ function buildFormHTML(wilayah, existing) {
     `}
 
     <div style="display:flex;gap:0.25rem;background:var(--dash-bg-secondary);padding:0.25rem;border-radius:0.5rem">
-        <button onclick="switchTab('struktur')" id="tab-btn-struktur" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:500;background:${activeTab === 'struktur' ? 'var(--dash-card-bg)' : 'transparent'};color:${activeTab === 'struktur' ? 'var(--dash-text)' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'struktur' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none'};border:none;cursor:pointer">1. Struktur Pokja</button>
-        <button onclick="switchTab('sk')" id="tab-btn-sk" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:500;background:${activeTab === 'sk' ? 'var(--dash-card-bg)' : 'transparent'};color:${activeTab === 'sk' ? 'var(--dash-text)' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'sk' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none'};border:none;cursor:pointer">2. Data SK</button>
+        <button onclick="switchTab('struktur')" id="tab-btn-struktur" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:600;background:${activeTab === 'struktur' ? 'var(--dash-primary)' : 'transparent'};color:${activeTab === 'struktur' ? '#fff' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'struktur' ? '0 1px 3px rgba(37,99,235,0.3)' : 'none'};border:none;cursor:pointer;transition:all 150ms ease">1. Struktur Pokja</button>
+        <button onclick="switchTab('sk')" id="tab-btn-sk" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:600;background:${activeTab === 'sk' ? 'var(--dash-primary)' : 'transparent'};color:${activeTab === 'sk' ? '#fff' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'sk' ? '0 1px 3px rgba(37,99,235,0.3)' : 'none'};border:none;cursor:pointer;transition:all 150ms ease">2. Data SK</button>
     </div>
 
     <!-- Tab 1: Struktur Pokja -->
@@ -496,9 +496,9 @@ function switchTab(tab) {
     ['struktur', 'sk'].forEach(t => {
         const btn = document.getElementById('tab-btn-' + t);
         const active = t === tab;
-        btn.style.background = active ? 'var(--dash-card-bg)' : 'transparent';
-        btn.style.color = active ? 'var(--dash-text)' : 'var(--dash-text-muted)';
-        btn.style.boxShadow = active ? '0 1px 2px rgba(0,0,0,0.05)' : 'none';
+        btn.style.background = active ? 'var(--dash-primary)' : 'transparent';
+        btn.style.color = active ? '#fff' : 'var(--dash-text-muted)';
+        btn.style.boxShadow = active ? '0 1px 3px rgba(37,99,235,0.3)' : 'none';
     });
 }
 
@@ -822,8 +822,8 @@ function editPokja(tab) {
     if (tab) switchTab(tab);
 }
 
-function confirmSubmit() { document.getElementById('submit-confirm-modal').style.display = ''; }
-function closeSubmitConfirm() { document.getElementById('submit-confirm-modal').style.display = 'none'; }
+function confirmSubmit() { document.getElementById('submit-confirm-modal').classList.add('modal--open'); }
+function closeSubmitConfirm() { document.getElementById('submit-confirm-modal').classList.remove('modal--open'); }
 
 function submitToAdmin() {
     const subs = getSubmissions();
@@ -951,7 +951,7 @@ let importPendingFile = null;
 function openImportModal() {
     importPendingFile = null;
     const modal = document.getElementById('import-excel-modal');
-    modal.style.display = '';
+    modal.classList.add('modal--open');
     document.getElementById('import-file-info').style.display = 'none';
     document.getElementById('btn-do-import').disabled = true;
     document.getElementById('import-file-input').value = '';
@@ -959,7 +959,7 @@ function openImportModal() {
 }
 
 function closeImportModal() {
-    document.getElementById('import-excel-modal').style.display = 'none';
+    document.getElementById('import-excel-modal').classList.remove('modal--open');
     importPendingFile = null;
 }
 
@@ -967,12 +967,12 @@ function setupDropzone() {
     const dz = document.getElementById('import-dropzone');
     const prevent = (e) => { e.preventDefault(); e.stopPropagation(); };
 
-    dz.addEventListener('dragenter', (e) => { prevent(e); dz.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20'); });
-    dz.addEventListener('dragover', (e) => { prevent(e); dz.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20'); });
-    dz.addEventListener('dragleave', (e) => { prevent(e); dz.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20'); });
+    dz.addEventListener('dragenter', (e) => { prevent(e); dz.style.borderColor = '#3b82f6'; dz.style.background = 'rgba(59,130,246,0.05)'; });
+    dz.addEventListener('dragover', (e) => { prevent(e); dz.style.borderColor = '#3b82f6'; dz.style.background = 'rgba(59,130,246,0.05)'; });
+    dz.addEventListener('dragleave', (e) => { prevent(e); dz.style.borderColor = ''; dz.style.background = ''; });
     dz.addEventListener('drop', (e) => {
         prevent(e);
-        dz.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+        dz.style.borderColor = ''; dz.style.background = '';
         const files = e.dataTransfer.files;
         if (files.length && /\.(xlsx|xls)$/i.test(files[0].name)) {
             importPendingFile = files[0];
