@@ -263,18 +263,20 @@
                 <label>data</label>
             </div>
             <input id="log-search" type="text" placeholder="Cari wilayah..." oninput="logFilterChanged()" class="form-input log-toolbar__search" />
-            <select id="log-status-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
-                <option value="">Semua Status</option>
-                <option value="approved">Disetujui</option>
-                <option value="pending">Pending</option>
-                <option value="draft">Draft</option>
-                <option value="declined">Ditolak</option>
-            </select>
-            <select id="log-jenis-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
-                <option value="">Semua Jenis</option>
-                <option value="dinas_prov">Provinsi</option>
-                <option value="dinas_kab">Kab/Kota</option>
-            </select>
+            <div class="log-toolbar__right">
+                <select id="log-status-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
+                    <option value="">Semua Status</option>
+                    <option value="approved">Disetujui</option>
+                    <option value="pending">Pending</option>
+                    <option value="draft">Draft</option>
+                    <option value="declined">Ditolak</option>
+                </select>
+                <select id="log-jenis-filter" onchange="logFilterChanged()" class="form-select log-toolbar__select">
+                    <option value="">Semua Jenis</option>
+                    <option value="dinas_prov">Provinsi</option>
+                    <option value="dinas_kab">Kab/Kota</option>
+                </select>
+            </div>
         </div>
         <span id="log-count" class="log-count"></span>
         <div class="dash-table__wrapper">

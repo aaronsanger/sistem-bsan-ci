@@ -187,11 +187,6 @@ const GENDER_OPTIONS = '<option value="">Pilih</option><option value="L">Laki-la
 
 function init() {
     if (role === 'kementerian') { location.href = '/dashboard'; return; }
-    // Move modals to body so they escape dashboard__content overflow clipping
-    ['demo-info-modal', 'submit-confirm-modal', 'import-excel-modal'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) document.body.appendChild(el);
-    });
     // Always show info modal for non-approved accounts
     const { sub } = getMySubmission();
     if (!sub || sub.status !== 'approved') {
@@ -382,8 +377,8 @@ function buildFormHTML(wilayah, existing) {
     `}
 
     <div style="display:flex;gap:0.25rem;background:var(--dash-bg-secondary);padding:0.25rem;border-radius:0.5rem">
-        <button onclick="switchTab('struktur')" id="tab-btn-struktur" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:600;background:${activeTab === 'struktur' ? 'var(--dash-primary)' : 'transparent'};color:${activeTab === 'struktur' ? '#fff' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'struktur' ? '0 1px 3px rgba(37,99,235,0.3)' : 'none'};border:none;cursor:pointer;transition:all 150ms ease">1. Struktur Pokja</button>
-        <button onclick="switchTab('sk')" id="tab-btn-sk" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:600;background:${activeTab === 'sk' ? 'var(--dash-primary)' : 'transparent'};color:${activeTab === 'sk' ? '#fff' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'sk' ? '0 1px 3px rgba(37,99,235,0.3)' : 'none'};border:none;cursor:pointer;transition:all 150ms ease">2. Data SK</button>
+        <button onclick="switchTab('struktur')" id="tab-btn-struktur" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:600;background:${activeTab === 'struktur' ? 'var(--dash-primary)' : 'transparent'};color:${activeTab === 'struktur' ? '#fff' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'struktur' ? '0 2px 6px rgba(37,99,235,0.3)' : 'none'};border:none;cursor:pointer;transition:all 150ms ease">1. Struktur Pokja</button>
+        <button onclick="switchTab('sk')" id="tab-btn-sk" style="flex:1;padding:0.5rem 1rem;border-radius:0.375rem;font-size:0.875rem;font-weight:600;background:${activeTab === 'sk' ? 'var(--dash-primary)' : 'transparent'};color:${activeTab === 'sk' ? '#fff' : 'var(--dash-text-muted)'};box-shadow:${activeTab === 'sk' ? '0 2px 6px rgba(37,99,235,0.3)' : 'none'};border:none;cursor:pointer;transition:all 150ms ease">2. Data SK</button>
     </div>
 
     <!-- Tab 1: Struktur Pokja -->
@@ -503,7 +498,7 @@ function switchTab(tab) {
         const active = t === tab;
         btn.style.background = active ? 'var(--dash-primary)' : 'transparent';
         btn.style.color = active ? '#fff' : 'var(--dash-text-muted)';
-        btn.style.boxShadow = active ? '0 1px 3px rgba(37,99,235,0.3)' : 'none';
+        btn.style.boxShadow = active ? '0 2px 6px rgba(37,99,235,0.3)' : 'none';
     });
 }
 
