@@ -332,10 +332,14 @@
     <div id="decline-banner" style="display:none" class="dash-alert dash-alert--danger" >
         <div style="display:flex;align-items:flex-start;gap:0.75rem">
             <svg style="width:1.25rem;height:1.25rem;color:#dc2626;flex-shrink:0;margin-top:2px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <div>
+            <div style="flex:1">
                 <p style="font-weight:600">Pengajuan Ditolak</p>
                 <p style="font-size:0.875rem;margin-top:0.25rem" id="decline-reason"></p>
             </div>
+            <a href="/dashboard/pokja" style="display:inline-flex;align-items:center;gap:0.375rem;padding:0.5rem 1rem;background:#dc2626;color:#fff;font-size:0.8125rem;font-weight:600;border-radius:0.5rem;text-decoration:none;white-space:nowrap;transition:opacity 0.15s" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                Edit & Ajukan Ulang
+            </a>
         </div>
     </div>
 
@@ -419,21 +423,22 @@
 </div>
 
 <!-- Kementerian: Detail Modal -->
-<div id="detail-approval-modal" class="modal" style="display:none">
+<div id="detail-approval-modal" class="modal">
     <div class="modal__backdrop" onclick="closeApprovalModal()"></div>
-    <div class="modal__container" style="max-width:48rem">
-        <div class="modal__content">
-            <div class="modal__header">
-                <h3 class="modal__title" style="display:flex;align-items:center;gap:0.5rem">
-                    <svg style="width:1.25rem;height:1.25rem;color:#2563eb" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    Detail Pengajuan Pokja
-                </h3>
-                <button onclick="closeApprovalModal()" class="modal__close">
-                    <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
+    <div class="modal__container" style="max-width:48rem;max-height:90vh;display:flex;flex-direction:column">
+        <div class="modal__header" style="background:var(--dash-primary);color:#fff;border-radius:0.75rem 0.75rem 0 0;border-bottom:none">
+            <h3 class="modal__title" style="display:flex;align-items:center;gap:0.5rem;color:inherit">
+                <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Detail Pengajuan Pokja
+            </h3>
+            <button onclick="closeApprovalModal()" class="modal__close" style="color:#fff">
+                <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <!-- Scrollable body: all content inside here -->
+        <div style="flex:1;overflow-y:auto;min-height:0">
             <!-- Dynamic content injected by JS -->
-            <div id="approval-detail-content" style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem;max-height:60vh;overflow-y:auto"></div>
+            <div id="approval-detail-content" style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem"></div>
             <!-- PDF Preview Section -->
             <div id="pdf-preview-section" style="display:none;padding:0 1.5rem 1rem">
                 <div style="background:var(--dash-bg);border:1px solid var(--dash-border);border-radius:0.75rem;padding:1rem">
@@ -447,7 +452,7 @@
                             Buka di Tab Baru
                         </button>
                     </div>
-                    <div id="pdf-preview-frame" style="height:300px;border-radius:0.5rem;overflow:hidden;background:var(--dash-bg-card);border:1px solid var(--dash-border)">
+                    <div id="pdf-preview-frame" style="height:200px;border-radius:0.5rem;overflow:hidden;background:var(--dash-bg-card);border:1px solid var(--dash-border)">
                         <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--dash-text-muted)">
                             <div style="text-align:center">
                                 <svg style="width:3rem;height:3rem;margin:0 auto 0.75rem;color:var(--dash-border)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
@@ -471,7 +476,7 @@
             <!-- Approve/Decline Buttons -->
             <div id="approval-actions" style="padding:0 1.5rem 1.5rem;display:flex;gap:0.75rem">
                 <button onclick="showDeclineForm()" class="btn-dash btn-dash--outline" style="flex:1;border-color:#dc2626;color:#dc2626">Tolak</button>
-                <button onclick="approvePokja()" class="btn-dash btn-dash--success" style="flex:1">Setujui</button>
+                <button onclick="approvePokja()" class="btn-dash btn-dash--success" style="flex:1;background:#16a34a;color:#fff;border-color:#16a34a">Setujui</button>
             </div>
             <div id="decline-form" style="display:none;padding:0 1.5rem 1.5rem">
                 <div style="display:flex;flex-direction:column;gap:0.75rem">
@@ -1130,7 +1135,7 @@
             <!-- Status Badge -->
             <div style="display:flex;align-items:center;justify-content:space-between">
                 <span style="font-size:0.75rem;font-weight:600;padding:0.25rem 0.75rem;border-radius:9999px;background:${st.bg};color:${st.color}">${st.label}</span>
-                <span style="font-size:0.75rem;color:var(--dash-text-muted)">${s.tanggal ? new Date(s.tanggal).toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'}) : ''}</span>
+                <span style="font-size:0.75rem;color:var(--dash-text-muted)">${(s.tanggalSK || s.tanggal) ? new Date(s.tanggalSK || s.tanggal).toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'}) : ''}</span>
             </div>
 
             <!-- Identitas Section -->
@@ -1150,7 +1155,7 @@
                     </div>
                     <div style="grid-column:1/-1">
                         <div style="font-size:0.6875rem;font-weight:500;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.04em">No. Call Center Pokja</div>
-                        <div style="font-size:0.875rem;color:var(--dash-text);margin-top:2px">${s.callCenter || '-'}</div>
+                        <div style="font-size:0.875rem;color:var(--dash-text);margin-top:2px">${s.callCenterPokja || s.callCenter || '-'}</div>
                     </div>
                 </div>
             </div>
@@ -1172,7 +1177,7 @@
                     </div>
                     <div style="grid-column:1/-1">
                         <div style="font-size:0.6875rem;font-weight:500;color:var(--dash-text-muted);text-transform:uppercase;letter-spacing:0.04em">Dokumen SK</div>
-                        <div style="font-size:0.875rem;color:var(--dash-text);margin-top:2px">${s.skFileName || 'Belum diunggah'}</div>
+                        <div style="font-size:0.875rem;color:var(--dash-text);margin-top:2px">${s.skFileName ? decodeURIComponent(s.skFileName.replace(/\+/g, ' ')) : 'Belum diunggah'}</div>
                     </div>
                 </div>
             </div>
@@ -1191,9 +1196,11 @@
 
         // PDF Preview
         const pdfSection = document.getElementById('pdf-preview-section');
-        if (s.skFileName) {
+        const skFile = s.skFileName || '';
+        const cleanFileName = decodeURIComponent(skFile.replace(/\+/g, ' '));
+        if (cleanFileName) {
             pdfSection.style.display = '';
-            document.getElementById('pdf-filename').textContent = s.skFileName;
+            document.getElementById('pdf-filename').textContent = cleanFileName;
         } else {
             pdfSection.style.display = 'none';
         }
@@ -1231,11 +1238,11 @@
         }
         declineFormEl.style.display = 'none';
 
-        document.getElementById('detail-approval-modal').style.display = '';
+        document.getElementById('detail-approval-modal').classList.add('modal--open');
     }
 
     function closeApprovalModal() {
-        document.getElementById('detail-approval-modal').style.display = 'none';
+        document.getElementById('detail-approval-modal').classList.remove('modal--open');
         currentApprovalIdx = -1;
     }
 
@@ -1253,12 +1260,12 @@
 
     function showDeclineForm() {
         document.getElementById('approval-actions').style.display = 'none';
-        document.getElementById('decline-form').style.display = '';
+        document.getElementById('decline-form').style.display = 'block';
     }
 
     function cancelDecline() {
         document.getElementById('decline-form').style.display = 'none';
-        document.getElementById('approval-actions').style.display = '';
+        document.getElementById('approval-actions').style.display = 'flex';
     }
 
     function declinePokja() {
@@ -1281,8 +1288,9 @@
         // Demo mode — no real PDF, show placeholder
         const w = window.open('', '_blank');
         const subs = getSubmissions();
-        const s = subs[currentApprovalIdx];
-        w.document.write(`<html><head><title>${s?.skFileName || 'SK Pokja'}</title></head><body style="font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f9fafb;"><div style="text-align:center;"><h1 style="font-size:3rem;">📄</h1><h2>Preview Dokumen SK</h2><p style="color:#666;">${s?.skFileName || '-'}</p><p style="color:#999;font-size:0.8rem;">Mode Demo — file PDF tidak tersimpan di server</p></div></body></html>`);
+        const s = _activeSubs[currentApprovalIdx];
+        const fileName = s?.skFileName ? decodeURIComponent(s.skFileName.replace(/\+/g, ' ')) : 'SK Pokja';
+        w.document.write(`<html><head><title>${fileName}</title></head><body style="font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f9fafb;"><div style="text-align:center;"><h1 style="font-size:3rem;">📄</h1><h2>Preview Dokumen SK</h2><p style="color:#666;">${fileName}</p><p style="color:#999;font-size:0.8rem;">Mode Demo — file PDF tidak tersimpan di server</p></div></body></html>`);
     }
 
     // ---- Dinas Dashboard ----

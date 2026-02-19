@@ -8,16 +8,18 @@
    CSS VARIABLES (Dashboard-specific)
    ============================================ */
 
-:root {
-    /* Dark mode specific */
+
+:root,
+[data-theme="light"] {
+    /* Dark mode specific - default to Light values here */
     --dash-bg: #f9fafb;
     --dash-bg-card: #ffffff;
     --dash-bg-card-alt: #f3f4f6;
     --dash-bg-input: #ffffff;
-    --dash-text: #111827;
-    --dash-text-secondary: #4b5563;
-    --dash-text-muted: #6b7280;
-    --dash-text-light: #9ca3af;
+    --dash-text: #111827;           /* Gray 900 */
+    --dash-text-secondary: #4b5563; /* Gray 600 */
+    --dash-text-muted: #6b7280;     /* Gray 500 */
+    --dash-text-light: #9ca3af;     /* Gray 400 */
     --dash-border: #e5e7eb;
     --dash-hover: #f3f4f6;
 
@@ -29,17 +31,11 @@
 
     /* Typography Scale (Standardized) */
     --text-xs: 0.75rem;
-    /* 12px */
     --text-sm: 0.875rem;
-    /* 14px */
     --text-base: 1rem;
-    /* 16px */
     --text-lg: 1.125rem;
-    /* 18px */
     --text-xl: 1.25rem;
-    /* 20px */
     --text-2xl: 1.5rem;
-    /* 24px */
 }
 
 /* ============================================
@@ -91,6 +87,8 @@
     --dash-primary-light: rgba(30, 64, 175, 0.2);
     --dash-primary-text: #60a5fa;
 }
+
+
 
 /* ============================================
    DASHBOARD LAYOUT

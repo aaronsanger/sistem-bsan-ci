@@ -463,7 +463,8 @@ function buildFormHTML(wilayah, existing) {
                 </button>
             </div>
 
-            <div style="display:flex;justify-content:flex-end;padding-top:1rem;border-top:1px solid var(--dash-border)">
+            <div style="display:flex;gap:0.75rem;justify-content:flex-end;padding-top:1rem;border-top:1px solid var(--dash-border)">
+                ${_editingFromApproved ? `<button onclick="cancelApprovedEdit()" class="btn-dash btn-dash--outline">Batal</button>` : ''}
                 <button onclick="saveStruktur()" class="btn-dash btn-dash--primary">Simpan Struktur Pokja</button>
             </div>
         </div>
@@ -495,13 +496,13 @@ function buildFormHTML(wilayah, existing) {
                 </div>
             </div>
             <div style="margin-top:1.25rem">
-                <label class="form-dash__label">Dokumen SK</label>
+                <label class="form-dash__label">Dokumen SK <span style="color:#ef4444">*</span></label>
                 <input type="file" id="sk-file" accept=".pdf" class="form-dash__input" style="padding:0">
                 <p style="font-size:0.75rem;color:var(--dash-text-muted);margin-top:0.25rem">Maksimal 2MB, format PDF</p>
                 ${sk.skFileName ? `<p style="font-size:0.875rem;color:#16a34a;margin-top:0.25rem">📄 ${sk.skFileName}</p>` : ''}
             </div>
             <div style="display:flex;gap:0.75rem;padding-top:1rem;border-top:1px solid var(--dash-border);margin-top:1.25rem">
-                <button onclick="switchTab('struktur')" class="btn-dash btn-dash--outline" style="flex:1">Batal</button>
+                <button onclick="${_editingFromApproved ? 'cancelApprovedEdit()' : "switchTab('struktur')"}" class="btn-dash btn-dash--outline" style="flex:1">Batal</button>
                 <button onclick="saveSK()" class="btn-dash btn-dash--primary" style="flex:1">Simpan Data SK</button>
             </div>
         </div>
@@ -570,48 +571,67 @@ function gatherStruktur() {
 }
 
 function validateRequired(struktur) {
+    // Returns { message, selector } for first invalid field, or null if valid
     // Validate leaders
     for (const key of ['ketua', 'wakil', 'koordinator']) {
         const m = struktur[key];
         const label = JABATAN_MAP[key];
-        if (!m.nama) return `Nama ${label} wajib diisi.`;
-        if (!m.email) return `Email ${label} wajib diisi.`;
-        if (m.email && !isValidEmail(m.email)) return `Email ${label} tidak valid.`;
-        if (!m.jenisKelamin) return `Jenis Kelamin ${label} wajib diisi.`;
-        if (!m.noWa) return `No. WhatsApp ${label} wajib diisi.`;
-        if (m.noWa && !isValidPhoneLength(m.noWa)) return `No. WhatsApp ${label} harus 10-13 digit.`;
-        if (!m.nomorInstansi) return `No. Instansi ${label} wajib diisi.`;
-        if (m.nomorInstansi && !isValidPhoneLength(m.nomorInstansi)) return `No. Instansi ${label} harus 10-13 digit.`;
-        if (m.nomorPribadi && !isValidPhoneLength(m.nomorPribadi)) return `No. Pribadi ${label} harus 10-13 digit.`;
+        const card = `[data-leader="${key}"]`;
+        if (!m.nama) return { message: `Nama ${label} wajib diisi.`, selector: `${card} .leader-nama` };
+        if (!m.email) return { message: `Email ${label} wajib diisi.`, selector: `${card} .leader-email` };
+        if (m.email && !isValidEmail(m.email)) return { message: `Email ${label} tidak valid.`, selector: `${card} .leader-email` };
+        if (!m.jenisKelamin) return { message: `Jenis Kelamin ${label} wajib diisi.`, selector: `${card} .leader-gender` };
+        if (!m.noWa) return { message: `No. WhatsApp ${label} wajib diisi.`, selector: `${card} .leader-wa` };
+        if (m.noWa && !isValidPhoneLength(m.noWa)) return { message: `No. WhatsApp ${label} harus 10-13 digit.`, selector: `${card} .leader-wa` };
+        if (!m.nomorInstansi) return { message: `No. Instansi ${label} wajib diisi.`, selector: `${card} .leader-instansi-no` };
+        if (m.nomorInstansi && !isValidPhoneLength(m.nomorInstansi)) return { message: `No. Instansi ${label} harus 10-13 digit.`, selector: `${card} .leader-instansi-no` };
+        if (m.nomorPribadi && !isValidPhoneLength(m.nomorPribadi)) return { message: `No. Pribadi ${label} harus 10-13 digit.`, selector: `${card} .leader-pribadi` };
     }
     // Validate anggota
     for (let i = 0; i < struktur.anggota.length; i++) {
         const a = struktur.anggota[i];
         const label = a.bidang;
-        if (!a.nama) return `Nama ${label} wajib diisi.`;
-        if (!a.email) return `Email ${label} wajib diisi.`;
-        if (a.email && !isValidEmail(a.email)) return `Email ${label} tidak valid.`;
-        if (!a.jenisKelamin) return `Jenis Kelamin ${label} wajib diisi.`;
-        if (!a.noWa) return `No. WhatsApp ${label} wajib diisi.`;
-        if (a.noWa && !isValidPhoneLength(a.noWa)) return `No. WhatsApp ${label} harus 10-13 digit.`;
-        if (!a.nomorInstansi) return `No. Instansi ${label} wajib diisi.`;
-        if (a.nomorInstansi && !isValidPhoneLength(a.nomorInstansi)) return `No. Instansi ${label} harus 10-13 digit.`;
-        if (a.nomorPribadi && !isValidPhoneLength(a.nomorPribadi)) return `No. Pribadi ${label} harus 10-13 digit.`;
+        const row = `.anggota-row[data-index="${i}"]`;
+        if (!a.nama) return { message: `Nama ${label} wajib diisi.`, selector: `${row} .anggota-nama` };
+        if (!a.email) return { message: `Email ${label} wajib diisi.`, selector: `${row} .anggota-email` };
+        if (a.email && !isValidEmail(a.email)) return { message: `Email ${label} tidak valid.`, selector: `${row} .anggota-email` };
+        if (!a.jenisKelamin) return { message: `Jenis Kelamin ${label} wajib diisi.`, selector: `${row} .anggota-gender` };
+        if (!a.noWa) return { message: `No. WhatsApp ${label} wajib diisi.`, selector: `${row} .anggota-wa` };
+        if (a.noWa && !isValidPhoneLength(a.noWa)) return { message: `No. WhatsApp ${label} harus 10-13 digit.`, selector: `${row} .anggota-wa` };
+        if (!a.nomorInstansi) return { message: `No. Instansi ${label} wajib diisi.`, selector: `${row} .anggota-instansi-no` };
+        if (a.nomorInstansi && !isValidPhoneLength(a.nomorInstansi)) return { message: `No. Instansi ${label} harus 10-13 digit.`, selector: `${row} .anggota-instansi-no` };
+        if (a.nomorPribadi && !isValidPhoneLength(a.nomorPribadi)) return { message: `No. Pribadi ${label} harus 10-13 digit.`, selector: `${row} .anggota-pribadi` };
     }
     return null;
 }
 
+function highlightAndFocus(selector, msg) {
+    // Clear previous highlights
+    document.querySelectorAll('.field-error-highlight').forEach(el => {
+        el.style.border = '';
+        el.classList.remove('field-error-highlight');
+    });
+    const el = document.querySelector(selector);
+    if (el) {
+        el.style.border = '2px solid #dc2626';
+        el.classList.add('field-error-highlight');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => el.focus(), 350);
+    }
+    alert(msg);
+}
+
 function saveStruktur() {
     const namaPokja = document.getElementById('nama-pokja').value.trim();
-    if (!namaPokja) { alert('Masukkan Nama Pokja.'); return; }
+    if (!namaPokja) { highlightAndFocus('#nama-pokja', 'Masukkan Nama Pokja.'); return; }
 
     const struktur = gatherStruktur();
     const err = validateRequired(struktur);
-    if (err) { alert(err); return; }
+    if (err) { highlightAndFocus(err.selector, err.message); return; }
 
     const callCenterPokja = document.getElementById('call-center-pokja').value.trim();
-    if (!callCenterPokja) { alert('No. Call Center Pokja wajib diisi.'); return; }
-    if (!isValidPhoneLength(callCenterPokja)) { alert('No. Call Center Pokja harus 10-13 digit.'); return; }
+    if (!callCenterPokja) { highlightAndFocus('#call-center-pokja', 'No. Call Center Pokja wajib diisi.'); return; }
+    if (!isValidPhoneLength(callCenterPokja)) { highlightAndFocus('#call-center-pokja', 'No. Call Center Pokja harus 10-13 digit.'); return; }
 
     const subs = getSubmissions();
     const { idx } = getMySubmission();
@@ -623,30 +643,71 @@ function saveStruktur() {
     submission.struktur = struktur;
     submission.updatedAt = new Date().toISOString();
 
+    // If editing from approved state, change status to pending for re-approval
+    if (_editingFromApproved && idx >= 0 && subs[idx].status === 'approved') {
+        submission.status = 'pending';
+        submission.submittedAt = new Date().toISOString();
+    }
     if (idx >= 0) subs[idx] = submission; else subs.push(submission);
     saveSubmissions(subs);
-    alert('Struktur Pokja berhasil disimpan!');
+    _editingFromApproved = false;
+    if (submission.status === 'pending') {
+        alert('Struktur Pokja berhasil disimpan! Perubahan data memerlukan approval ulang dari Admin Pusat.');
+    } else {
+        alert('Struktur Pokja berhasil disimpan!');
+    }
     renderPokjaPage();
 }
 
 function saveSK() {
+    const fields = [
+        { id: 'nomor-sk', label: 'Nomor SK' },
+        { id: 'tanggal-sk', label: 'Tanggal SK' },
+        { id: 'periode-mulai', label: 'Periode Mulai' },
+        { id: 'periode-selesai', label: 'Periode Selesai' },
+    ];
+    for (const f of fields) {
+        const el = document.getElementById(f.id);
+        if (!el.value.trim()) {
+            highlightAndFocus(`#${f.id}`, `${f.label} wajib diisi.`);
+            return;
+        }
+    }
+
     const nomorSK = document.getElementById('nomor-sk').value.trim();
     const tanggalSK = document.getElementById('tanggal-sk').value;
     const periodeMulai = document.getElementById('periode-mulai').value;
     const periodeSelesai = document.getElementById('periode-selesai').value;
     const skFile = document.getElementById('sk-file').files[0];
-    if (!nomorSK || !tanggalSK || !periodeMulai || !periodeSelesai) { alert('Lengkapi semua field SK.'); return; }
 
     const subs = getSubmissions();
     const { idx } = getMySubmission();
     if (idx < 0) { alert('Simpan Struktur Pokja terlebih dahulu.'); return; }
 
+    // Validate SK file: must have a file selected or already uploaded
+    const existingFile = subs[idx].skFileName || '';
+    if (!skFile && !existingFile) {
+        highlightAndFocus('#sk-file', 'Dokumen SK wajib diunggah.');
+        return;
+    }
+
     subs[idx].nomorSK = nomorSK; subs[idx].tanggalSK = tanggalSK;
     subs[idx].periodeMulai = periodeMulai; subs[idx].periodeSelesai = periodeSelesai;
-    subs[idx].skFileName = skFile ? skFile.name : subs[idx].skFileName || '';
+    subs[idx].skFileName = skFile ? skFile.name : existingFile;
     subs[idx].updatedAt = new Date().toISOString();
+
+    // If editing from approved state, change status to pending for re-approval
+    if (_editingFromApproved && subs[idx].status === 'approved') {
+        subs[idx].status = 'pending';
+        subs[idx].submittedAt = new Date().toISOString();
+    }
     saveSubmissions(subs);
-    alert('Data SK berhasil disimpan!');
+    _editingFromApproved = false;
+    if (subs[idx].status === 'pending') {
+        alert('Data SK berhasil disimpan! Perubahan data memerlukan approval ulang dari Admin Pusat.');
+    } else {
+        alert('Data SK berhasil disimpan!');
+    }
     renderPokjaPage();
 }
 
@@ -766,7 +827,7 @@ function renderDraftView(app, sub, wilayah) {
             <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Update SK
         </button>
-        ${canSubmit ? `<button onclick="confirmSubmit()" class="btn-dash btn-dash--success btn-spotlight" style="margin-left:auto;font-size:0.875rem">
+        ${canSubmit ? `<button onclick="confirmSubmit()" class="btn-dash btn-dash--success btn-spotlight" style="margin-left:auto;font-size:0.875rem;background:#16a34a;color:#fff;border-color:#16a34a">
             <svg style="width:1.25rem;height:1.25rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Ajukan ke Admin Pusat
         </button>` : ''}
     </div>
@@ -794,11 +855,11 @@ function renderApprovedView(app, sub, wilayah) {
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem">
         <div><h2 class="dash-section__title">Data Pokja ${wilayah}</h2></div>
         <div style="display:flex;gap:0.5rem">
-            <button onclick="editPokja('struktur')" class="btn-dash btn-dash--outline" style="font-size:0.875rem">
+            <button onclick="editApprovedPokja('struktur')" class="btn-dash btn-dash--outline" style="font-size:0.875rem">
                 <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                 Edit Struktur
             </button>
-            <button onclick="editPokja('sk')" class="btn-dash btn-dash--outline" style="font-size:0.875rem;color:#7c3aed;border-color:#c4b5fd">
+            <button onclick="editApprovedPokja('sk')" class="btn-dash btn-dash--outline" style="font-size:0.875rem;color:#7c3aed;border-color:#c4b5fd">
                 <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 Update SK
             </button>
@@ -808,7 +869,7 @@ function renderApprovedView(app, sub, wilayah) {
         <div style="width:2.5rem;height:2.5rem;border-radius:50%;background:rgba(22,163,74,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:1.5rem;height:1.5rem;color:#16a34a" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
         <div>
             <h3 style="font-weight:700">Pokja Disetujui</h3>
-            <p style="font-size:0.875rem">Struktur Pokja telah diverifikasi. Anda tetap dapat memperbarui data Struktur atau SK jika ada perubahan anggota.</p>
+            <p style="font-size:0.875rem">Struktur Pokja telah diverifikasi. Jika ada perubahan anggota, data akan memerlukan <strong>approval ulang</strong> dari Admin Pusat.</p>
         </div>
     </div>
     ${renderReadonlySummary(sub)}`;
@@ -838,11 +899,24 @@ function renderDeclinedView(app, sub, wilayah) {
     ${renderReadonlySummary(sub)}`;
 }
 
+let _editingFromApproved = false;
+
 function editPokja(tab) {
     const { sub } = getMySubmission();
     const wilayah = getWilayahName();
     document.getElementById('pokja-app').innerHTML = buildFormHTML(wilayah, sub);
     if (tab) switchTab(tab);
+}
+
+function editApprovedPokja(tab) {
+    if (!confirm('Perubahan data Pokja yang sudah disetujui akan memerlukan approval ulang dari Admin Pusat. Lanjutkan?')) return;
+    _editingFromApproved = true;
+    editPokja(tab);
+}
+
+function cancelApprovedEdit() {
+    _editingFromApproved = false;
+    renderPokjaPage();
 }
 
 function confirmSubmit() { document.getElementById('submit-confirm-modal').classList.add('modal--open'); }
@@ -1084,7 +1158,7 @@ async function doImport() {
 
         closeImportModal();
         alert(`Berhasil import ${Object.keys(leaders).length} pimpinan dan ${anggota.length} anggota dari Excel!`);
-        renderPokjaPage();
+        editPokja('struktur');
 
     } catch (err) {
         alert('Error membaca file: ' + err.message);

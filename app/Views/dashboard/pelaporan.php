@@ -52,7 +52,7 @@
 </div>
 
 <!-- Form Modal -->
-<div id="form-modal" class="modal" style="display:none">
+<div id="form-modal" class="modal">
     <div class="modal__backdrop" onclick="closeForm()"></div>
     <div class="modal__container" style="max-width:42rem">
         <div class="modal__content">
@@ -168,7 +168,7 @@
 </div>
 
 <!-- Detail Modal -->
-<div id="detail-modal" class="modal" style="display:none">
+<div id="detail-modal" class="modal">
     <div class="modal__backdrop" onclick="closeDetail()"></div>
     <div class="modal__container" style="max-width:32rem">
         <div class="modal__content">
@@ -245,10 +245,10 @@ function openForm(editIdx) {
         document.querySelectorAll('.unsur-l, .unsur-p').forEach(el => el.value = 0);
     }
 
-    document.getElementById('form-modal').style.display = '';
+    document.getElementById('form-modal').classList.add('modal--open');
 }
 
-function closeForm() { document.getElementById('form-modal').style.display = 'none'; }
+function closeForm() { document.getElementById('form-modal').classList.remove('modal--open'); }
 
 function gatherUnsur() {
     const unsurs = ['peserta_didik', 'tenaga_pendidik', 'tenaga_kependidikan', 'pihak_luar'];
@@ -354,10 +354,10 @@ function showDetail(idx) {
         <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Rekomendasi</span><p class="text-gray-900 dark:text-white">${r.rekomendasi}</p></div>
         <div><span class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</span><p class="text-gray-900 dark:text-white font-semibold">${r.status}</p></div>
     `;
-    document.getElementById('detail-modal').style.display = '';
+    document.getElementById('detail-modal').classList.add('modal--open');
 }
 
-function closeDetail() { document.getElementById('detail-modal').style.display = 'none'; }
+function closeDetail() { document.getElementById('detail-modal').classList.remove('modal--open'); }
 
 function deleteRecord(idx) {
     if (!confirm('Hapus laporan ini?')) return;

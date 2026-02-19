@@ -65,16 +65,24 @@ function amGetStatusMap() {
     return map;
 }
 
+function amGetKabStatusMap() {
+    // Build kabupaten→status map from real submission data only
+    const subs = (typeof getActiveSubmissions === 'function') ? getActiveSubmissions() : [];
+    const statusLabels = { approved: 'Disetujui', pending: 'Pending', draft: 'Draft', declined: 'Ditolak' };
+    const map = {};
+    subs.forEach(s => {
+        if (s.roleType === 'dinas_kab') {
+            const name = (s.wilayah || '');
+            map[name] = statusLabels[s.status] || s.status || 'Belum Ada';
+        }
+    });
+    return map;
+}
+
 function amGetKabStatus(provName, kabName) {
-    // Deterministic kab status based on province status
-    const statusMap = amGetStatusMap();
-    const provStatus = statusMap[provName] || 'Belum Ada';
-    const hash = kabName.length + provName.length;
-    if (provStatus === 'Disetujui') return hash % 5 === 0 ? 'Pending' : 'Disetujui';
-    if (provStatus === 'Pending') return hash % 3 === 0 ? 'Belum Ada' : 'Pending';
-    if (provStatus === 'Draft') return hash % 3 === 0 ? 'Draft' : 'Belum Ada';
-    if (provStatus === 'Ditolak') return hash % 2 === 0 ? 'Ditolak' : 'Belum Ada';
-    return 'Belum Ada';
+    // Use real submission data — only submissions that exist get a status
+    const kabMap = amGetKabStatusMap();
+    return kabMap[kabName] || 'Belum Ada';
 }
 
 function amGetColor(status) {
